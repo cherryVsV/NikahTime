@@ -9,17 +9,33 @@ use Illuminate\Support\Facades\Mail;
 
 class MailController extends Controller
 {
-    public function sendEmail(Request $request){
+    public function sendConfirmationEmail(Request $request){
         $this->validate($request,[
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users']]);
+            'email' => [ 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],]);
         $toEmail = $request->email;
         $code = strval(mt_rand(100000, 999999));
         $details = [
-            'code'=>$code
+            'code'=>$code,
+            'title'=>'Подтверждение адреса электронной почты'
+        ];
+        session(['email' => $toEmail, 'code'=>$code, 'password'=>$request->password]);
+        Mail::to($toEmail)->send(new ConfirmedRegisterMail($details));
+        return redirect('/confirmation');
+
+    }
+    public function sendForgotPasswordEmail(Request $request){
+        $this->validate($request,[
+            'email' => [ 'string', 'email', 'max:255', 'exists:users']]);
+        $toEmail = $request->email;
+        $code = strval(mt_rand(100000, 999999));
+        $details = [
+            'code'=>$code,
+            'title'=>'Восстановление пароля'
         ];
         session(['email' => $toEmail, 'code'=>$code]);
         Mail::to($toEmail)->send(new ConfirmedRegisterMail($details));
-        return redirect('/confirmation');
+        return redirect('/forgot/password/confirmation');
 
     }
 }

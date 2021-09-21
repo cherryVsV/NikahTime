@@ -24,8 +24,8 @@ class LikeUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'user1_id' => ['required', 'integer', 'exists:user1s,id'],
-            'user2_id' => ['required', 'integer', 'exists:user2s,id'],
+            'user1_id' => ['required', 'integer', 'exists:users,id'],
+            'user2_id' => ['required', 'integer', 'exists:users,id'],
         ];
     }
 }

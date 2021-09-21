@@ -27,7 +27,6 @@ class ProfileStoreRequest extends FormRequest
             'user_id' => ['required', 'integer', 'exists:users,id'],
             'avatar' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
-            'surname' => ['required', 'string', 'max:255'],
             'gender' => ['required', 'string', 'max:20'],
             'birthdate' => ['required', 'date'],
             'country' => ['required', 'string', 'max:255'],

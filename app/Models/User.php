@@ -60,6 +60,10 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->HasOne(\App\Models\Profile::class);
     }
+    public function socialAccount()
+    {
+        return $this->HasMany(\App\Models\SocialAccount::class);
+    }
     public function questions()
     {
         return $this->HasMany(\App\Models\Question::class);

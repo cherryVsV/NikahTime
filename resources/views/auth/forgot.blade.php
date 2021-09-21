@@ -8,7 +8,7 @@
                     <div class="card-header">{{ __('Confirm') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('checkEmailCode') }}">
+                        <form method="POST" action="{{ route('checkForgotPasswordCode') }}">
                             @csrf
                             <div class="form-group row">
                                 <label for="code" class="col-md-4 col-form-label text-md-right">{{ __('Code') }}</label>

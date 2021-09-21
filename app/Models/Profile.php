@@ -18,7 +18,6 @@ class Profile extends Model
         'user_id',
         'avatar',
         'name',
-        'surname',
         'gender',
         'birthdate',
         'country',
