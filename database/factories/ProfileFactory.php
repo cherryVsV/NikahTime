@@ -30,7 +30,6 @@ class ProfileFactory extends Factory
             'user_id' => User::factory(),
             'avatar' => $this->faker->regexify('[A-Za-z0-9]{255}'),
             'name' => $this->faker->name,
-            'surname' => $this->faker->regexify('[A-Za-z0-9]{255}'),
             'gender' => $this->faker->regexify('[A-Za-z0-9]{20}'),
             'birthdate' => $this->faker->date(),
             'country' => $this->faker->country,

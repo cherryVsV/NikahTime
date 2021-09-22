@@ -13,6 +13,8 @@ class CreateSocialAccountsTable extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::create('social_accounts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
@@ -20,12 +22,13 @@ class CreateSocialAccountsTable extends Migration
             $table->string('provider');
             $table->string('token');
             $table->timestamps();
-
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('CASCADE');
         });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**

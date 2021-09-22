@@ -14,7 +14,7 @@ use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\ProfileController
+ * @see \App\Http\Controllers\Auth\Auth\Auth\ProfileController
  */
 class ProfileControllerTest extends TestCase
 {
@@ -40,7 +40,7 @@ class ProfileControllerTest extends TestCase
     public function store_uses_form_request_validation()
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\ProfileController::class,
+            \App\Http\Controllers\Auth\Auth\Auth\ProfileController::class,
             'store',
             \App\Http\Requests\ProfileStoreRequest::class
         );
@@ -54,7 +54,6 @@ class ProfileControllerTest extends TestCase
         $user = User::factory()->create();
         $avatar = $this->faker->word;
         $name = $this->faker->name;
-        $surname = $this->faker->word;
         $gender = $this->faker->word;
         $birthdate = $this->faker->date();
         $country = $this->faker->country;
@@ -72,7 +71,6 @@ class ProfileControllerTest extends TestCase
             'user_id' => $user->id,
             'avatar' => $avatar,
             'name' => $name,
-            'surname' => $surname,
             'gender' => $gender,
             'birthdate' => $birthdate,
             'country' => $country,
@@ -91,7 +89,6 @@ class ProfileControllerTest extends TestCase
             ->where('user_id', $user->id)
             ->where('avatar', $avatar)
             ->where('name', $name)
-            ->where('surname', $surname)
             ->where('gender', $gender)
             ->where('birthdate', $birthdate)
             ->where('country', $country)
@@ -133,7 +130,7 @@ class ProfileControllerTest extends TestCase
     public function update_uses_form_request_validation()
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\ProfileController::class,
+            \App\Http\Controllers\Auth\Auth\Auth\ProfileController::class,
             'update',
             \App\Http\Requests\ProfileUpdateRequest::class
         );
@@ -148,7 +145,6 @@ class ProfileControllerTest extends TestCase
         $user = User::factory()->create();
         $avatar = $this->faker->word;
         $name = $this->faker->name;
-        $surname = $this->faker->word;
         $gender = $this->faker->word;
         $birthdate = $this->faker->date();
         $country = $this->faker->country;
@@ -166,7 +162,6 @@ class ProfileControllerTest extends TestCase
             'user_id' => $user->id,
             'avatar' => $avatar,
             'name' => $name,
-            'surname' => $surname,
             'gender' => $gender,
             'birthdate' => $birthdate,
             'country' => $country,
@@ -189,7 +184,6 @@ class ProfileControllerTest extends TestCase
         $this->assertEquals($user->id, $profile->user_id);
         $this->assertEquals($avatar, $profile->avatar);
         $this->assertEquals($name, $profile->name);
-        $this->assertEquals($surname, $profile->surname);
         $this->assertEquals($gender, $profile->gender);
         $this->assertEquals(Carbon::parse($birthdate), $profile->birthdate);
         $this->assertEquals($country, $profile->country);

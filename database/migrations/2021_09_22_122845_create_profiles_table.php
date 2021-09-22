@@ -33,6 +33,7 @@ class CreateProfilesTable extends Migration
             $table->foreignId('habit_id')->nullable()->constrained();
             $table->text('about_me')->nullable();
             $table->timestamps();
+
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

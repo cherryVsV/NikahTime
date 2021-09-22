@@ -35,7 +35,6 @@ models:
     user_id: id foreign:users
     avatar: string:255
     name: string:255
-    surname: string:255
     gender: string:20
     birthdate: date
     country: string:255
@@ -75,6 +74,11 @@ models:
     answer: text nullable
     relationships:
       belongsTo: User
+  SocialAccount:
+    user_id: id foreign:users
+    provider_id: string
+    provider: string
+    token: string
 
 controllers:
   Interest:

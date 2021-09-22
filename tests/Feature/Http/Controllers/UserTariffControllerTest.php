@@ -11,7 +11,7 @@ use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\UserTariffController
+ * @see \App\Http\Controllers\Auth\Auth\Auth\UserTariffController
  */
 class UserTariffControllerTest extends TestCase
 {
@@ -37,7 +37,7 @@ class UserTariffControllerTest extends TestCase
     public function store_uses_form_request_validation()
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\UserTariffController::class,
+            \App\Http\Controllers\Auth\Auth\Auth\UserTariffController::class,
             'store',
             \App\Http\Requests\UserTariffStoreRequest::class
         );
@@ -97,7 +97,7 @@ class UserTariffControllerTest extends TestCase
     public function update_uses_form_request_validation()
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\UserTariffController::class,
+            \App\Http\Controllers\Auth\Auth\Auth\UserTariffController::class,
             'update',
             \App\Http\Requests\UserTariffUpdateRequest::class
         );

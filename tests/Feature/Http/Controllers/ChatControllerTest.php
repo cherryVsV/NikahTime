@@ -11,7 +11,7 @@ use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\ChatController
+ * @see \App\Http\Controllers\Auth\Auth\Auth\ChatController
  */
 class ChatControllerTest extends TestCase
 {
@@ -37,7 +37,7 @@ class ChatControllerTest extends TestCase
     public function store_uses_form_request_validation()
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\ChatController::class,
+            \App\Http\Controllers\Auth\Auth\Auth\ChatController::class,
             'store',
             \App\Http\Requests\ChatStoreRequest::class
         );
@@ -88,7 +88,7 @@ class ChatControllerTest extends TestCase
     public function update_uses_form_request_validation()
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\ChatController::class,
+            \App\Http\Controllers\Auth\Auth\Auth\ChatController::class,
             'update',
             \App\Http\Requests\ChatUpdateRequest::class
         );

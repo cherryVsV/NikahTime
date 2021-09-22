@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ConfirmedRegisterMail extends Mailable
+class ConfirmMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $details;
@@ -28,6 +28,6 @@ class ConfirmedRegisterMail extends Mailable
      */
     public function build()
     {
-        return $this->view('email.registerConfirmed', ['details'=>$this->details]);
+        return $this->view('email.confirm', ['details'=>$this->details]);
     }
 }

@@ -24,6 +24,7 @@ class ProfileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id' => ['required', 'integer', 'exists:users,id'],
             'avatar' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
             'gender' => ['required', 'string', 'max:20'],

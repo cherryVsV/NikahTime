@@ -3,76 +3,70 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ConfirmMail;
 use App\Models\Profile;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function register(Request $request)
     {
-        $this->middleware('guest');
+        $rules = [
+            'code' => ['required'],
+        ];
+        $code = session('code');
+        $email = session('email');
+        $password = session('password');
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+        if ($email != null && $request->code == $code) {
+            $user = User::create([
+                'email' => $email,
+                'password' => Hash::make($password)
+            ]);
+            Profile::create([
+                'user_id' => $user->id
+            ]);
+
+            $token = $user->createToken('NikahTime Personal Access Client')->accessToken;
+            Auth::login($user);
+            return response()->json(['token' => $token], 200);
+        }
+        else {
+            return response()->json(['error' => 'Введенный код не совпадает с отправленным на вашу почту '.$email], 500);
+        }
+
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
+    public function sendConfirmEmail(Request $request)
     {
-        return Validator::make($data, [
-            'email' => [ 'string', 'email', 'max:255', 'unique:users'],
-            'phone' => ['string', 'min:17','max:25', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        $rules = [
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed']
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        } else {
+            $toEmail = $request->email;
+            $code = strval(mt_rand(100000, 999999));
+            $details = [
+                'code' => $code,
+            ];
+            session(['email' => $toEmail, 'code' => $code, 'password' => $request->password]);
+            $email = session('email');
+            Mail::to($toEmail)->send(new ConfirmMail($details));
+            return response()->json(['success' => 'Письмо подтверждения отправлено на почту '.$email ], 200);
+
+        }
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    protected function create(array $data)
-    {
-        $user =  User::create([
-            'phone' => $data['phone'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-        Profile::create([
-            'user_id'=>$user->id
-        ]);
-        return $user;
-    }
 }

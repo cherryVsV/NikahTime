@@ -6,11 +6,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
 
 class User extends \TCG\Voyager\Models\User
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use Notifiable, HasApiTokens, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +43,6 @@ class User extends \TCG\Voyager\Models\User
         'email_verified_at' => 'datetime',
         'blocked_at' => 'datetime',
     ];
-
     public function chats()
     {
         return $this->HasMany(\App\Models\Chat::class);
@@ -75,5 +74,8 @@ class User extends \TCG\Voyager\Models\User
     public function interests()
     {
         return $this->belongsToMany(\App\Models\Interest::class);
+    }
+    public function authAccessToken(){
+        return $this->hasMany(OauthAccessToken::class);
     }
 }

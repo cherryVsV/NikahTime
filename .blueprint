@@ -17,18 +17,20 @@ created:
     - database/factories/MessageFactory.php
     - database/factories/LikeFactory.php
     - database/factories/QuestionFactory.php
-    - database/migrations/2021_09_16_185145_create_education_table.php
-    - database/migrations/2021_09_16_185146_create_marital_statuses_table.php
-    - database/migrations/2021_09_16_185147_create_habits_table.php
-    - database/migrations/2021_09_16_185148_create_interests_table.php
-    - database/migrations/2021_09_16_185149_create_tariffs_table.php
-    - database/migrations/2021_09_16_185150_create_user_tariffs_table.php
-    - database/migrations/2021_09_16_185151_create_profiles_table.php
-    - database/migrations/2021_09_16_185152_create_chats_table.php
-    - database/migrations/2021_09_16_185153_create_messages_table.php
-    - database/migrations/2021_09_16_185154_create_likes_table.php
-    - database/migrations/2021_09_16_185155_create_questions_table.php
-    - database/migrations/2021_09_16_185156_create_interest_user_table.php
+    - database/factories/SocialAccountFactory.php
+    - database/migrations/2021_09_22_122839_create_education_table.php
+    - database/migrations/2021_09_22_122840_create_marital_statuses_table.php
+    - database/migrations/2021_09_22_122841_create_habits_table.php
+    - database/migrations/2021_09_22_122842_create_interests_table.php
+    - database/migrations/2021_09_22_122843_create_tariffs_table.php
+    - database/migrations/2021_09_22_122844_create_user_tariffs_table.php
+    - database/migrations/2021_09_22_122845_create_profiles_table.php
+    - database/migrations/2021_09_22_122846_create_chats_table.php
+    - database/migrations/2021_09_22_122847_create_messages_table.php
+    - database/migrations/2021_09_22_122848_create_likes_table.php
+    - database/migrations/2021_09_22_122849_create_questions_table.php
+    - database/migrations/2021_09_22_122850_create_social_accounts_table.php
+    - database/migrations/2021_09_22_122851_create_interest_user_table.php
     - app/Models/Education.php
     - app/Models/MaritalStatus.php
     - app/Models/Habit.php
@@ -40,6 +42,7 @@ created:
     - app/Models/Message.php
     - app/Models/Like.php
     - app/Models/Question.php
+    - app/Models/SocialAccount.php
     - tests/Feature/Http/Controllers/InterestControllerTest.php
     - tests/Feature/Http/Controllers/UserTariffControllerTest.php
     - tests/Feature/Http/Controllers/QuestionControllerTest.php
@@ -84,8 +87,9 @@ models:
     Interest: { title: 'string:255', relationships: { belongsToMany: User } }
     Tariff: { title: 'string:255', description: text, one_month_price: 'integer nullable', three_month_price: 'integer nullable', year_price: 'integer nullable', relationships: { hasMany: UserTariff } }
     UserTariff: { user_id: 'id foreign:users', tariff_id: 'id foreign:tariffs', period: integer, payment_amount: integer, finished_at: timestamp, relationships: { belongsTo: 'User, Tariff' } }
-    Profile: { user_id: 'id foreign:users', avatar: 'string:255', name: 'string:255', surname: 'string:255', gender: 'string:20', birthdate: date, country: 'string:255', town: 'string:255', education_id: 'id foreign:educations', place_of_study: 'string:255', place_of_work: 'string:255', post: 'string:255', marital_status_id: 'id foreign:marital_statuses', children: boolean, habit_id: 'id foreign:habits', about_me: text, relationships: { belongsTo: 'User, Education, MaritalStatus, Habit' } }
+    Profile: { user_id: 'id foreign:users', avatar: 'string:255', name: 'string:255', gender: 'string:20', birthdate: date, country: 'string:255', town: 'string:255', education_id: 'id foreign:educations', place_of_study: 'string:255', place_of_work: 'string:255', post: 'string:255', marital_status_id: 'id foreign:marital_statuses', children: boolean, habit_id: 'id foreign:habits', about_me: text, relationships: { belongsTo: 'User, Education, MaritalStatus, Habit' } }
     Chat: { user1_id: 'id foreign:users', user2_id: 'id foreign:users', softdeletes: softDeletes, relationships: { belongsTo: User, hasMany: Message } }
     Message: { user_id: 'id foreign:users', chat_id: 'id foreign:chats', message: text, softdeletes: softDeletes, relationships: { belongsTo: 'User, Chat' } }
     Like: { user1_id: 'id foreign:users', user2_id: 'id foreign:users', relationships: { belongsTo: User } }
     Question: { user_id: 'id foreign:users', question: text, answer: 'text nullable', relationships: { belongsTo: User } }
+    SocialAccount: { user_id: 'id foreign:users', provider_id: string, provider: string, token: string }

@@ -11,7 +11,7 @@ use JMac\Testing\Traits\AdditionalAssertions;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\LikeController
+ * @see \App\Http\Controllers\Auth\Auth\Auth\LikeController
  */
 class LikeControllerTest extends TestCase
 {
@@ -37,7 +37,7 @@ class LikeControllerTest extends TestCase
     public function store_uses_form_request_validation()
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\LikeController::class,
+            \App\Http\Controllers\Auth\Auth\Auth\LikeController::class,
             'store',
             \App\Http\Requests\LikeStoreRequest::class
         );
@@ -88,7 +88,7 @@ class LikeControllerTest extends TestCase
     public function update_uses_form_request_validation()
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\LikeController::class,
+            \App\Http\Controllers\Auth\Auth\Auth\LikeController::class,
             'update',
             \App\Http\Requests\LikeUpdateRequest::class
         );

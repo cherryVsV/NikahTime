@@ -3,57 +3,51 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
-    use AuthenticatesUsers;
-
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
+     * Login Req
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function login(Request $request)
     {
-        $this->middleware('guest')->except('logout');
-    }
-    /**
-     * Get the needed authorization credentials from the request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    protected function credentials(Request $request)
-    {
-        $field = filter_var($request->get($this->username()), FILTER_VALIDATE_EMAIL)
-            ? $this->username()
-            : 'phone';
+        $user = User::where('email', $request->emailOrPhone)
+            ->orWhere('phone', $request->emailOrPhone)
+            ->first();
+        if($user){
+            if (Hash::check($request->password, $user->password)) {
+                Auth::login($user);
+                $tokenResult = $user->createToken('NikahTime Personal Access Client');
+                $token = $tokenResult->token;
+                if ($request->remember_me)
+                    $token->expires_at = Carbon::now()->addWeeks(1);
+                $token->save();
+                return response()->json([
+                    'access_token' => $tokenResult->accessToken,
+                    'user'=>Auth::user()
+                ]);
 
-        return [
-            $field => $request->get($this->username()),
-            'password' => $request->password,
-        ];
+            } else {
+                $response = ['Password incorrect'];
+                return response($response, 422);
+            }
+        }else {
+            $response = ['User doesn\'t exist'];
+            return response($response, 422);
+        }
     }
 
+    public function logOut()
+    {
+        if (Auth::user()) {
+            Auth::user()->authAccessToken()->delete();
+            return response()->json(['success' => 'Успешный выход из аккаунта'], 200);
+        }
+        return response()->json(['error' => 'Неавторизованный пользователь'], 422);
+    }
 }

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Socials;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Profile;
 use App\Models\SocialAccount;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
@@ -23,9 +24,9 @@ class SocialController extends Controller
 
         $user = $this->findOrCreateUser($provider, $socialiteUser);
 
-        auth()->login($user, true);
+        Auth::login($user, true);
 
-        return redirect('/home');
+        return response()->json(['success' => 'Авторизация через '.$provider.' прошла успешно!'], 200);
     }
 
     public function findOrCreateUser($provider, $socialiteUser)
@@ -43,7 +44,7 @@ class SocialController extends Controller
             'email' => $socialiteUser->getEmail(),
             'password' => Hash::make(Str::random(8)),
         ]);
-         Profile::create([
+        Profile::create([
             'user_id'=>$user->id,
             'avatar'=>$socialiteUser->getAvatar(),
             'name'=>$socialiteUser->getName()

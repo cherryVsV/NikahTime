@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>{{$details['title']}}</title>
+    <title>Подтверждение електронной почты</title>
 </head>
 <body>
 Здравствуйте, подтвердите Ваш адрес электронной почты для приложения NikahTime
