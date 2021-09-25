@@ -16,11 +16,11 @@ class SocialController extends Controller
 {
     public function redirectToProvider($provider)
     {
-        return Socialite::driver($provider)->redirect();
+        return Socialite::driver($provider)->stateless()->redirect();
     }
     public function handleProviderCallback($provider)
     {
-        $socialiteUser = Socialite::driver($provider)->user();
+        $socialiteUser = Socialite::driver($provider)->stateless()->user();
 
         $user = $this->findOrCreateUser($provider, $socialiteUser);
 

@@ -2,60 +2,121 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\ProjectExceptions\GrantTypeError;
+use App\Exceptions\ProjectExceptions\ValidationDataError;
+use App\Exceptions\ProjectExceptions\VerificationError;
 use App\Http\Controllers\Controller;
-use App\Mail\ConfirmMail;
+use App\Models\Profile;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class ResetPasswordController extends Controller
 {
-    public function sendForgotPasswordEmail(Request $request)
+    public function getResetPasswordCode(Request $request)
     {
-        $rules = [
-            'email' => ['string', 'email', 'max:255', 'exists:users']
-        ];
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        } else {
-            $toEmail = $request->email;
-            $code = strval(mt_rand(100000, 999999));
-            $details = [
-                'code' => $code,
+        $checkUserData = new CheckUserDataController();
+        $user = $checkUserData->checkUserData($request);
+        if ($request->grantType == "email") {
+            $rules = [
+                'email' => ['required', 'string', 'email', 'max:255', 'exists:users']
             ];
-            session(['email' => $toEmail, 'code' => $code]);
-            Mail::to($toEmail)->send(new ConfirmMail($details));
-            return response()->json(['success' => 'Письмо подтверждения отправлено на почту ' . $toEmail], 200);
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                throw new ValidationDataError("Validation failed", 422, $validator->errors()->first());
+            } else {
+                $toEmail = $request->email;
+                $code = '';
+                $array = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'));
+                for ($i = 0; $i < 14; $i++) {
+                    $code .= $array[mt_rand(0, count($array) - 1)];
+                }
+                DB::table("password_resets")->insert([
+                    "email" => $toEmail,
+                    "token" => Hash::make($code)
+                ]);
+                $sendCode = new SendCodeController();
+                $sendCode->sendEmailCode($toEmail, $code, 200);
+            }
         }
 
     }
-    public function checkForgotPasswordCode(Request $request){
-        $this->validate($request, [
-            'code' => ['required'],
-        ]);
-        $code = session('code');
-        if( $request->code==$code){
-            return response()->json(['success' => 'Почта подтверждена'], 200);
-        }
-        return response()->json(['error'=>'Код не совпадает с отправленным на вашу почту']);
-    }
-    public function changePassword(Request $request)
+
+    public function verifyResetPasswordCode(Request $request)
     {
-        $this->validate($request,[
-            'password' => ['required', 'string', 'min:8', 'confirmed']]);
-        $email = session('email');
-            $user = User::where('email', $email)->first();
-            if ($user) {
+        if (!$request->has('grantType') || is_null($request->grantType)) {
+            throw new GrantTypeError();
+        }
+        if ($request->grantType == "email") {
+            $rules = [
+                'email' => ['required', 'string', 'email', 'max:255', 'exists:users', 'exists:password_resets'],
+                'code' => ['required', 'string']
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                throw new ValidationDataError("Validation failed", 422, $validator->errors()->first());
+            } else {
+                $passwordReset = DB::table('password_resets')->where('email', $request->email)->first();
+                if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
+                    throw new VerificationError();
+                }
+                return response()->json(['description' => 'OK'], 204);
+            }
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        if (!$request->has('grantType') || is_null($request->grantType)) {
+            throw new GrantTypeError();
+        }
+        if ($request->grantType == "email") {
+            $rules = [
+                'email' => ['required', 'string', 'email', 'max:255', 'exists:users', 'exists:password_resets'],
+                'password' => ['required', 'string', 'min:8'],
+                'code' => ['required', 'string']
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                throw new ValidationDataError("Validation failed", 422, $validator->errors()->first());
+            } else {
+                $passwordReset = DB::table('password_resets')->where('email', $request->email)->first();
+                if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
+                    throw new VerificationError();
+                }
+                DB::table('password_resets')->where('email', $request->email)->delete();
+                $user = User::where('email', $request->email)->first();
                 $user->password = Hash::make($request->password);
                 $user->save();
-                return response()->json(['success' => 'Пароль успешно изменен'], 200);
+                Auth::login($user);
+                $tokenResult = $user->createToken('NikahTime Personal Access Client');
+                $token = $tokenResult->token;
+                if ($request->remember_me)
+                    $token->expires_at = Carbon::now()->addWeeks(1);
+                $token->save();
+                $profile = Profile::where('user_id', $user->id)->first();
+                $firstName = $profile->name;
+                $date = new DateTime();
+                //make success response correct!
+                return response()->json([
+                    'Account' => [
+                        'user' => [
+                            'firstName' => $firstName
+                        ],
+                        'tokenData' => [
+                            'accessToken' => $tokenResult->accessToken,
+                            'expiresIn' => $date->getTimestamp(),
+                            'refreshToken' => $token->revoked
+                        ]
+                    ]
+                ], 200);
             }
-            return response()->json(['error' => 'Ошибка при изменении пароля! Проверьте введенные данные']);
+        }
 
 
     }

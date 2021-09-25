@@ -20,35 +20,41 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [LoginController::class, 'login']);
 
-Route::post('register', [RegisterController::class, 'register']);
+Route::post('registration', [RegisterController::class, 'registration']);
 
-Route::post('confirm/email', [RegisterController::class, 'sendConfirmEmail']);
+Route::post('registration/code/verify', [RegisterController::class, 'verifyRegistrationCode']);
 
-Route::get('social/auth/{provider}', [SocialController::class, 'redirectToProvider'])->name('auth.social');
+Route::post('registration/code', [RegisterController::class, 'requestRegistrationCode']);
 
-Route::get('social/auth/{provider}/callback', [SocialController::class, 'handleProviderCallback'])->name('auth.social.callback');
+Route::post('account/password/code', [ResetPasswordController::class, 'getResetPasswordCode']);
 
-Route::post('forgot/password', [ResetPasswordController::class, 'sendForgotPasswordEmail']);
+Route::post('account/password/code/verify', [ResetPasswordController::class, 'verifyResetPasswordCode']);
 
-Route::post('change/password', [ResetPasswordController::class, 'changePassword']);
+Route::post('account/password/reset', [ResetPasswordController::class, 'resetPassword']);
 
-Route::post('password/confirmation', [ResetPasswordController::class, 'checkForgotPasswordCode']);
 
-Route::post('logout', [LoginController::class, 'logOut']);
+Route::middleware("auth:api")->group(function(){
 
-Route::apiResource('interest', App\Http\Controllers\InterestController::class);
+    Route::post('logout', [LoginController::class, 'logOut']);
 
-Route::apiResource('user-tariff', App\Http\Controllers\UserTariffController::class);
+    Route::apiResource('interest', App\Http\Controllers\InterestController::class);
 
-Route::apiResource('question', App\Http\Controllers\QuestionController::class);
+    Route::apiResource('user-tariff', App\Http\Controllers\UserTariffController::class);
 
-Route::apiResource('chat', App\Http\Controllers\ChatController::class);
+    Route::apiResource('question', App\Http\Controllers\QuestionController::class);
 
-Route::apiResource('message', App\Http\Controllers\MessageController::class);
+    Route::apiResource('chat', App\Http\Controllers\ChatController::class);
 
-Route::apiResource('profile', App\Http\Controllers\ProfileController::class);
+    Route::apiResource('message', App\Http\Controllers\MessageController::class);
 
-Route::apiResource('like', App\Http\Controllers\LikeController::class);
+    Route::apiResource('profile', App\Http\Controllers\ProfileController::class);
+
+    Route::apiResource('like', App\Http\Controllers\LikeController::class);
+});
+
+
+
+
 
 
 
