@@ -3,15 +3,14 @@
 namespace App\Exceptions;
 
 use App\Exceptions\ProjectExceptions\BaseError;
-use App\Exceptions\ProjectExceptions\GrantTypeError;
+
 use Exception;
 use Facade\FlareClient\Http\Response;
 use HttpException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
+
+use UnexpectedValueException;
 
 class Handler extends ExceptionHandler
 {
@@ -50,6 +49,7 @@ class Handler extends ExceptionHandler
 
     public function handleException($request, Exception $e)
     {
+        $response = [];
         if ($request->wantsJson() && ($e instanceof BaseError)) {
             $response = [
                 'code' => $e->getCode(),
@@ -57,16 +57,24 @@ class Handler extends ExceptionHandler
                 'detail' => $e->getDetail()
             ];
 
-            if ($e instanceof HttpException) {
-                $response['code'] = $e->getStatusCode();
-                $response['title'] = $e->getMessage();
-                $response['detail'] = Response::$statusTexts[$e->getStatusCode()];
-            } else if ($e instanceof ModelNotFoundException) {
-                $response['code'] = Response::HTTP_NOT_FOUND;
-                $response['title'] = $e->getMessage();
-                $response['detail'] = Response::$statusTexts[Response::HTTP_NOT_FOUND];
-            }
+        }
+        if ($e instanceof HttpException || $e instanceof UnexpectedValueException) {
+            $response['code'] = $e->getCode();
+            $response['title'] = $e->innerException;
+            $response['detail'] = $e->getMessage();
+        }
+        if ($e instanceof ModelNotFoundException) {
+            $response['code'] = Response::HTTP_NOT_FOUND;
+            $response['title'] = $e->getMessage();
+            $response['detail'] = Response::$statusTexts[Response::HTTP_NOT_FOUND];
+        }
+            if ($e instanceof \Illuminate\Validation\ValidationException) {
+            $response['code'] = 422;
+            $response['title'] = 'ValidationException';
+            $response['detail'] = $e->validator->errors()->first();
+        }
 
+        if(count($response)>0) {
             return response()->json(["Error" =>
                 [
                     'code' => $response['code'],
@@ -75,7 +83,6 @@ class Handler extends ExceptionHandler
                 ]
             ], $response['code']);
         }
-
     }
 
 

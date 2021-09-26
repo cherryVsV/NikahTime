@@ -15,22 +15,23 @@ class ProfileResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'avatar' => $this->avatar,
-            'name' => $this->name,
+            'firstName' => $this->first_name,
+            'lastName' => $this->last_name,
+            'photos'=>$this->photos,
             'gender' => $this->gender,
-            'birthdate' => $this->birthdate,
+            'birthDate' => $this->birth_date,
             'country' => $this->country,
-            'town' => $this->town,
-            'education_id' => $this->education_id,
-            'place_of_study' => $this->place_of_study,
-            'place_of_work' => $this->place_of_work,
-            'post' => $this->post,
-            'marital_status_id' => $this->marital_status_id,
-            'children' => $this->children,
-            'habit_id' => $this->habit_id,
-            'about_me' => $this->about_me,
+            'city' => $this->city,
+            'contactPhoneNumber'=>$this->contact_phone_number,
+            'education' => $this->education->title,
+            'placeOfStudy' => $this->place_of_study,
+            'placeOfWork' => $this->place_of_work,
+            'workPosition' => $this->work_position,
+            'maritalStatus' => $this->maritalStatus->title,
+            'haveChildren' => $this->have_children,
+            'badHabits'=>$this->habits(),
+            'interests'=>$this->interests(),
+            'about' => $this->about,
         ];
     }
 }

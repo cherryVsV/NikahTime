@@ -24,21 +24,18 @@ class ProfileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'avatar' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
+            'firstName' => ['required', 'string', 'max:255'],
+            'lastName' => ['required', 'string', 'max:255'],
             'gender' => ['required', 'string', 'max:20'],
-            'birthdate' => ['required', 'date'],
+            'contactPhoneNumber' => ['required', 'string', 'max:25'],
+            'birthDate' => ['required', 'date'],
             'country' => ['required', 'string', 'max:255'],
-            'town' => ['required', 'string', 'max:255'],
-            'education_id' => ['required', 'integer', 'exists:education,id'],
-            'place_of_study' => ['required', 'string', 'max:255'],
-            'place_of_work' => ['required', 'string', 'max:255'],
-            'post' => ['required', 'string', 'max:255'],
-            'marital_status_id' => ['required', 'integer', 'exists:marital_statuses,id'],
-            'children' => ['required'],
-            'habit_id' => ['required', 'integer', 'exists:habits,id'],
-            'about_me' => ['required', 'string'],
+            'city' => ['required', 'string', 'max:255'],
+            'education' => ['required'],
+            'maritalStatus' => ['required'],
+            'haveChildren' => ['required'],
+            'badHabits' => ['required'],
+            'interests' => ['required'],
         ];
     }
 }

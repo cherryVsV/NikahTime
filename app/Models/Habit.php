@@ -30,6 +30,6 @@ class Habit extends Model
 
     public function profiles()
     {
-        return $this->hasMany(\App\Models\Profile::class);
+        return $this->belongsToMany(\App\Models\Profile::class, 'profile_habit');
     }
 }

@@ -71,10 +71,7 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->hasMany(\App\Models\UserTariff::class);
     }
-    public function interests()
-    {
-        return $this->belongsToMany(\App\Models\Interest::class);
-    }
+
     public function authAccessToken(){
         return $this->hasMany(OauthAccessToken::class);
     }

@@ -16,20 +16,21 @@ class Profile extends Model
      */
     protected $fillable = [
         'user_id',
-        'avatar',
-        'name',
+        'photos',
+        'first_name',
+        'last_name',
         'gender',
-        'birthdate',
+        'birth_date',
+        'contact_phone_number',
         'country',
-        'town',
+        'city',
         'education_id',
         'place_of_study',
         'place_of_work',
-        'post',
+        'work_position',
         'marital_status_id',
-        'children',
-        'habit_id',
-        'about_me',
+        'have_children',
+        'about',
     ];
 
     /**
@@ -40,10 +41,10 @@ class Profile extends Model
     protected $casts = [
         'id' => 'integer',
         'user_id' => 'integer',
-        'birthdate' => 'date',
+        'birth_date' => 'datetime',
         'education_id' => 'integer',
         'marital_status_id' => 'integer',
-        'children' => 'boolean',
+        'have_children' => 'boolean',
         'habit_id' => 'integer',
     ];
 
@@ -55,17 +56,21 @@ class Profile extends Model
 
     public function education()
     {
-        return $this->belongsTo(\App\Models\Education::class);
+        return $this->belongsTo(\App\Models\Education::class, 'education_id');
     }
 
     public function maritalStatus()
     {
-        return $this->belongsTo(\App\Models\MaritalStatus::class);
+        return $this->belongsTo(\App\Models\MaritalStatus::class, 'marital_status_id');
     }
 
-    public function habit()
+    public function habits()
     {
-        return $this->belongsTo(\App\Models\Habit::class);
+        return $this->belongsToMany(\App\Models\Habit::class, 'profile_habit');
+    }
+    public function interests()
+    {
+        return $this->belongsToMany(\App\Models\Interest::class, 'profile_interest');
     }
 
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\MaritalStatus;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        Model::unguard();
+
+        $this->call(EducationSeeder::class);
+        $this->call(MaritalStatusSeeder::class);
+        $this->call(HabitSeeder::class);
+        Model::reguard();
     }
 }

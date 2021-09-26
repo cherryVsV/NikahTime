@@ -7,6 +7,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "fruitcake/laravel-cors": "^2.0",
+        "google/apiclient": "^2.11",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.54",
         "laravel/passport": "^10.1",
@@ -17,7 +18,8 @@
         "socialiteproviders/instagram": "^4.1",
         "socialiteproviders/vkontakte": "^4.2",
         "tcg/voyager": "^1.5",
-      "ext-http": "*"
+      "ext-json": "*",
+        "ext-http": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

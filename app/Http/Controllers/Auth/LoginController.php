@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ProjectExceptions\PasswordIncorrectError;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Services\GenerateAccessTokenService;
 use App\Models\Profile;
 use DateTime;
 use Illuminate\Http\Request;
@@ -22,29 +23,22 @@ class LoginController extends Controller
     {
         $checkUserData = new CheckUserDataController();
         $user = $checkUserData->checkUserData($request);
-        if (!Hash::check($request->password, $user->password)) {
-            throw new PasswordIncorrectError();
+        if ($request->grantType == 'email' || $request->grantType == 'phone') {
+            if (!Hash::check($request->password, $user->password)) {
+                throw new PasswordIncorrectError();
+            }
         }
-        Auth::login($user);
-        $tokenResult = $user->createToken('NikahTime Personal Access Client');
-        $token = $tokenResult->token;
-        if ($request->remember_me)
-            $token->expires_at = Carbon::now()->addWeeks(1);
-        $token->save();
+        $generateToken = new GenerateAccessTokenService();
+        $token = $generateToken->generateToken($request, $user);
         $profile = Profile::where('user_id', $user->id)->first();
         $firstName = $profile->name;
-        $date = new DateTime();
-        //make success response correct!
+
         return response()->json([
             'Account' => [
                 'user' => [
                     'firstName' => $firstName
                 ],
-                'tokenData' => [
-                    'accessToken' => $tokenResult->accessToken,
-                    'expiresIn' => $date->getTimestamp(),
-                    'refreshToken' => $token->revoked
-                ]
+                'tokenData' =>$token
             ]
         ], 200);
 

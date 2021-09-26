@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,7 +36,14 @@ Route::post('account/password/reset', [ResetPasswordController::class, 'resetPas
 
 Route::middleware("auth:api")->group(function(){
 
-    Route::post('logout', [LoginController::class, 'logOut']);
+    Route::get('logout', [LoginController::class, 'logOut']);
+
+    Route::get('account/user', [ProfileController::class, 'index']);
+
+    Route::put('account/user/update', [ProfileController::class, 'update']);
+
+
+
 
     Route::apiResource('interest', App\Http\Controllers\InterestController::class);
 
@@ -46,8 +54,6 @@ Route::middleware("auth:api")->group(function(){
     Route::apiResource('chat', App\Http\Controllers\ChatController::class);
 
     Route::apiResource('message', App\Http\Controllers\MessageController::class);
-
-    Route::apiResource('profile', App\Http\Controllers\ProfileController::class);
 
     Route::apiResource('like', App\Http\Controllers\LikeController::class);
 });

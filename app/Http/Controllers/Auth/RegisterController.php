@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ProjectExceptions\GrantTypeError;
+use App\Exceptions\ProjectExceptions\SocialAuthError;
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Exceptions\ProjectExceptions\VerificationError;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Services\GenerateAccessTokenService;
+use App\Http\Controllers\Services\GoogleAuthService;
+use App\Http\Controllers\Services\LoginAndRegisterViaGoogleService;
 use App\Models\Profile;
+use App\Models\SocialAccount;
 use App\Models\User;
-use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +28,7 @@ class RegisterController extends Controller
         }
         if ($request->grantType == 'email') {
             $rules = [
-                'email' => ['required', 'string', 'email','unique:users' ],
+                'email' => ['required', 'string', 'email', 'unique:users'],
                 'code' => ['required'],
             ];
             $validator = Validator::make($request->all(), $rules);
@@ -37,7 +41,6 @@ class RegisterController extends Controller
             if ($email != $request->email || $code != $request->code) {
                 throw new VerificationError();
             }
-            $date = new DateTime();
             $user = User::create([
                 'email' => $email,
                 'password' => Hash::make($password)
@@ -45,18 +48,10 @@ class RegisterController extends Controller
             Profile::create([
                 'user_id' => $user->id
             ]);
-            Auth::login($user);
-            $tokenResult = $user->createToken('NikahTime Personal Access Client');
-            $token = $tokenResult->token;
-            if ($request->remember_me)
-                $token->expires_at = Carbon::now()->addWeeks(1);
-            $token->save();
+            $generateToken = new GenerateAccessTokenService();
+            $token = $generateToken->generateToken($request, $user);
             return response()->json([
-                'TokenData' => [
-                    'accessToken' => $tokenResult->accessToken,
-                    'expiresIn' => $date->getTimestamp(),
-                    'refreshToken' => $token->revoked
-                ]
+                'TokenData' => $token
             ], 200);
         }
     }
@@ -82,9 +77,27 @@ class RegisterController extends Controller
             $sendCode->sendEmailCode($toEmail, $code, 204);
 
         }
+        if ($request->grantType == 'googleIdToken') {
+            $rules = [
+                'idToken' => ['required', 'string'],
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                throw new ValidationDataError("Validation failed", 422, $validator->errors()->first());
+            }
+            $register = new LoginAndRegisterViaGoogleService();
+            $user = $register->authViaGoogle($request->idToken);
+            $generateToken = new GenerateAccessTokenService();
+            $token = $generateToken->generateToken($request, $user);
+            return response()->json([
+                'TokenData' => $token
+            ], 200);
+
+        }
     }
 
-    public function requestRegistrationCode(Request $request){
+    public function requestRegistrationCode(Request $request)
+    {
         if (!$request->has('grantType') || is_null($request->grantType)) {
             throw new GrantTypeError();
         }

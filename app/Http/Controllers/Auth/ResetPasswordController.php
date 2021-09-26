@@ -6,12 +6,10 @@ use App\Exceptions\ProjectExceptions\GrantTypeError;
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Exceptions\ProjectExceptions\VerificationError;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Services\GenerateAccessTokenService;
 use App\Models\Profile;
 use App\Models\User;
-use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -93,26 +91,17 @@ class ResetPasswordController extends Controller
                 $user = User::where('email', $request->email)->first();
                 $user->password = Hash::make($request->password);
                 $user->save();
-                Auth::login($user);
-                $tokenResult = $user->createToken('NikahTime Personal Access Client');
-                $token = $tokenResult->token;
-                if ($request->remember_me)
-                    $token->expires_at = Carbon::now()->addWeeks(1);
-                $token->save();
+                $generateToken = new GenerateAccessTokenService();
+                $token = $generateToken->generateToken($request, $user);
                 $profile = Profile::where('user_id', $user->id)->first();
                 $firstName = $profile->name;
-                $date = new DateTime();
                 //make success response correct!
                 return response()->json([
                     'Account' => [
                         'user' => [
                             'firstName' => $firstName
                         ],
-                        'tokenData' => [
-                            'accessToken' => $tokenResult->accessToken,
-                            'expiresIn' => $date->getTimestamp(),
-                            'refreshToken' => $token->revoked
-                        ]
+                        'tokenData' => $token
                     ]
                 ], 200);
             }
