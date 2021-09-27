@@ -13,20 +13,33 @@ use App\Models\Interest;
 use App\Models\MaritalStatus;
 use App\Models\Profile;
 use Database\Seeders\MaritalStatusSeeder;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Nette\Schema\ValidationException;
 
 class ProfileController extends Controller
 {
     /**
      * @param \Illuminate\Http\Request $request
-     * @return \App\Http\Resources\ProfileCollection
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function getUser()
     {
-        /*$profiles = Profile::all();
-        return new ProfileCollection($profiles);*/
+        try {
+            $user_id = auth()->user()->getAuthIdentifier();
+            $profile = Profile::where('user_id', $user_id)->first();
+            return response()->json([
+                'User'=> new ProfileResource($profile)
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(['Error' =>
+                ['code' => $e->getCode(),
+                    'title' => $e->getMessage(),
+                    'details' => $e->getMessage()]],
+                404);
+        }
     }
 
     /**
@@ -55,13 +68,14 @@ class ProfileController extends Controller
      * @param \App\Models\Profile $profile
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(ProfileUpdateRequest $request)
+    public function updateUser(ProfileUpdateRequest $request)
     {
         $user_id = auth()->user()->getAuthIdentifier();
         $profile = Profile::where('user_id', $user_id)->first();
         $profile->first_name = $request->firstName;
         $profile->last_name = $request->lastName;
         $profile->gender = $request->gender;
+        $profile->photos = $request->photos;
         $profile->birth_date = $request->birthDate;
         $profile->country = $request->country;
         $profile->city = $request->city;
@@ -93,9 +107,18 @@ class ProfileController extends Controller
                 $profile->interests()->save($interest);
             }
         }
-
+        $profile->place_of_study = $request->placeOfStudy;
+        $profile->place_of_work = $request->placeOfWork;
+        $profile->work_position = $request->workPosition;
+        $patternUrl = '/(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/';
+        $patternPhone = '/[(]*\d{3}[)]*\s*[.\-\s]*\d{3}[.\-\s]*\d{4}/';
+        if (preg_match($patternUrl, $request->about) || preg_match($patternPhone, $request->about)) {
+            throw new ValidationDataError('ValidationException', 422, 'Field about contains unresolved characters');
+        }
+        $profile->about = $request->about;
         $profile->save();
         return response()->json(['description' => 'OK'], 200);
+
 
     }
 
@@ -104,7 +127,8 @@ class ProfileController extends Controller
      * @param \App\Models\Profile $profile
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Profile $profile)
+    public
+    function destroy(Request $request, Profile $profile)
     {
         $profile->delete();
 

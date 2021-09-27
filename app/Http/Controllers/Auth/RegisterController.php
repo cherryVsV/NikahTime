@@ -3,19 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ProjectExceptions\GrantTypeError;
-use App\Exceptions\ProjectExceptions\SocialAuthError;
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Exceptions\ProjectExceptions\VerificationError;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Services\GenerateAccessTokenService;
-use App\Http\Controllers\Services\GoogleAuthService;
 use App\Http\Controllers\Services\LoginAndRegisterViaGoogleService;
 use App\Models\Profile;
-use App\Models\SocialAccount;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 

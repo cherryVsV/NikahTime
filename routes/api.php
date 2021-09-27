@@ -38,9 +38,9 @@ Route::middleware("auth:api")->group(function(){
 
     Route::get('logout', [LoginController::class, 'logOut']);
 
-    Route::get('account/user', [ProfileController::class, 'index']);
+    Route::get('account/user', [ProfileController::class, 'getUser']);
 
-    Route::put('account/user/update', [ProfileController::class, 'update']);
+    Route::put('account/user/update', [ProfileController::class, 'updateUser']);
 
 
 

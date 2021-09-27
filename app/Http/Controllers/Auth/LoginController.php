@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\ProjectExceptions\PasswordIncorrectError;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Services\GenerateAccessTokenService;
+use App\Http\Resources\ProfileResource;
 use App\Models\Profile;
 use DateTime;
 use Illuminate\Http\Request;
@@ -31,13 +32,9 @@ class LoginController extends Controller
         $generateToken = new GenerateAccessTokenService();
         $token = $generateToken->generateToken($request, $user);
         $profile = Profile::where('user_id', $user->id)->first();
-        $firstName = $profile->name;
-
         return response()->json([
             'Account' => [
-                'user' => [
-                    'firstName' => $firstName
-                ],
+                'user'=> new ProfileResource($profile),
                 'tokenData' =>$token
             ]
         ], 200);
