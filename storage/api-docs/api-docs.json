@@ -1,0 +1,232 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "NikahTime API",
+        "version": "3.0.0"
+    },
+    "paths": {
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Вход пользователя",
+                "operationId": "login",
+                "requestBody": {
+                    "description": "Данные для авторизации",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "grantType"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "test@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+74951239999"
+                                    },
+                                    "idToken": {
+                                        "type": "string",
+                                        "example": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjFiZjhhODRkM2VjZDc3ZTlmMmFkNWYwNmZmZDI2MDcwMWRkMDZkOTAiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIzMjExNzk3NzU4MDctZWpmY2UzZDU5aWUwN2hnc2VnMzB2NWE3OGg4dGlrMTcuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiIzMjExNzk3NzU4MDctaXYyaTVvZXEwZjRkanRlYmplNGZmbW5obXBmZmpzOWUuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTEwNTk2ODk5NTc3MDgwNDg1MjMiLCJlbWFpbCI6ImRlaWdoZDA4QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoi0JTQvNC40YLRgNC40Lkg0JfQsNC50YbQtdCyIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FBVFhBSnhKcXNJaWVmYXdpZHFKQ3N1Sl9kSy1Pa2RZWTFPa3VybTFWNy1hPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6ItCU0LzQuNGC0YDQuNC5IiwiZmFtaWx5X25hbWUiOiLQl9Cw0LnRhtC10LIiLCJsb2NhbGUiOiJydSIsImlhdCI6MTYyNTY2Nzk5NCwiZXhwIjoxNjI1NjcxNTk0fQ.gbb5A30-Oqiu_o5bKrov4Sjm5I-7p0VCFxqMWaPfV-5wHBCVs3PR70pOxfLeyqqJHZkauE_KheKWxgOMo6CN4VhjPeOYWzmVH88fVB1ZWThfCkTD06rxWKsfY8I0__kNocP3K-iT5Az908lMtEfl9QQOJfCvgezxi-TKlBRP8R44s9s9bsMMvli08g_J2YEb5jZm6OH2W7KFTeoLzM3okcDEfnX5m--Qx52x6R9LqBPxD0AvzdenZwchQ3yNzpfLxG2tXpN8wehGijlJ-tG4vxSyC8IKy7x09k5whGWMTx_ssIDLQlnAjW91JibhKvgSZnWvyNmFnWey_D6gdSF8ig"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "PassWord12345"
+                                    },
+                                    "grantType": {
+                                        "type": "string",
+                                        "example": "email"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Данные аккаунта",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "Account": {
+                                            "$ref": "#/components/schemas/Account"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "Error": {
+                                            "$ref": "#/components/schemas/Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Account": {
+                "properties": {
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "tokenData": {
+                        "$ref": "#/components/schemas/TokenData"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Account"
+                }
+            },
+            "Error": {
+                "properties": {
+                    "code": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "detail": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "Error"
+                }
+            },
+            "TokenData": {
+                "properties": {
+                    "accessToken": {
+                        "type": "string"
+                    },
+                    "expiresIn": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "refreshToken": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "TokenData"
+                }
+            },
+            "User": {
+                "required": [
+                    "firstName",
+                    "lastName",
+                    "gender",
+                    "birthDate",
+                    "country",
+                    "city",
+                    "contactPhoneNumber",
+                    "education",
+                    "maritalStatus",
+                    "haveChildren",
+                    "badHabits",
+                    "interests"
+                ],
+                "properties": {
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "description": "Пол может принимать значения: male, female",
+                        "type": "string"
+                    },
+                    "photos": {
+                        "description": "Массив ссылок на фотограйии пользователя. Первая ссылка - основное фото пользователя.",
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    },
+                    "birthDate": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "24-09-2021"
+                    },
+                    "country": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "contactPhoneNumber": {
+                        "type": "string"
+                    },
+                    "education": {
+                        "description": "Уровень образования. Может принимать следущие значения: основное общее / basic general, среднее общее / secondary general, среднее профессиональное / secondary vocational, высшее (бакалавр, специалист) / higher (bachelor, specialist), высшее (магистр) / higher (мaster), учёная степень / academic degree",
+                        "type": "string"
+                    },
+                    "placeOfStudy": {
+                        "type": "string"
+                    },
+                    "workPosition": {
+                        "type": "string"
+                    },
+                    "maritalStatus": {
+                        "description": "Семейное положение может принимать значения: notMarried, married, divorced",
+                        "type": "string"
+                    },
+                    "haveChildren": {
+                        "type": "boolean"
+                    },
+                    "interests": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "badHabits": {
+                        "type": "array",
+                        "items": {
+                            "description": "Может принимать значения: smoking, alcohol, gambling, other",
+                            "type": "string"
+                        }
+                    },
+                    "about": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "xml": {
+                    "name": "User"
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
