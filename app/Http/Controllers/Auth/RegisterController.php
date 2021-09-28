@@ -45,9 +45,9 @@ class RegisterController extends Controller
             ]);
             $generateToken = new GenerateAccessTokenService();
             $token = $generateToken->generateToken($request, $user);
-            return response()->json([
-                'TokenData' => $token
-            ], 200);
+            return response()->json(
+               $token
+            , 200);
         }
     }
 
@@ -84,9 +84,7 @@ class RegisterController extends Controller
             $user = $register->authViaGoogle($request->idToken);
             $generateToken = new GenerateAccessTokenService();
             $token = $generateToken->generateToken($request, $user);
-            return response()->json([
-                'TokenData' => $token
-            ], 200);
+            return response()->json([], 204);
 
         }
     }

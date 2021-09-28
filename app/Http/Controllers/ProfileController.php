@@ -34,10 +34,10 @@ class ProfileController extends Controller
                 'User'=> new ProfileResource($profile)
             ], 200);
         } catch (Exception $e) {
-            return response()->json(['Error' =>
-                ['code' => $e->getCode(),
+            return response()->json([
+                'code' => $e->getCode(),
                     'title' => $e->getMessage(),
-                    'details' => $e->getMessage()]],
+                    'details' => $e->getMessage()],
                 404);
         }
     }
@@ -117,7 +117,7 @@ class ProfileController extends Controller
         }
         $profile->about = $request->about;
         $profile->save();
-        return response()->json(['description' => 'OK'], 200);
+        return response()->json([], 200);
 
 
     }

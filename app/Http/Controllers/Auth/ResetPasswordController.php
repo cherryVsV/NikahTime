@@ -64,7 +64,7 @@ class ResetPasswordController extends Controller
                 if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                     throw new VerificationError();
                 }
-                return response()->json(['description' => 'OK'], 204);
+                return response()->json([], 204);
             }
         }
     }
@@ -96,10 +96,8 @@ class ResetPasswordController extends Controller
                 $token = $generateToken->generateToken($request, $user);
                 $profile = Profile::where('user_id', $user->id)->first();
                 return response()->json([
-                    'Account' => [
                         'user'=> new ProfileResource($profile),
                         'tokenData' => $token
-                    ]
                 ], 200);
             }
         }
