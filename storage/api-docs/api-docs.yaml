@@ -5,7 +5,8 @@ info:
   license:
     name: MIT
 servers:
-  - url: /api/
+  - url: https://virtserver.swaggerhub.com/cherryVsV/NikahTime/0.1.1
+    description: SwaggerHub API Auto Mocking
 paths:
   /login:
     post:
