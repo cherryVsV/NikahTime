@@ -18,18 +18,14 @@ class RegisterController extends Controller
 {
     public function verifyRegistrationCode(Request $request)
     {
-        if (!$request->has('grantType') || is_null($request->grantType)) {
-            throw new GrantTypeError();
-        }
+        $this->validate($request, [
+            'grantType'=>['required', 'string']
+        ]);
         if ($request->grantType == 'email') {
-            $rules = [
+            $this->validate($request, [
                 'email' => ['required', 'string', 'email', 'unique:users'],
                 'code' => ['required'],
-            ];
-            $validator = Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                throw new ValidationDataError("Validation failed", 422, $validator->errors()->first());
-            }
+            ]);
             $code = session('code');
             $email = session('email');
             $password = session('password');
@@ -44,7 +40,7 @@ class RegisterController extends Controller
                 'user_id' => $user->id
             ]);
             $generateToken = new GenerateAccessTokenService();
-            $token = $generateToken->generateToken($request, $user);
+            $token = $generateToken->generateToken($request, $email, $password);
             return response()->json(
                $token
             , 200);
@@ -53,60 +49,60 @@ class RegisterController extends Controller
 
     public function registration(Request $request)
     {
-        if (!$request->has('grantType') || is_null($request->grantType)) {
-            throw new GrantTypeError();
-        }
+        $this->validate($request, [
+            'grantType'=>['required', 'string']
+        ]);
         if ($request->grantType == 'email') {
-            $rules = [
+            $this->validate($request, [
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => ['required', 'string', 'min:8']
-            ];
-            $validator = Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                throw new ValidationDataError("Validation failed", 422, $validator->errors()->first());
-            }
+            ]);
             $toEmail = $request->email;
             $code = strval(mt_rand(100000, 999999));
             session(['email' => $toEmail, 'password' => $request->password, "code" => $code]);
             $sendCode = new SendCodeController();
-            $sendCode->sendEmailCode($toEmail, $code, 204);
+            $answer = $sendCode->sendEmailCode($toEmail, $code);
+            if($answer=='ok'){
+                return response(null, 204);
+            }
 
         }
         if ($request->grantType == 'googleIdToken') {
-            $rules = [
+            $this->validate($request, [
                 'idToken' => ['required', 'string'],
-            ];
-            $validator = Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                throw new ValidationDataError("Validation failed", 422, $validator->errors()->first());
-            }
+            ]);
             $register = new LoginAndRegisterViaGoogleService();
-            $user = $register->authViaGoogle($request->idToken);
+            $userData = $register->authViaGoogle($request->idToken);
             $generateToken = new GenerateAccessTokenService();
-            $token = $generateToken->generateToken($request, $user);
-            return response()->json([], 204);
+            $user = $userData['user'];
+            $username = $userData['username'];
+            $password = $userData['password'];
+            $token = $generateToken->generateToken($request, $username, $password);
+            return response()->json(
+                $token
+                , 200);
+           // return response(null,204);
 
         }
     }
 
     public function requestRegistrationCode(Request $request)
     {
-        if (!$request->has('grantType') || is_null($request->grantType)) {
-            throw new GrantTypeError();
-        }
+        $this->validate($request, [
+            'grantType'=>['required', 'string']
+        ]);
         if ($request->grantType == 'email') {
-            $rules = [
+            $this->validate($request, [
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            ];
-            $validator = Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                throw new ValidationDataError("Validation failed", 422, $validator->errors()->first());
-            }
+            ]);
             $toEmail = $request->email;
             $code = strval(mt_rand(100000, 999999));
             session(['email' => $toEmail, "code" => $code]);
             $sendCode = new SendCodeController();
-            $sendCode->sendEmailCode($toEmail, $code, 202);
+            $answer = $sendCode->sendEmailCode($toEmail, $code);
+            if($answer=='ok'){
+                return response(null, 202);
+            }
         }
 
     }

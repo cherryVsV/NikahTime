@@ -4,9 +4,11 @@ namespace App\Exceptions;
 
 use App\Exceptions\ProjectExceptions\BaseError;
 
+use Cassandra\Exception\UnauthorizedException;
 use Exception;
 use Facade\FlareClient\Http\Response;
 use HttpException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -60,27 +62,31 @@ class Handler extends ExceptionHandler
         }
         if ($e instanceof HttpException || $e instanceof UnexpectedValueException) {
             $response['code'] = $e->getCode();
-            $response['title'] = $e->innerException;
+            $response['title'] = 'ERR_HTTP_FAILED';
+            $response['detail'] = $e->getMessage();
+        }
+        if ($e instanceof AuthenticationException) {
+            $response['code'] = 401;
+            $response['title'] = 'ERR_AUTHORIZATION_CHECK_FAILED';
             $response['detail'] = $e->getMessage();
         }
         if ($e instanceof ModelNotFoundException) {
             $response['code'] = Response::HTTP_NOT_FOUND;
-            $response['title'] = $e->getMessage();
-            $response['detail'] = Response::$statusTexts[Response::HTTP_NOT_FOUND];
+            $response['title'] = 'ERR_FOUND_MODEL_FAILED';
+            $response['detail'] =  $e->getMessage();
         }
             if ($e instanceof \Illuminate\Validation\ValidationException) {
             $response['code'] = 422;
-            $response['title'] = 'ValidationException';
+            $response['title'] = 'ERR_VALIDATION_FAILED';
             $response['detail'] = $e->validator->errors()->first();
         }
 
         if(count($response)>0) {
-            return response()->json(["Error" =>
-                [
+            return response()->json([
                     'code' => $response['code'],
                     'title' => $response['title'],
                     'detail' => $response['detail'],
-                ]
+
             ], $response['code']);
         }
     }

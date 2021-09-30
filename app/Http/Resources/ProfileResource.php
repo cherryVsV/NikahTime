@@ -15,20 +15,32 @@ class ProfileResource extends JsonResource
      */
     public function toArray($request)
     {
+        $maritalStatus = null;
+        $education = null;
+        $birthDate = null;
+        if(!is_null($this->maritalStatus)){
+            $maritalStatus = $this->maritalStatus->title;
+        }
+        if(!is_null($this->education)){
+            $education = $this->education->title;
+        }
+        if(!is_null($this->birth_date)){
+            $birthDate = Carbon::parse($this->birth_date)->format('d-m-Y');
+        }
         return [
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
             'photos'=>$this->photos,
             'gender' => $this->gender,
-            'birthDate' => Carbon::parse($this->birth_date)->format('d-m-Y'),
+            'birthDate' => $birthDate,
             'country' => $this->country,
             'city' => $this->city,
             'contactPhoneNumber'=>$this->contact_phone_number,
-            'education' => $this->education->title,
+            'education' => $education,
             'placeOfStudy' => $this->place_of_study,
             'placeOfWork' => $this->place_of_work,
             'workPosition' => $this->work_position,
-            'maritalStatus' => $this->maritalStatus->title,
+            'maritalStatus' => $maritalStatus,
             'haveChildren' => $this->have_children,
             'badHabits'=>$this->habits()->pluck('title'),
             'interests'=>$this->interests()->pluck('title'),

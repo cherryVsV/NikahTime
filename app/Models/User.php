@@ -75,4 +75,20 @@ class User extends \TCG\Voyager\Models\User
     public function authAccessToken(){
         return $this->hasMany(OauthAccessToken::class);
     }
+
+
+    public function findForPassport($username){
+
+        if($this->where('email',$username)->exists()){
+            return $this->where('email',$username)->first();
+        }
+        if($this->where('phone',$username)->exists()){
+            return $this->where('phone',$username)->first();
+        }
+        if(SocialAccount::where('provider_id', $username)->exists()){
+            $social = SocialAccount::where('provider_id', $username)->first();
+           return $this->where('id',$social->user_id)->first();
+        }
+
+    }
 }

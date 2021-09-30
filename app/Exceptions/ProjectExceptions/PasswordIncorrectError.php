@@ -8,6 +8,6 @@ class PasswordIncorrectError extends BaseError
 {
     public function __construct()
     {
-        parent::__construct("Authorization failed", 422, "Password field is incorrect");
+        parent::__construct("ERR_AUTHORIZATION_FAILED", 422, "Password field is incorrect");
     }
 }

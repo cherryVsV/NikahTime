@@ -20,15 +20,25 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        $this->validate($request, [
+           'grantType'=>['required', 'string']
+        ]);
         $checkUserData = new CheckUserDataController();
-        $user = $checkUserData->checkUserData($request);
-        if ($request->grantType == 'email' || $request->grantType == 'phone') {
+        $userData = $checkUserData->checkUserData($request);
+        $password = '';
+        $user = $userData['user'];
+        $username = $userData['username'];
+        if ($request->grantType == 'email' || $request->grantType == 'phoneNumber') {
             if (!Hash::check($request->password, $user->password)) {
                 throw new PasswordIncorrectError();
             }
+            $password = $request->password;
+        }
+        if($request->grantType=='googleIdToken'){
+            $password = $userData['password'];
         }
         $generateToken = new GenerateAccessTokenService();
-        $token = $generateToken->generateToken($request, $user);
+        $token = $generateToken->generateToken($request, $username, $password);
         $profile = Profile::where('user_id', $user->id)->first();
         return response()->json([
                 'user'=> new ProfileResource($profile),

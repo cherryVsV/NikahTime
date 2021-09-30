@@ -33,7 +33,7 @@ class ProfileUpdateRequest extends FormRequest
             'city' => ['required', 'string', 'max:255'],
             'education' => ['required'],
             'maritalStatus' => ['required'],
-            'haveChildren' => ['required'],
+            'haveChildren' => ['boolean'],
             'badHabits' => ['required'],
             'interests' => ['required'],
         ];

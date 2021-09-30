@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Mail;
 
 class SendCodeController extends Controller
 {
-    public function sendEmailCode($toEmail, $code, $status)
+    public function sendEmailCode($toEmail, $code)
     {
         try {
             $html = "Здравствуйте, подтвердите Ваш адрес электронной почты для приложения NikahTime с помощью кода проверки из данного сообщения
@@ -21,7 +21,7 @@ class SendCodeController extends Controller
                 $message->subject('Подтверждение электронной почты');
                 $message->setBody($html, 'text/html');
             });
-            return response()->json(['description' => 'OK'], $status);
+            return 'ok';
         } catch (Exception $e) {
             throw new SendingMessageError();
         }

@@ -19,7 +19,8 @@
         "socialiteproviders/google": "^4.1",
         "socialiteproviders/instagram": "^4.1",
         "socialiteproviders/vkontakte": "^4.2",
-        "tcg/voyager": "^1.5"
+        "tcg/voyager": "^1.5",
+      "ext-http": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
