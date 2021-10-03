@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Voyager\VoyagerUserController;
 use Illuminate\Support\Facades\Route;
 use TCG\Voyager\Facades\Voyager;
 
@@ -13,4 +14,11 @@ use TCG\Voyager\Facades\Voyager;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Voyager::routes();
+Route::get('/', function (){
+    return view('welcome');
+});
+Route::group(['prefix'=>'admin'], function(){
+    Route::get('users/block',[VoyagerUserController::class, 'block'])->name('users.block');
+    Voyager::routes();
+});
+

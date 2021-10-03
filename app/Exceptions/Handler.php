@@ -43,6 +43,7 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+
         $this->renderable(function (Exception $e, $request) {
             return $this->handleException($request, $e);
         });
@@ -51,43 +52,45 @@ class Handler extends ExceptionHandler
 
     public function handleException($request, Exception $e)
     {
-        $response = [];
-        if ($request->wantsJson() && ($e instanceof BaseError)) {
-            $response = [
-                'code' => $e->getCode(),
-                'title' => $e->getTitle(),
-                'detail' => $e->getDetail()
-            ];
+        if ($request->wantsJson()) {
+            $response = [];
+            if ($request->wantsJson() && ($e instanceof BaseError)) {
+                $response = [
+                    'code' => $e->getCode(),
+                    'title' => $e->getTitle(),
+                    'detail' => $e->getDetail()
+                ];
 
-        }
-        if ($e instanceof HttpException || $e instanceof UnexpectedValueException) {
-            $response['code'] = $e->getCode();
-            $response['title'] = 'ERR_HTTP_FAILED';
-            $response['detail'] = $e->getMessage();
-        }
-        if ($e instanceof AuthenticationException) {
-            $response['code'] = 401;
-            $response['title'] = 'ERR_AUTHORIZATION_CHECK_FAILED';
-            $response['detail'] = $e->getMessage();
-        }
-        if ($e instanceof ModelNotFoundException) {
-            $response['code'] = Response::HTTP_NOT_FOUND;
-            $response['title'] = 'ERR_FOUND_MODEL_FAILED';
-            $response['detail'] =  $e->getMessage();
-        }
+            }
+            if ($e instanceof HttpException || $e instanceof UnexpectedValueException) {
+                $response['code'] = $e->getCode();
+                $response['title'] = 'ERR_HTTP_FAILED';
+                $response['detail'] = $e->getMessage();
+            }
+            if ($e instanceof AuthenticationException) {
+                $response['code'] = 401;
+                $response['title'] = 'ERR_AUTHORIZATION_CHECK_FAILED';
+                $response['detail'] = $e->getMessage();
+            }
+            if ($e instanceof ModelNotFoundException) {
+                $response['code'] = Response::HTTP_NOT_FOUND;
+                $response['title'] = 'ERR_FOUND_MODEL_FAILED';
+                $response['detail'] = $e->getMessage();
+            }
             if ($e instanceof \Illuminate\Validation\ValidationException) {
-            $response['code'] = 422;
-            $response['title'] = 'ERR_VALIDATION_FAILED';
-            $response['detail'] = $e->validator->errors()->first();
-        }
+                $response['code'] = 422;
+                $response['title'] = 'ERR_VALIDATION_FAILED';
+                $response['detail'] = $e->validator->errors()->first();
+            }
 
-        if(count($response)>0) {
-            return response()->json([
+            if (count($response) > 0) {
+                return response()->json([
                     'code' => $response['code'],
                     'title' => $response['title'],
                     'detail' => $response['detail'],
 
-            ], $response['code']);
+                ], $response['code']);
+            }
         }
     }
 
