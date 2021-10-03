@@ -15,10 +15,6 @@
         "laravel/passport": "^10.1",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "socialiteproviders/facebook": "^4.1",
-        "socialiteproviders/google": "^4.1",
-        "socialiteproviders/instagram": "^4.1",
-        "socialiteproviders/vkontakte": "^4.2",
         "tcg/voyager": "^1.5",
       "ext-http": "*"
     },
