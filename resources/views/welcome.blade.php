@@ -4,11 +4,13 @@
     <title>Nikah Time</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8" />
+    <link rel="icon" href="{{asset('favicon.ico')}}" />
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script type="text/javascript" src="{{asset('js/jquery-2.1.4.min.js')}}"></script>
     <!-- Custom Theme files -->
     <link href="{{asset('css/style.css')}}" rel='stylesheet' type='text/css' />
     <link rel="stylesheet" href="{{asset('css/jquery.countdown.css')}}" />
+
     <!--fonts-->
     <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese" rel="stylesheet">
     <!--//fonts-->
