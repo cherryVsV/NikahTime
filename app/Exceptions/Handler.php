@@ -4,10 +4,8 @@ namespace App\Exceptions;
 
 use App\Exceptions\ProjectExceptions\BaseError;
 
-use Cassandra\Exception\UnauthorizedException;
 use Exception;
 use Facade\FlareClient\Http\Response;
-use HttpException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -45,12 +43,12 @@ class Handler extends ExceptionHandler
     {
 
         $this->renderable(function (Exception $e, $request) {
-            return $this->handleException($request, $e);
+            return $this->customHandleException($request, $e);
         });
 
     }
 
-    public function handleException($request, Exception $e)
+    public function customHandleException($request, Exception $e)
     {
         if ($request->wantsJson()) {
             $response = [];
@@ -62,7 +60,7 @@ class Handler extends ExceptionHandler
                 ];
 
             }
-            if ($e instanceof HttpException || $e instanceof UnexpectedValueException) {
+            if ( $e instanceof UnexpectedValueException) {
                 $response['code'] = $e->getCode();
                 $response['title'] = 'ERR_HTTP_FAILED';
                 $response['detail'] = $e->getMessage();

@@ -5,12 +5,19 @@ namespace App\Http\Controllers\Voyager;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use TCG\Voyager\Facades\Voyager;
 use TCG\Voyager\Http\Controllers\VoyagerAuthController as BaseVoyagerAuthController;
 
 class VoyagerAuthController extends BaseVoyagerAuthController
 {
-
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => ['required', 'string','email', 'exists:users,email'],
+            'password' => ['required','string'],
+        ]);
+    }
     public function postLogin(Request $request)
     {
         $this->validateLogin($request);
