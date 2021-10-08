@@ -18,29 +18,28 @@ class LoginAndRegisterViaGoogleService
        $jwt = $googleAuthService->decode();
        if($jwt) {
            $username = $googleAuthService->getSub();
-           $email = $googleAuthService->getEmail();
            $password = strval(mt_rand(10000000, 99999999));
-           if (is_null($email)|| !User::where('email', $email)->exists()) {
+           if (!SocialAccount::where(['provider_id' => $username, 'provider' => 'google'])->exists()) {
                $user = User::create([
-                   'email' => $email,
                    'password' => Hash::make($password)
                ]);
                Profile::create([
                    'user_id' => $user->id
                ]);
-
-           }else{
-               $user = User::where('email', $email)->first();
-               $user->password=Hash::make($password);
-               $user->save();
-           }
-           if (!SocialAccount::where(['provider_id' => $username, 'provider' => 'google'])->exists()) {
                SocialAccount::create([
                    'user_id' => $user->id,
                    'provider_id' => $username,
                    'provider' => 'google',
                    'token' => $token
                ]);
+           }
+           else{
+               $social = SocialAccount::where(['provider_id' => $username, 'provider' => 'google'])->first();
+               $social->token = $token;
+               $social->save();
+               $user = User::where('id', $social->user_id)->first();
+               $user->password=Hash::make($password);
+               $user->save();
            }
            return ['username'=>$username, 'password'=>$password, 'user'=>$user];
        }

@@ -10,7 +10,9 @@ use App\Http\Controllers\Services\GenerateAccessTokenService;
 use App\Http\Controllers\Services\LoginAndRegisterViaGoogleService;
 use App\Models\Profile;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,21 +28,22 @@ class RegisterController extends Controller
                 'email' => ['required', 'string', 'email', 'unique:users'],
                 'code' => ['required'],
             ]);
-            $code = session('code');
-            $email = session('email');
-            $password = session('password');
-            if ($email != $request->email || $code != $request->code) {
+            $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->first();
+            $password = $passwordReset->password;
+            if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError();
             }
             $user = User::create([
-                'email' => $email,
-                'password' => Hash::make($password)
+                'email' => $request->email,
+                'password' => Hash::make($password),
+                'email_verified_at'=>Carbon::now()
             ]);
+            DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->delete();
             Profile::create([
                 'user_id' => $user->id
             ]);
             $generateToken = new GenerateAccessTokenService();
-            $token = $generateToken->generateToken($request, $email, $password);
+            $token = $generateToken->generateToken($request, $request->email, $password);
             return response()->json(
                $token
             , 200);
@@ -59,7 +62,12 @@ class RegisterController extends Controller
             ]);
             $toEmail = $request->email;
             $code = strval(mt_rand(100000, 999999));
-            session(['email' => $toEmail, 'password' => $request->password, "code" => $code]);
+            DB::table("password_resets")->insert([
+                "email" => $toEmail,
+                "token" => Hash::make($code),
+                "type"=>'verify',
+                "password"=>$request->password
+            ]);
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendEmailCode($toEmail, $code);
             if($answer=='ok'){
@@ -75,7 +83,7 @@ class RegisterController extends Controller
             $userData = $register->authViaGoogle($request->idToken);
             $generateToken = new GenerateAccessTokenService();
             $user = $userData['user'];
-            $username = $userData['username'];
+            $username = $userData['username'].' google';
             $password = $userData['password'];
             $token = $generateToken->generateToken($request, $username, $password);
             return response()->json(
@@ -97,7 +105,12 @@ class RegisterController extends Controller
             ]);
             $toEmail = $request->email;
             $code = strval(mt_rand(100000, 999999));
-            session(['email' => $toEmail, "code" => $code]);
+            if(!DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->exists()) {
+                throw new VerificationError();
+            }
+           DB::table('password_resets')->where(['email' => $request->email, 'type' => 'verify'])
+               ->update(['token'=>Hash::make($code)]);
+
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendEmailCode($toEmail, $code);
             if($answer=='ok'){

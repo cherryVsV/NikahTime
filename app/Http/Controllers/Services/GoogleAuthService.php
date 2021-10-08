@@ -29,14 +29,6 @@ class GoogleAuthService
         return $googleSignInPayload->sub;
     }
 
-    public function getEmail()
-    {
-        $googleSignInPayload = $this->decode();
-        if($googleSignInPayload->email) {
-            return $googleSignInPayload->email;
-        }return null;
-    }
-
     public function setToken($token){
         $this->token = $token;
     }

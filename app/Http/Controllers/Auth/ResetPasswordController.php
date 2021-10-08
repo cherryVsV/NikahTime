@@ -34,9 +34,13 @@ class ResetPasswordController extends Controller
             for ($i = 0; $i < 14; $i++) {
                 $code .= $array[mt_rand(0, count($array) - 1)];
             }
+            if(DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->exists()){
+                DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->delete();
+            }
             DB::table("password_resets")->insert([
                 "email" => $toEmail,
-                "token" => Hash::make($code)
+                "token" => Hash::make($code),
+                "type"=>'reset'
             ]);
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendEmailCode($toEmail, $code);
@@ -59,7 +63,7 @@ class ResetPasswordController extends Controller
                 'code' => ['required', 'string']
             ]);
 
-            $passwordReset = DB::table('password_resets')->where('email', $request->email)->first();
+            $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError();
             }
@@ -79,11 +83,11 @@ class ResetPasswordController extends Controller
                 'password' => ['required', 'string', 'min:8'],
                 'code' => ['required', 'string']
             ]);
-            $passwordReset = DB::table('password_resets')->where('email', $request->email)->first();
+            $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError();
             }
-            DB::table('password_resets')->where('email', $request->email)->delete();
+            DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->delete();
             $user = User::where('email', $request->email)->first();
             $user->password = Hash::make($request->password);
             $user->save();

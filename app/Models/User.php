@@ -22,7 +22,8 @@ class User extends \TCG\Voyager\Models\User
         'name',
         'email',
         'password',
-        'blocked_at'
+        'blocked_at',
+        'email_verified_at'
     ];
 
     /**
@@ -44,52 +45,66 @@ class User extends \TCG\Voyager\Models\User
         'email_verified_at' => 'datetime',
         'blocked_at' => 'datetime',
     ];
+
+
     public function chats()
     {
         return $this->HasMany(\App\Models\Chat::class);
     }
+
     public function likes()
     {
         return $this->HasMany(\App\Models\Like::class);
     }
+
     public function messages()
     {
         return $this->HasMany(\App\Models\Message::class);
     }
+
     public function profile()
     {
         return $this->HasOne(\App\Models\Profile::class);
     }
+
     public function socialAccount()
     {
         return $this->HasMany(\App\Models\SocialAccount::class);
     }
+
     public function questions()
     {
         return $this->HasMany(\App\Models\Question::class);
     }
+
     public function userTariffs()
     {
         return $this->hasMany(\App\Models\UserTariff::class);
     }
 
-    public function authAccessToken(){
+    public function authAccessToken()
+    {
         return $this->hasMany(OauthAccessToken::class);
     }
 
 
-    public function findForPassport($username){
+    public function findForPassport($username)
+    {
+        if (strpos($username, ' ') !== false) {
+            $data = explode(" ", $username);
+            if (SocialAccount::where(['provider_id' => $data[0], 'provider' => $data[1]])->exists()) {
+                $social = SocialAccount::where(['provider_id' => $data[0], 'provider' => $data[1]])->first();
+                return $this->where('id', $social->user_id)->first();
+            }
+        }
 
-        if($this->where('email',$username)->exists()){
-            return $this->where('email',$username)->first();
+        if ($this->where('email', $username)->exists()) {
+            return $this->where('email', $username)->first();
         }
-        if($this->where('phone',$username)->exists()){
-            return $this->where('phone',$username)->first();
+        if ($this->where('phone', $username)->exists()) {
+            return $this->where('phone', $username)->first();
         }
-        if(SocialAccount::where('provider_id', $username)->exists()){
-            $social = SocialAccount::where('provider_id', $username)->first();
-           return $this->where('id',$social->user_id)->first();
-        }
+
 
     }
 }

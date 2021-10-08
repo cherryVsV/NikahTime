@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ProjectExceptions\PasswordIncorrectError;
+use App\Exceptions\ProjectExceptions\UserNotFoundError;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Services\GenerateAccessTokenService;
 use App\Http\Resources\ProfileResource;
 use App\Models\Profile;
+use App\Models\SocialAccount;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -28,6 +30,7 @@ class LoginController extends Controller
         $password = '';
         $user = $userData['user'];
         $username = $userData['username'];
+        logger($username);
         if ($request->grantType == 'email' || $request->grantType == 'phoneNumber') {
             if (!Hash::check($request->password, $user->password)) {
                 throw new PasswordIncorrectError();
@@ -36,6 +39,7 @@ class LoginController extends Controller
         }
         if($request->grantType=='googleIdToken'){
             $password = $userData['password'];
+            $username = $username.' google';
         }
         $generateToken = new GenerateAccessTokenService();
         $token = $generateToken->generateToken($request, $username, $password);
