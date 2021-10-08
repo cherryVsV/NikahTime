@@ -30,7 +30,6 @@ class LoginController extends Controller
         $password = '';
         $user = $userData['user'];
         $username = $userData['username'];
-        logger($username);
         if ($request->grantType == 'email' || $request->grantType == 'phoneNumber') {
             if (!Hash::check($request->password, $user->password)) {
                 throw new PasswordIncorrectError();
@@ -40,6 +39,10 @@ class LoginController extends Controller
         if($request->grantType=='googleIdToken'){
             $password = $userData['password'];
             $username = $username.' google';
+        }
+        if($request->grantType=='appleIdToken'){
+            $password = $userData['password'];
+            $username = $username.' apple';
         }
         $generateToken = new GenerateAccessTokenService();
         $token = $generateToken->generateToken($request, $username, $password);

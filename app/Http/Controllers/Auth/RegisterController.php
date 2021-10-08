@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ProjectExceptions\GrantTypeError;
+use App\Exceptions\ProjectExceptions\UserNotFoundError;
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Exceptions\ProjectExceptions\VerificationError;
 use App\Http\Controllers\Controller;
@@ -28,6 +29,9 @@ class RegisterController extends Controller
                 'email' => ['required', 'string', 'email', 'unique:users'],
                 'code' => ['required'],
             ]);
+            if(!DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->exists()){
+                throw new UserNotFoundError();
+            }
             $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->first();
             $password = $passwordReset->password;
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
@@ -80,7 +84,7 @@ class RegisterController extends Controller
                 'idToken' => ['required', 'string'],
             ]);
             $register = new LoginAndRegisterViaGoogleService();
-            $userData = $register->authViaGoogle($request->idToken);
+            $userData = $register->authViaGoogle($request->idToken, 'google');
             $generateToken = new GenerateAccessTokenService();
             $user = $userData['user'];
             $username = $userData['username'].' google';
@@ -90,6 +94,23 @@ class RegisterController extends Controller
                 $token
                 , 200);
            // return response(null,204);
+
+        }
+        if ($request->grantType == 'appleIdToken') {
+            $this->validate($request, [
+                'idToken' => ['required', 'string'],
+            ]);
+            $register = new LoginAndRegisterViaGoogleService();
+            $userData = $register->authViaGoogle($request->idToken, 'apple');
+            $generateToken = new GenerateAccessTokenService();
+            $user = $userData['user'];
+            $username = $userData['username'].' apple';
+            $password = $userData['password'];
+            $token = $generateToken->generateToken($request, $username, $password);
+            return response()->json(
+                $token
+                , 200);
+            // return response(null,204);
 
         }
     }

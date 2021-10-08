@@ -7,6 +7,7 @@ use App\Exceptions\ProjectExceptions\SocialAuthError;
 use App\Exceptions\ProjectExceptions\UserNotFoundError;
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Services\AppleAuthService;
 use App\Http\Controllers\Services\GoogleAuthService;
 use App\Http\Controllers\Services\LoginAndRegisterViaGoogleService;
 use App\Models\Profile;
@@ -41,7 +42,17 @@ class CheckUserDataController extends Controller
                 'idToken'=>['required', 'string']
             ]);
             $login = new LoginAndRegisterViaGoogleService();
-            $userData = $login->authViaGoogle($request->idToken);
+            $userData = $login->authViaGoogle($request->idToken, 'google');
+            $user = $userData['user'];
+            $username = $userData['username'];
+            $password = $userData['password'];
+        }
+        if ($request->grantType == 'appleIdToken') {
+            $this->validate($request, [
+                'idToken'=>['required', 'string']
+            ]);
+            $login = new LoginAndRegisterViaGoogleService();
+            $userData = $login->authViaGoogle($request->idToken, 'apple');
             $user = $userData['user'];
             $username = $userData['username'];
             $password = $userData['password'];

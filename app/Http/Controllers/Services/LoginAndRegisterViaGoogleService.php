@@ -12,14 +12,22 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginAndRegisterViaGoogleService
 {
-   public function authViaGoogle($token){
-       $googleAuthService = new GoogleAuthService();
-       $googleAuthService->setToken($token);
-       $jwt = $googleAuthService->decode();
-       if($jwt) {
-           $username = $googleAuthService->getSub();
+   public function authViaGoogle($token, $provider){
+       $jwt = null;
+       if($provider == 'google') {
+           $googleAuthService = new GoogleAuthService();
+           $googleAuthService->setToken($token);
+           $jwt = $googleAuthService->decode();
+       }
+       if($provider == 'apple') {
+           $appleAuthService = new AppleAuthService();
+           $appleAuthService->setToken($token);
+           $jwt = $appleAuthService->decode();
+       }
+       if(!is_null($jwt)) {
+           $username = $jwt->sub;
            $password = strval(mt_rand(10000000, 99999999));
-           if (!SocialAccount::where(['provider_id' => $username, 'provider' => 'google'])->exists()) {
+           if (!SocialAccount::where(['provider_id' => $username, 'provider' => $provider])->exists()) {
                $user = User::create([
                    'password' => Hash::make($password)
                ]);
@@ -29,12 +37,12 @@ class LoginAndRegisterViaGoogleService
                SocialAccount::create([
                    'user_id' => $user->id,
                    'provider_id' => $username,
-                   'provider' => 'google',
+                   'provider' => $provider,
                    'token' => $token
                ]);
            }
            else{
-               $social = SocialAccount::where(['provider_id' => $username, 'provider' => 'google'])->first();
+               $social = SocialAccount::where(['provider_id' => $username, 'provider' => $provider])->first();
                $social->token = $token;
                $social->save();
                $user = User::where('id', $social->user_id)->first();
