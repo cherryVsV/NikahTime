@@ -33,7 +33,7 @@ class RegisterController extends Controller
                 throw new UserNotFoundError();
             }
             $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->first();
-            $password = $passwordReset->password;
+            $password = $passwordReset->code;
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError();
             }
@@ -66,11 +66,14 @@ class RegisterController extends Controller
             ]);
             $toEmail = $request->email;
             $code = strval(mt_rand(100000, 999999));
+            if(DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->exists()){
+                DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->delete();
+            }
             DB::table("password_resets")->insert([
                 "email" => $toEmail,
                 "token" => Hash::make($code),
                 "type"=>'verify',
-                "password"=>$request->password
+                "code"=>$request->password
             ]);
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendEmailCode($toEmail, $code);
