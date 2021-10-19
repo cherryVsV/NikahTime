@@ -27,21 +27,20 @@ class ProfileFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
-            'avatar' => $this->faker->regexify('[A-Za-z0-9]{255}'),
-            'name' => $this->faker->name,
-            'gender' => $this->faker->regexify('[A-Za-z0-9]{20}'),
-            'birthdate' => $this->faker->date(),
-            'country' => $this->faker->country,
-            'town' => $this->faker->regexify('[A-Za-z0-9]{255}'),
-            'education_id' => Education::factory(),
-            'place_of_study' => $this->faker->regexify('[A-Za-z0-9]{255}'),
-            'place_of_work' => $this->faker->regexify('[A-Za-z0-9]{255}'),
-            'post' => $this->faker->regexify('[A-Za-z0-9]{255}'),
-            'marital_status_id' => MaritalStatus::factory(),
-            'children' => $this->faker->boolean,
-            'habit_id' => Habit::factory(),
-            'about_me' => $this->faker->text,
+            'user_id' => 35,
+            'first_name' => $this->faker->firstNameFemale,
+            'last_name' => $this->faker->lastName,
+            'gender' => 'female',
+            'birth_date' => $this->faker->date(),
+            'country' => 'Россия',
+            'city' => 'Тверь',
+            'education_id' => 4,
+            'place_of_study' => $this->faker->text(255),
+            'place_of_work' => $this->faker->text(255),
+            'work_position' => $this->faker->text(255),
+            'marital_status_id' => 1,
+            'have_children' => $this->faker->boolean,
+            'about' => $this->faker->text,
         ];
     }
 }

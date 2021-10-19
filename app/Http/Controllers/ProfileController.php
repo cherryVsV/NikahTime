@@ -137,8 +137,7 @@ class ProfileController extends Controller
      * @param \App\Models\Profile $profile
      * @return \Illuminate\Http\Response
      */
-    public
-    function destroy(Request $request, Profile $profile)
+    public function destroy(Request $request, Profile $profile)
     {
         $profile->delete();
 

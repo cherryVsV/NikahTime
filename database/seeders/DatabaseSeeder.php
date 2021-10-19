@@ -15,11 +15,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
+        /*Model::unguard();
 
         $this->call(EducationSeeder::class);
         $this->call(MaritalStatusSeeder::class);
         $this->call(HabitSeeder::class);
-        Model::reguard();
+        Model::reguard();*/
+        $this->call(ProfileTableSeeder::class);
     }
 }

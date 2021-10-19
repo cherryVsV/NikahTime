@@ -19,6 +19,8 @@ class CreateChatsTable extends Migration
             $table->id();
             $table->foreignId('user1_id')->constrained('users');
             $table->foreignId('user2_id')->constrained('users');
+            $table->boolean('is_blocked')->default(false);
+            $table->bigInteger('user_block')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ProjectExceptions\PasswordIncorrectError;
 use App\Exceptions\ProjectExceptions\UserNotFoundError;
+use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Services\GenerateAccessTokenService;
 use App\Http\Resources\ProfileResource;
@@ -54,8 +55,11 @@ class LoginController extends Controller
 
     }
 
-    public function logOut()
+    public function logout()
     {
+        if (!auth()->check()) {
+            throw new ValidationDataError('ERROR_AUTHORIZATION_CHECK_FAILED', 401, 'Unauthorized');
+        }
         try {
             $accessToken = auth()->user()->token();
 
@@ -66,13 +70,12 @@ class LoginController extends Controller
                 ]);
 
             $accessToken->revoke();
-
-            return response()->json(['code' => 200], 200);
+            return response(null, 200);
         } catch (Exception $e) {
-            return response()->json(['error' =>
-                ['code' => 404,
-                    'title' => 'error',
-                    'details' => $e]],
+            return response()->json([
+                'code' => $e->getCode(),
+                'title' => 'ERR_LOGOUT_FAILED',
+                'details' => $e->getMessage()],
                 404);
         }
     }

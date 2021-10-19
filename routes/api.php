@@ -3,9 +3,9 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\SearchUsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', [LoginController::class, 'login']);
+Route::post('login', [LoginController::class, 'login'])->name('login');
 
 Route::post('registration', [RegisterController::class, 'registration']);
 
@@ -36,12 +36,19 @@ Route::post('account/password/reset', [ResetPasswordController::class, 'resetPas
 
 Route::middleware("auth:api")->group(function(){
 
-    Route::get('logout', [LoginController::class, 'logOut']);
+    Route::get('account/logout', [LoginController::class, 'logOut']);
 
     Route::get('account/user', [ProfileController::class, 'getUser']);
 
     Route::put('account/user/update', [ProfileController::class, 'updateUser']);
 
+    Route::post('store/image', [FileController::class, 'storeImage']);
+
+    Route::get('search/get/selection/users', [SearchUsersController::class, 'getSelectionUsers']);
+
+    Route::post('search/save/seen/users', [SearchUsersController::class, 'saveSeenUsers']);
+
+    Route::post('search/users', [SearchUsersController::class, 'searchUsers']);
 
 
 

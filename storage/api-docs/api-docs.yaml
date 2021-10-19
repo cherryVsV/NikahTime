@@ -309,6 +309,420 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
       - bearerAuth: []
+  /chats/user:
+    get:
+      tags:
+        - Chats
+      summary: Получение информации о чатах пользователя
+      operationId: getChatUser
+      responses:
+        "200":
+          description: Информация о чатах пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chats'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /chats/add/{userId}:
+    post:
+      tags:
+        - Chats
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник пользователя, с которым авторизованный пользователь начинает чат
+      summary: Создание нового чата
+      operationId: addUserChat
+      responses:
+        "200":
+          description: Чат создан успешно
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /chats/get/{chatId}:
+    get:
+      tags:
+        - Chats
+      parameters:
+        - in: path
+          name: chatId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник чата, сообщения которого нужно получить
+      summary: Получение информации о чате между пользователями
+      operationId: getChatMessages
+      responses:
+        "200":
+          description: Информация о чате между пользователями
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Messages'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /chats/block/{chatId}:
+    put:
+      tags:
+        - Chats
+      parameters:
+        - in: path
+          name: chatId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник чата, который нужно заблокировать/разблокировать
+      summary: Заблокировать/разблокировать чат между пользователями
+      operationId: blockChat
+      responses:
+        "200":
+          description: Чат заблокирован/разблокирован успешно. Обновляем данные чата пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Messages'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /chats/send/message:
+    post:
+      tags:
+        - Chats
+      summary: Отправка сообщения
+      operationId: sendMessage
+      requestBody:
+        description: Данные о сообщении
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessage'
+            examples:
+              default:
+                value:
+                  message: Hello
+                  chatId: 1
+        required: true
+      responses:
+        "200":
+          description: Сообщение отправлено успешно. После этого будет вызываться событие об уведомлении пользователя, которому отправлено сообщение
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /chats/delete/{chatId}:
+    delete:
+      tags:
+        - Chats
+      parameters:
+        - in: path
+          name: chatId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник чата, который нужно удалить
+      summary: Удалить чат между пользователями
+      operationId: deleteChat
+      responses:
+        "200":
+          description: Чат удален успешно. Обновляем данные о чатах пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chats'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /favourites/get:
+    get:
+      tags:
+        - Favourites
+      summary: Получение информации о понравившихся пользователю людях
+      operationId: getUserFavourites
+      responses:
+        "200":
+          description: Информация о понравившихся пользователю людях
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favourite'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /favourites/add/{userId}:
+    put:
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник пользователя, которого добавить в понравившиеся
+      tags:
+        - Favourites
+      summary: Добавление пользователя в понравившееся
+      operationId: addToUserFavourites
+      responses:
+        "200":
+          description: Добавление пользователя в понравившееся прошло успешно. В случае совпадения - будет вызвано событие для оповещения пользователей о взаимной симпатии
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /favourites/delete/{userId}:
+    delete:
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник пользователя, которого удалить из понравившихся
+      tags:
+        - Favourites
+      summary: Удаление пользователя из понравившихся
+      operationId: deleteFromUserFavourites
+      responses:
+        "200":
+          description: Удаление пользователя из понравившихся успешно. Обновляем данные о понравившихся
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favourite'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /search/users:
+    post:
+      tags:
+        - Search
+      summary: Поиск пользователей по фильтрам из подбора кандидатур по интересам (из всех сохраненных просмотренных)
+      operationId: searchUsers
+      requestBody:
+        description: Подбор пользователю кандидатур в соответствии с выбранными фильтрами
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filter'
+            examples:
+              simplifiedFilter:
+                value:
+                  filterType: simpleFilter
+                  minAge: 18
+                  maxAge: 30
+              complicatedFilter:
+                value:
+                  filterType: complicatedFilter
+                  minAge: 18
+                  maxAge: 30
+                  country: Россия
+                  city: Ростов
+                  education: basicGeneral
+                  maritalStatus: notMarried
+                  haveChildren: true
+                  haveBadHabits: false
+                  badHabits: ["smoking"]
+        required: true
+      responses:
+        "200":
+          description: Кандидатуры пользователей в соответствии с выбранными фильтрами
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favourite'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /search/save/seen/users:
+    post:
+      tags:
+        - Search
+      summary: Сохранение кандидатур, которые были просмотрены пользователем
+      operationId: saveSeenUsers
+      requestBody:
+        description: Сохранение кандидатур, которые были просмотрены пользователем
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SeenUsers'
+            example:
+              seenUsersId: [1, 2, 3, 4, 5]
+        required: true
+      responses:
+        "200":
+          description: Сохранены кандидатуры, которые были просмотрены пользователем
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /search/get/selection/users:
+    get:
+      tags:
+        - Search
+      summary: Получение кандидатур, которые подобрал сервер в соответствии с интересами пользователя (максимум - 20). Для показа следующих 20 кандидатур, вызываем этот же запрос, здесь будет проверка, были ли уже показаны данные анкеты
+      operationId: getSelectionUsers
+      responses:
+        "200":
+          description: Кандидатуры, подобранные пользователю по интересам
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favourite'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /guests/get:
+    get:
+      tags:
+        - Guests
+      summary: Получение информации о гостях пользователя
+      operationId: getGuestsUser
+      responses:
+        "200":
+          description: Информация о гостях пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Guests'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /guests/add/{userId}:
+    put:
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник пользователя, описание профиля которого просмотрел авторизованный пользователь
+      tags:
+        - Guests
+      summary: Добавление гостей, просмотревших описание профиля пользователя
+      operationId: addUserGuest
+      responses:
+        "200":
+          description: Добавление гостя, просмотревшего описание профиля пользователя, прошло успешно
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /store/image:
+    post:
+      tags:
+        - Account
+      summary: Загрузка изображения на сервер
+      operationId: storeImage
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: "Доступные расширения файлов - jpg,png,jpeg,bmp"
+      responses:
+        "200":
+          description: Загрузка изображения прошла успешно
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /account/logout:
+    get:
+      tags:
+        - Account
+      summary: Выход пользователя из аккаунта
+      operationId: logout
+      responses:
+        "200":
+          description: Выход прошел успешно
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+
 components:
   schemas:
     Auth:
@@ -336,6 +750,69 @@ components:
         password:
           type: string
           description: Пароль пользователя
+    Filter:
+      required:
+        - filterType
+        - minAge
+        - maxAge
+      type: object
+      properties:
+        filterType:
+          type: string
+          description: Тип фильтра
+          enum:
+            - simplifiedFilter
+            - complicatedFilter
+        minAge:
+          type: integer
+          format: int32
+        maxAge:
+          type: integer
+          format: int32
+        country:
+          type: string
+        city:
+          type: string
+        education:
+          type: string
+          description: "Уровень образования. Может принимать следущие значения: ос\
+                  новное общее / basic general, среднее общее / secondary general, средн\
+                  ее профессиональное / secondary vocational, высшее (бакалавр, специали\
+                  ст) / higher (bachelor, specialist), высшее (магистр) / higher (мaster),\
+                  \ учёная степень / academic degree"
+          enum:
+            - basicGeneral
+            - secondaryGeneral
+            - secondaryVocational
+            - higherBachelorOrSpecialist
+            - higherMaster
+            - academicDegree
+        maritalStatus:
+          type: string
+          enum:
+            - notMarried
+            - married
+            - divorced
+        haveСhildren:
+          type: boolean
+        badHabits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BadHabit'
+        haveBadHabits:
+          type: boolean
+          description: Обязательный параметр для расширенного фильтра. В случае выбора привычек - передать true
+    SeenUsers:
+      required:
+        - seenUsersId
+      type: object
+      properties:
+        seenUsersId:
+          type: array
+          items:
+            type: integer
+            format: int64
+            description: "Айдишники просмотренных пользователем анкет"
     Account:
       type: object
       properties:
@@ -343,6 +820,51 @@ components:
           $ref: '#/components/schemas/User'
         tokenData:
           $ref: '#/components/schemas/TokenData'
+    Chats:
+      type: array
+      items:
+        $ref: '#/components/schemas/Chat'
+      example:
+        - chatId: 1
+          userAvatar: url
+          userName: name
+          isChatBlocked: false
+          isAuthUserBlockChat: false
+          lastMessage: message
+          lastMessageTime: 15-10-21 19:00:00
+          isAuthUserMessage: true
+        - chatId: 2
+          userAvatar: url
+          userName: name
+          isChatBlocked: false
+          isAuthUserBlockChat: false
+          lastMessage: message
+          lastMessageTime: 15-10-21 19:00
+          isAuthUserMessage: true
+    Favourite:
+      type: array
+      items:
+        $ref: '#/components/schemas/FavouriteUser'
+    Guests:
+      type: array
+      items:
+        $ref: '#/components/schemas/GuestUser'
+    Messages:
+      type: object
+      properties:
+        chat:
+          $ref: '#/components/schemas/CurrentChat'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+          example:
+            - message: message1
+              messageTime: 15-10-21 19:00:00
+              isAuthUserMessage: true
+            - message: message2
+              messageTime: 15-10-21 19:01:00
+              isAuthUserMessage: false
     TokenData:
       required:
       - accessToken
@@ -359,6 +881,7 @@ components:
           type: string
     User:
       required:
+      - userId
       - badHabits
       - birthDate
       - city
@@ -373,6 +896,11 @@ components:
       - maritalStatus
       type: object
       properties:
+        userId:
+          type: integer
+          format: int64
+          description: "для прослушивания события отправки сообщения в чате,
+                в названии события необходимо будет указывать id авторизованного пользователя"
         firstName:
           type: string
         lastName:
@@ -437,6 +965,161 @@ components:
             type: string
         about:
           type: string
+    FavouriteUser:
+      required:
+        - userId
+        - badHabits
+        - birthDate
+        - city
+        - country
+        - education
+        - firstName
+        - haveСhildren
+        - interests
+        - lastName
+        - maritalStatus
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: "Нужен для добавления данного пользователя в понравившиеся и для начала чата с данным пользователем"
+        firstName:
+          type: string
+        lastName:
+          type: string
+        photos:
+          type: array
+          description: Массив ссылок на фотограйии пользователя. Первая ссылка - основное
+            фото пользователя.
+          items:
+            type: string
+            format: uri
+        birthDate:
+          type: string
+          format: data-time
+          default: 24-09-2021
+        city:
+          type: string
+        education:
+          type: string
+          description: "Уровень образования. Может принимать следущие значения: ос\
+              новное общее / basic general, среднее общее / secondary general, средн\
+              ее профессиональное / secondary vocational, высшее (бакалавр, специали\
+              ст) / higher (bachelor, specialist), высшее (магистр) / higher (мaster),\
+              \ учёная степень / academic degree"
+          enum:
+            - basicGeneral
+            - secondaryGeneral
+            - secondaryVocational
+            - higherBachelorOrSpecialist
+            - higherMaster
+            - academicDegree
+        placeOfStudy:
+          type: string
+        placeOfWork:
+          type: string
+        workPosition:
+          type: string
+        maritalStatus:
+          type: string
+          enum:
+            - notMarried
+            - married
+            - divorced
+        haveСhildren:
+          type: boolean
+        badHabits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BadHabit'
+        interests:
+          type: array
+          items:
+            type: string
+        about:
+          type: string
+    GuestUser:
+      required:
+        - userId
+        - badHabits
+        - birthDate
+        - city
+        - contactPhoneNumber
+        - country
+        - education
+        - firstName
+        - haveСhildren
+        - interests
+        - lastName
+        - maritalStatus
+        - date
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: "Нужен для добавления данного пользователя в понравившиеся"
+        firstName:
+          type: string
+        lastName:
+          type: string
+        photos:
+          type: array
+          description: Массив ссылок на фотограйии пользователя. Первая ссылка - основное
+            фото пользователя.
+          items:
+            type: string
+            format: uri
+        birthDate:
+          type: string
+          format: data-time
+          default: 24-09-2021
+        city:
+          type: string
+        education:
+          type: string
+          description: "Уровень образования. Может принимать следущие значения: ос\
+                  новное общее / basic general, среднее общее / secondary general, средн\
+                  ее профессиональное / secondary vocational, высшее (бакалавр, специали\
+                  ст) / higher (bachelor, specialist), высшее (магистр) / higher (мaster),\
+                  \ учёная степень / academic degree"
+          enum:
+            - basicGeneral
+            - secondaryGeneral
+            - secondaryVocational
+            - higherBachelorOrSpecialist
+            - higherMaster
+            - academicDegree
+        placeOfStudy:
+          type: string
+        placeOfWork:
+          type: string
+        workPosition:
+          type: string
+        maritalStatus:
+          type: string
+          enum:
+            - notMarried
+            - married
+            - divorced
+        haveСhildren:
+          type: boolean
+        badHabits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BadHabit'
+        interests:
+          type: array
+          items:
+            type: string
+        about:
+          type: string
+        date:
+          type: string
+          description: "Дата просмотра профиля пользователя гостем"
+          format: data-time
+          default: 24-09-2021
     CodeRequest:
       required:
       - code
@@ -500,6 +1183,84 @@ components:
           type: string
         detail:
           type: string
+    Chat:
+      required:
+        - chatId
+        - userAvatar
+        - userName
+        - isChatBlocked
+        - lastMessage
+        - lastMessageTime
+        - isAuthUserMessage
+      type: object
+      properties:
+        chatId:
+          type: integer
+          format: int64
+          description: "Для подгрузки сообщений в чате для запроса используется в качестве параметра
+           и для прослушивания события отправки сообщения в данном чате,
+            в названии события необходимо будет указывать id чата"
+        userAvatar:
+          type: string
+          format: uri
+        userName:
+          type: string
+        isChatBlocked:
+          type: boolean
+        isAuthUserBlockChat:
+          type: boolean
+        lastMessage:
+          type: string
+        lastMessageTime:
+          type: string
+          format: data-time
+        isAuthUserMessage:
+          type: boolean
+    CurrentChat:
+      required:
+        - chatId
+        - userAvatar
+        - userName
+        - isChatBlocked
+      type: object
+      properties:
+        chatId:
+          type: integer
+          format: int64
+          description: "Для подгрузки сообщений в чате для запроса используется в качестве параметра"
+        userAvatar:
+          type: string
+          format: uri
+        userName:
+          type: string
+        isChatBlocked:
+          type: boolean
+    Message:
+      required:
+        - message
+        - messageTime
+        - isAuthUserMessage
+      type: object
+      properties:
+        message:
+          type: string
+        messageTime:
+          type: string
+          format: data-time
+        isAuthUserMessage:
+          type: boolean
+    SendMessage:
+      required:
+        - message
+        - chatId
+      type: object
+      properties:
+        message:
+          type: string
+        chatId:
+          type: integer
+          format: int64
+          description: "Чат создается между двумя пользователями, по его айдишнику будет поиск пользователя, которому отправлено сообщение"
   securitySchemes:
     bearerAuth:
       type: http

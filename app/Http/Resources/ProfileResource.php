@@ -28,6 +28,7 @@ class ProfileResource extends JsonResource
             $birthDate = Carbon::parse($this->birth_date)->format('d-m-Y');
         }
         return [
+            'id'=>$this->user_id,
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
             'photos'=>$this->photos,

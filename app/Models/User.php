@@ -56,6 +56,14 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->HasMany(\App\Models\Like::class);
     }
+    public function seenUsers()
+    {
+        return $this->HasMany(\App\Models\SeenUser::class);
+    }
+    public function guests()
+    {
+        return $this->HasMany(\App\Models\Guest::class);
+    }
 
     public function messages()
     {
