@@ -16,7 +16,7 @@ class GuestController extends Controller
     public function addUserGuest($userId)
     {
         if(!User::where('id', $userId)->exists()){
-            throw new ValidationDataError('ERR_FIND_USER_FAILED', 401, 'Selected user do not exists');
+            throw new ValidationDataError('ERR_FIND_USER_FAILED', 422, 'Selected user do not exists');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
         if(Guest::where(['user_id'=>$auth_id, 'guest_id'=>$userId])->exists()){
