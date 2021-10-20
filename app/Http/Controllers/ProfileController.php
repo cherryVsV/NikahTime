@@ -28,9 +28,6 @@ class ProfileController extends Controller
      */
     public function getUser()
     {
-        if (!auth()->check()) {
-            throw new ValidationDataError('ERROR_AUTHORIZATION_CHECK_FAILED', 401, 'Unauthorized');
-        }
         try {
             $user_id = auth()->user()->getAuthIdentifier();
             $profile = Profile::where('user_id', $user_id)->first();
@@ -74,9 +71,6 @@ class ProfileController extends Controller
      */
     public function updateUser(ProfileUpdateRequest $request)
     {
-        if (!auth()->check()) {
-            throw new  ValidationDataError('ERROR_AUTHORIZATION_CHECK_FAILED', 401, 'Unauthorized');
-        }
         $user_id = auth()->user()->getAuthIdentifier();
         $profile = Profile::where('user_id', $user_id)->first();
         $profile->first_name = $request->firstName;

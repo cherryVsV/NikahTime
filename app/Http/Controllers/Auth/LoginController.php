@@ -57,18 +57,13 @@ class LoginController extends Controller
 
     public function logout()
     {
-        if (!auth()->check()) {
-            throw new ValidationDataError('ERROR_AUTHORIZATION_CHECK_FAILED', 401, 'Unauthorized');
-        }
         try {
             $accessToken = auth()->user()->token();
-
             $refreshToken = DB::table('oauth_refresh_tokens')
                 ->where('access_token_id', $accessToken->id)
                 ->update([
                     'revoked' => true
                 ]);
-
             $accessToken->revoke();
             return response(null, 200);
         } catch (Exception $e) {

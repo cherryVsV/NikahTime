@@ -15,8 +15,8 @@ class Like extends Model
      * @var array
      */
     protected $fillable = [
-        'user1_id',
-        'user2_id',
+        'user_id',
+        'favourite_user_id',
     ];
 
     /**
@@ -26,8 +26,8 @@ class Like extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'user1_id' => 'integer',
-        'user2_id' => 'integer',
+        'user_id' => 'integer',
+        'favourite_user_id' => 'integer',
     ];
 
 

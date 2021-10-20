@@ -46,6 +46,7 @@ class ProfileResource extends JsonResource
             'badHabits'=>$this->habits()->pluck('title'),
             'interests'=>$this->interests()->pluck('title'),
             'about' => $this->about,
+            'date' => $this->when($this->date, $this->date),
         ];
     }
 }

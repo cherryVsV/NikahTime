@@ -17,9 +17,6 @@ class SearchUsersController extends Controller
 {
     public function getSelectionUsers()
     {
-        if (!auth()->check()) {
-            throw new ValidationDataError('ERROR_AUTHORIZATION_CHECK_FAILED', 401, 'Unauthorized');
-        }
         try {
             $user_id = auth()->user()->getAuthIdentifier();
             $profile = Profile::where('user_id', $user_id)->first();
@@ -50,9 +47,6 @@ class SearchUsersController extends Controller
 
     public function saveSeenUsers(Request $request)
     {
-        if (!auth()->check()) {
-            throw new ValidationDataError('ERROR_AUTHORIZATION_CHECK_FAILED', 401, 'Unauthorized');
-        }
        $this->validate($request, [
            'seenUsersId'=>['required', 'array'],
            'seenUsersId.*' => ['integer', 'required', 'exists:users,id']
@@ -80,9 +74,6 @@ class SearchUsersController extends Controller
 
     public function searchUsers(Request $request)
     {
-        if (!auth()->check()) {
-            throw new ValidationDataError('ERROR_AUTHORIZATION_CHECK_FAILED', 401, 'Unauthorized');
-        }
         $this->validate($request,[
             'filterType'=>['required', 'string'],
             'minAge'=>['required', 'integer'],

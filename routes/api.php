@@ -3,7 +3,9 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\FavouritesController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchUsersController;
 use Illuminate\Support\Facades\Route;
@@ -50,7 +52,15 @@ Route::middleware("auth:api")->group(function(){
 
     Route::post('search/users', [SearchUsersController::class, 'searchUsers']);
 
+    Route::put('guests/add/{userId}', [GuestController::class, 'addUserGuest']);
 
+    Route::get('guests/get', [GuestController::class, 'getGuestsUser']);
+
+    Route::put('favourites/add/{userId}', [FavouritesController::class, 'addToUserFavourites']);
+
+    Route::get('favourites/get', [FavouritesController::class, 'getUserFavourites']);
+
+    Route::delete('favourites/delete/{userId}', [FavouritesController::class, 'deleteFromUserFavourites']);
 
     Route::apiResource('interest', App\Http\Controllers\InterestController::class);
 
