@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\URL;
 
 class ProfileResource extends JsonResource
 {
@@ -18,6 +19,7 @@ class ProfileResource extends JsonResource
         $maritalStatus = null;
         $education = null;
         $birthDate = null;
+        $images = [];
         if(!is_null($this->maritalStatus)){
             $maritalStatus = $this->maritalStatus->title;
         }
@@ -27,11 +29,20 @@ class ProfileResource extends JsonResource
         if(!is_null($this->birth_date)){
             $birthDate = Carbon::parse($this->birth_date)->format('d-m-Y');
         }
+        if(!is_null($this->photos)){
+            foreach (json_decode($this->photos) as $photo){
+                if(!str_starts_with($photo, URL::to('/') . '/storage')){
+                    $photo = URL::to('/') . '/storage/'.$photo;
+                }
+                $images[] = $photo;
+            }
+        }
+
         return [
             'id'=>$this->user_id,
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
-            'photos'=>$this->photos,
+            'photos'=>$images,
             'gender' => $this->gender,
             'birthDate' => $birthDate,
             'country' => $this->country,
