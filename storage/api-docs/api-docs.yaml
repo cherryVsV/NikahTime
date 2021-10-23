@@ -346,6 +346,10 @@ paths:
       responses:
         "200":
           description: Чат создан успешно
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserChat'
         default:
           description: unexpected error
           content:
@@ -467,6 +471,62 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - bearerAuth: []
+  /chats/get/message/{messageId}:
+    get:
+      tags:
+        - Chats
+      parameters:
+        - in: path
+          name: messageId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник сообщения, данные которого нужно получить
+      summary: Получение информации о сообщении пользователя
+      operationId: getMessage
+      responses:
+        "200":
+          description: Информация о сообщении между пользователями
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /chats/seen/message/{messageId}:
+    put:
+      tags:
+        - Chats
+      parameters:
+        - in: path
+          name: messageId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник сообщения, которое было прочитано
+      summary: Отметка сообщения прочитанным
+      operationId: makeSeenMessage
+      responses:
+        "200":
+          description: Сообщение отмечено прочитанным
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: [ ]
   /favourites/get:
     get:
       tags:
@@ -750,6 +810,19 @@ components:
         password:
           type: string
           description: Пароль пользователя
+    UserChat:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+          description: id пользователя, с которым создан чат
+        userAvatar:
+          type: string
+          description: Аватар пользователя, с которым создан чат
+        userName:
+          type: string
+          description: Имя пользователя, с которым создан чат
     Filter:
       required:
         - filterType
@@ -833,6 +906,8 @@ components:
           lastMessage: message
           lastMessageTime: 15-10-21 19:00:00
           isAuthUserMessage: true
+          isSeenMessage: true
+          numberNotSeenMessages: 0
         - chatId: 2
           userAvatar: url
           userName: name
@@ -841,6 +916,8 @@ components:
           lastMessage: message
           lastMessageTime: 15-10-21 19:00
           isAuthUserMessage: true
+          isSeenMessage: false
+          numberNotSeenMessages: 4
     Favourite:
       type: array
       items:
@@ -862,9 +939,13 @@ components:
             - message: message1
               messageTime: 15-10-21 19:00:00
               isAuthUserMessage: true
+              messageId: 1
+              isMessageSeen: true
             - message: message2
               messageTime: 15-10-21 19:01:00
               isAuthUserMessage: false
+              messageId: 2
+              isMessageSeen: true
     TokenData:
       required:
       - accessToken
@@ -1192,6 +1273,8 @@ components:
         - lastMessage
         - lastMessageTime
         - isAuthUserMessage
+        - isSeenMessage
+        - numberNotSeenMessages
       type: object
       properties:
         chatId:
@@ -1216,6 +1299,11 @@ components:
           format: data-time
         isAuthUserMessage:
           type: boolean
+        isSeenMessage:
+          type: boolean
+        numberNotSeenMessages:
+          type: integer
+          format: int32
     CurrentChat:
       required:
         - chatId
@@ -1240,6 +1328,8 @@ components:
         - message
         - messageTime
         - isAuthUserMessage
+        - messageId
+        - isMessageSeen
       type: object
       properties:
         message:
@@ -1248,6 +1338,11 @@ components:
           type: string
           format: data-time
         isAuthUserMessage:
+          type: boolean
+        messageId:
+          type: integer
+          format: int64
+        isMessageSeen:
           type: boolean
     SendMessage:
       required:

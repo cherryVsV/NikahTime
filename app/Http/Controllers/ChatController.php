@@ -11,59 +11,35 @@ use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \App\Http\Resources\ChatCollection
-     */
-    public function index(Request $request)
+    public function getChatMessages()
     {
         $chats = Chat::all();
 
         return new ChatCollection($chats);
     }
 
-    /**
-     * @param \App\Http\Requests\ChatStoreRequest $request
-     * @return \App\Http\Resources\ChatResource
-     */
-    public function store(ChatStoreRequest $request)
+    public function addUserChat($userId)
     {
-        $chat = Chat::create($request->validated());
+        //$chat = Chat::create($request->validated());
 
-        return new ChatResource($chat);
+        //return new ChatResource($chat);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Chat $chat
-     * @return \App\Http\Resources\ChatResource
-     */
-    public function show(Request $request, Chat $chat)
+    public function blockChat($chatId)
     {
-        return new ChatResource($chat);
+        //$chat->update($request->validated());
+
+        //return new ChatResource($chat);
     }
 
-    /**
-     * @param \App\Http\Requests\ChatUpdateRequest $request
-     * @param \App\Models\Chat $chat
-     * @return \App\Http\Resources\ChatResource
-     */
-    public function update(ChatUpdateRequest $request, Chat $chat)
+    public function deleteChat($chatId)
     {
-        $chat->update($request->validated());
+        //$chat->delete();
 
-        return new ChatResource($chat);
+       // return response()->noContent();
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Chat $chat
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, Chat $chat)
-    {
-        $chat->delete();
+    public function getChatInformation($chatId){
 
-        return response()->noContent();
     }
 }

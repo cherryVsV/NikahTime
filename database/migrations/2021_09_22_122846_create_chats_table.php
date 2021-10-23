@@ -17,8 +17,8 @@ class CreateChatsTable extends Migration
 
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user1_id')->constrained('users');
-            $table->foreignId('user2_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('receiver_id')->constrained('users');
             $table->boolean('is_blocked')->default(false);
             $table->bigInteger('user_block')->nullable();
             $table->softDeletes();

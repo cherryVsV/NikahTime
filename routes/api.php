@@ -3,9 +3,11 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FavouritesController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchUsersController;
 use Illuminate\Support\Facades\Route;
@@ -62,17 +64,22 @@ Route::middleware("auth:api")->group(function(){
 
     Route::delete('favourites/delete/{userId}', [FavouritesController::class, 'deleteFromUserFavourites']);
 
-    Route::apiResource('interest', App\Http\Controllers\InterestController::class);
 
-    Route::apiResource('user-tariff', App\Http\Controllers\UserTariffController::class);
+    Route::post('chats/add/{userId}', [ChatController::class, 'addUserChat']);
 
-    Route::apiResource('question', App\Http\Controllers\QuestionController::class);
+    Route::get('chats/user', [ChatController::class, 'getChatMessages']);
 
-    Route::apiResource('chat', App\Http\Controllers\ChatController::class);
+    Route::get('chats/get/{chatId}', [ChatController::class, 'getChatInformation']);
 
-    Route::apiResource('message', App\Http\Controllers\MessageController::class);
+    Route::put('chats/block/{chatId}', [ChatController::class, 'blockChat']);
 
-    Route::apiResource('like', App\Http\Controllers\LikeController::class);
+    Route::delete('chats/delete/{chatId}', [ChatController::class, 'deleteChat']);
+
+    Route::post('chats/send/message', [MessageController::class, 'sendMessage']);
+
+    Route::get('chats/get/message/{messageId}', [MessageController::class, 'getMessage']);
+
+    Route::put('chats/seen/message/{messageId}', [MessageController::class, 'makeSeenMessage']);
 });
 
 

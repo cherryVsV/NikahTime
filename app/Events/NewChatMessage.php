@@ -31,10 +31,19 @@ class NewChatMessage implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return PrivateChannel
      */
     public function broadcastOn()
     {
-        return new Channel('chat');
+        return new PrivateChannel('chats.'.$this->user->id);
+    }
+    /**
+     * Получите данные для трансляции.
+     *
+     * @return array
+     */
+    public function broadcastWith()
+    {
+        return ['messageId' => $this->message];
     }
 }
