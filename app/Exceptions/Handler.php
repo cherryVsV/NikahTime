@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 use App\Exceptions\ProjectExceptions\BaseError;
 
-use Exception;
+Use Throwable;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -42,13 +42,13 @@ class Handler extends ExceptionHandler
     public function register()
     {
 
-        $this->renderable(function (Exception $e, $request) {
+        $this->renderable(function (Throwable $e, $request) {
             return $this->customHandleException($request, $e);
         });
 
     }
 
-    public function customHandleException($request, Exception $e)
+    public function customHandleException($request, Throwable $e)
     {
         if ($request->wantsJson()) {
             $response = [];
