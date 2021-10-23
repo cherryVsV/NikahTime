@@ -7,7 +7,6 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
-        "beyondcode/laravel-websockets": "^1.12",
         "darkaonline/l5-swagger": "^8.0",
         "fruitcake/laravel-cors": "^2.0",
         "google/apiclient": "^2.11",
@@ -17,8 +16,8 @@
         "laravel/passport": "^10.1",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "pusher/pusher-php-server": "~4.0",
-        "tcg/voyager": "^1.5"
+        "tcg/voyager": "^1.5",
+        "beyondcode/laravel-websockets": "^1.12"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
