@@ -5,12 +5,12 @@ info:
     name: MIT
   version: 0.1.1
 servers:
-- url: /api/
+  - url: /api/
 paths:
   /login:
     post:
       tags:
-      - Login
+        - Login
       summary: Вход пользователя
       operationId: login
       requestBody:
@@ -55,7 +55,7 @@ paths:
   /registration:
     post:
       tags:
-      - Registration
+        - Registration
       summary: Регистрация пользователя
       operationId: registration
       requestBody:
@@ -96,7 +96,7 @@ paths:
   /registration/code:
     post:
       tags:
-      - Registration
+        - Registration
       summary: Запрос повторной отправки пользователю кода подтверждения
       operationId: requestRegistrationCode
       requestBody:
@@ -127,7 +127,7 @@ paths:
   /registration/code/verify:
     post:
       tags:
-      - Registration
+        - Registration
       summary: Отправка кода подтверждения
       operationId: verifyRegistrationCode
       requestBody:
@@ -164,7 +164,7 @@ paths:
   /account/password/code:
     post:
       tags:
-      - Account
+        - Account
       summary: Запрос кода подтверждения
       operationId: getResetPasswordCode
       requestBody:
@@ -195,7 +195,7 @@ paths:
   /account/password/code/verify:
     post:
       tags:
-      - Account
+        - Account
       summary: Отправка кода подтверждения
       operationId: verifyResetPasswordCode
       requestBody:
@@ -228,7 +228,7 @@ paths:
   /account/password/reset:
     post:
       tags:
-      - Account
+        - Account
       summary: Сброс пароля пользователя
       operationId: resetPassword
       requestBody:
@@ -267,7 +267,7 @@ paths:
   /account/user/update:
     put:
       tags:
-      - Account
+        - Account
       summary: Обновление информации о пользователе
       operationId: updateUser
       requestBody:
@@ -287,11 +287,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /account/user:
     get:
       tags:
-      - Account
+        - Account
       summary: Получение информации о пользователе
       operationId: getUser
       responses:
@@ -308,7 +308,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /chats/user:
     get:
       tags:
@@ -431,6 +431,7 @@ paths:
                 value:
                   message: Hello
                   chatId: 1
+                  messageType: text
         required: true
       responses:
         "200":
@@ -787,17 +788,17 @@ components:
   schemas:
     Auth:
       required:
-      - grantType
+        - grantType
       type: object
       properties:
         grantType:
           type: string
           description: Тип авторизационных данных
           enum:
-          - email
-          - phoneNumber
-          - googleIdToken
-          - appleIdToken
+            - email
+            - phoneNumber
+            - googleIdToken
+            - appleIdToken
         idToken:
           type: string
           description: Идентификационный токен от провайдера
@@ -813,10 +814,10 @@ components:
     UserChat:
       type: object
       properties:
-        userId:
+        chatId:
           type: integer
           format: int64
-          description: id пользователя, с которым создан чат
+          description: id созданного чата
         userAvatar:
           type: string
           description: Аватар пользователя, с которым создан чат
@@ -948,9 +949,9 @@ components:
               isMessageSeen: true
     TokenData:
       required:
-      - accessToken
-      - expiresIn
-      - refreshToken
+        - accessToken
+        - expiresIn
+        - refreshToken
       type: object
       properties:
         accessToken:
@@ -962,19 +963,19 @@ components:
           type: string
     User:
       required:
-      - userId
-      - badHabits
-      - birthDate
-      - city
-      - contactPhoneNumber
-      - country
-      - education
-      - firstName
-      - gender
-      - haveСhildren
-      - interests
-      - lastName
-      - maritalStatus
+        - userId
+        - badHabits
+        - birthDate
+        - city
+        - contactPhoneNumber
+        - country
+        - education
+        - firstName
+        - gender
+        - haveСhildren
+        - interests
+        - lastName
+        - maritalStatus
       type: object
       properties:
         userId:
@@ -996,8 +997,8 @@ components:
         gender:
           type: string
           enum:
-          - male
-          - female
+            - male
+            - female
         birthDate:
           type: string
           format: data-time
@@ -1016,12 +1017,12 @@ components:
             ст) / higher (bachelor, specialist), высшее (магистр) / higher (мaster),\
             \ учёная степень / academic degree"
           enum:
-          - basicGeneral
-          - secondaryGeneral
-          - secondaryVocational
-          - higherBachelorOrSpecialist
-          - higherMaster
-          - academicDegree
+            - basicGeneral
+            - secondaryGeneral
+            - secondaryVocational
+            - higherBachelorOrSpecialist
+            - higherMaster
+            - academicDegree
         placeOfStudy:
           type: string
         placeOfWork:
@@ -1031,9 +1032,9 @@ components:
         maritalStatus:
           type: string
           enum:
-          - notMarried
-          - married
-          - divorced
+            - notMarried
+            - married
+            - divorced
         haveСhildren:
           type: boolean
         badHabits:
@@ -1203,8 +1204,8 @@ components:
           default: 24-09-2021
     CodeRequest:
       required:
-      - code
-      - grantType
+        - code
+        - grantType
       type: object
       properties:
         grantType:
@@ -1217,9 +1218,9 @@ components:
           type: string
     ResetPasswordRequest:
       required:
-      - code
-      - grantType
-      - password
+        - code
+        - grantType
+        - password
       type: object
       properties:
         grantType:
@@ -1234,7 +1235,7 @@ components:
           type: string
     ResetPasswordCodeRequest:
       required:
-      - grantType
+        - grantType
       type: object
       properties:
         grantType:
@@ -1246,15 +1247,15 @@ components:
     BadHabit:
       type: string
       enum:
-      - smoking
-      - alcohol
-      - gambling
-      - other
+        - smoking
+        - alcohol
+        - gambling
+        - other
     Error:
       required:
-      - code
-      - detail
-      - title
+        - code
+        - detail
+        - title
       type: object
       properties:
         code:
@@ -1272,6 +1273,7 @@ components:
         - isChatBlocked
         - lastMessage
         - lastMessageTime
+        - lastMessageType
         - isAuthUserMessage
         - isSeenMessage
         - numberNotSeenMessages
@@ -1297,6 +1299,12 @@ components:
         lastMessageTime:
           type: string
           format: data-time
+        lastMessageType:
+          type: string
+          description: Тип сообщения, например, картинка, текст и т.д
+          enum:
+            - text
+            - image
         isAuthUserMessage:
           type: boolean
         isSeenMessage:
@@ -1330,6 +1338,7 @@ components:
         - isAuthUserMessage
         - messageId
         - isMessageSeen
+        - messageType
       type: object
       properties:
         message:
@@ -1344,6 +1353,12 @@ components:
           format: int64
         isMessageSeen:
           type: boolean
+        messageType:
+          type: string
+          description: Тип сообщения, например, картинка, текст и т.д
+          enum:
+            - text
+            - image
     SendMessage:
       required:
         - message
@@ -1356,6 +1371,12 @@ components:
           type: integer
           format: int64
           description: "Чат создается между двумя пользователями, по его айдишнику будет поиск пользователя, которому отправлено сообщение"
+        messageType:
+          type: string
+          description: Тип сообщения, например, картинка, текст и т.д
+          enum:
+            - text
+            - image
   securitySchemes:
     bearerAuth:
       type: http

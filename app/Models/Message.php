@@ -19,6 +19,9 @@ class Message extends Model
         'user_id',
         'chat_id',
         'message',
+        'receiver_id',
+        'is_seen',
+        'type'
     ];
 
     /**
@@ -30,6 +33,8 @@ class Message extends Model
         'id' => 'integer',
         'user_id' => 'integer',
         'chat_id' => 'integer',
+        'receiver_id' => 'integer',
+        'is_seen'=>'boolean'
     ];
 
 

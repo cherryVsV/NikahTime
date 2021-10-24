@@ -16,8 +16,10 @@ class Chat extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
-        'receiver_id',
+        'user1_id',
+        'user2_id',
+        'is_blocked',
+        'user_block'
     ];
 
     /**
@@ -27,8 +29,10 @@ class Chat extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'user_id' => 'integer',
-        'receiver_id' => 'integer',
+        'user1_id' => 'integer',
+        'user2_id' => 'integer',
+        'user_block'=>'integer',
+        'is_blocked'=>'boolean'
     ];
 
 

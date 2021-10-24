@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewChatMessage;
-use App\Http\Requests\MessageStoreRequest;
-use App\Http\Requests\MessageUpdateRequest;
-use App\Http\Resources\MessageCollection;
-use App\Http\Resources\MessageResource;
+use App\Exceptions\ProjectExceptions\ValidationDataError;
+use App\Models\Chat;
 use App\Models\Message;
 use App\Models\User;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -16,24 +16,76 @@ class MessageController extends Controller
 
     public function getMessage($messageId)
     {
-        //$messages = Message::all();
-
-       // return new MessageCollection($messages);
+        if(!Message::where('id',$messageId)->exists()){
+            throw new ValidationDataError('ERR_MESSAGE_NOT_FOUND', 422, 'Selected message do not exists');
+        }
+        return response()->json($this->getMessageData($messageId), 200);
     }
 
 
     public function sendMessage(Request $request)
     {
         $this->validate($request,[
-            'message'=>['required', 'string']
+            'message'=>['required', 'string'],
+            'chatId'=>['required', 'integer', 'exists:chats,id'],
+            'messageType'=>['required', 'string']
         ]);
+        $patternUrl = '#((https?|ftp)://(\S*?\.\S*?))([\s)\[\]{},;"\':<]|\.\s|$)#i';
+        $patternPhone = '/[(]*\d{3}[)]*\s*[.\-\s]*\d{3}[.\-\s]*\d{4}/';
+        if (preg_match($patternUrl, $request->message) || preg_match($patternPhone, $request->message)) {
+            throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'Field message contains unresolved characters');
+        }
+        try{
         $user_id = auth()->user()->getAuthIdentifier();
         $user = User::find($user_id);
+        $chat = Chat::find($request->chatId)->first();
+        if($chat->user1_id == $user_id){
+            $receiverId = $chat->user2_id;
+        }else{
+            $receiverId = $chat->user1_id;
+        }
+        Message::create([
+            'user_id'=>$user_id,
+            'chat_id'=>$request->chatId,
+            'message'=>$request->message,
+            'receiver_id'=>$receiverId,
+            'type'=>$request->messageType
+        ]);
         event(new NewChatMessage($request->message, $user));
-        return response()->json('Event generated correctly');
+        return response(null, 200);
+        }
+        catch (Exception $e){
+            return response()->json([
+                'code' => $e->getCode(),
+                'title' => 'ERR_SEND_MESSAGE_FAILED',
+                'details' => $e->getMessage()],
+                404);
+        }
+
     }
 
-    public function makeSeenMessage($messageId){
+    public function makeSeenMessage($messageId)
+    {
+        if(!Message::where('id',$messageId)->exists()){
+            throw new ValidationDataError('ERR_MESSAGE_NOT_FOUND', 422, 'Selected message do not exists');
+        }
+        $message = Message::find($messageId);
+        $message->is_seen = true;
+        $message->save();
+        return response()->json($this->getMessageData($messageId), 200);
+
+    }
+
+    public function getMessageData($messageId)
+    {
+        $user_id = auth()->user()->getAuthIdentifier();
+        $message = Message::find($messageId);
+        $isAuthUserMessage = false;
+        if($message->user_id == $user_id){
+            $isAuthUserMessage = true;
+        }
+        return ['message'=>$message->message, 'messageTime'=>Carbon::parse($message->created_at)->format('d.m.Y H:i:s'),
+            'isAuthUserMessage'=>$isAuthUserMessage, 'messageType'=>$message->type, 'messageId'=>$message->id, 'isMessageSeen'=>$message->is_seen];
 
     }
 

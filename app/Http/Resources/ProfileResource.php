@@ -27,7 +27,7 @@ class ProfileResource extends JsonResource
             $education = $this->education->title;
         }
         if(!is_null($this->birth_date)){
-            $birthDate = Carbon::parse($this->birth_date)->format('d-m-Y');
+            $birthDate = Carbon::parse($this->birth_date)->format('d.m.Y');
         }
         if(!is_null($this->photos)){
             foreach (json_decode($this->photos) as $photo){

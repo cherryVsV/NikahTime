@@ -64,7 +64,6 @@ Route::middleware("auth:api")->group(function(){
 
     Route::delete('favourites/delete/{userId}', [FavouritesController::class, 'deleteFromUserFavourites']);
 
-
     Route::post('chats/add/{userId}', [ChatController::class, 'addUserChat']);
 
     Route::get('chats/user', [ChatController::class, 'getChatMessages']);

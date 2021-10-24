@@ -19,7 +19,10 @@ class CreateMessagesTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('chat_id')->constrained();
+            $table->foreignId('receiver_id')->constrained();
             $table->text('message');
+            $table->boolean('is_seen')->default('false');
+            $table->string('type')->default('text');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -27,6 +27,7 @@ return [
             'name' => env('PUSHER_APP_NAME'),
             'key' => env('PUSHER_APP_KEY'),
             'secret' => env('PUSHER_APP_SECRET'),
+            'capacity' => null,
             'enable_client_messages' => false,
             'enable_statistics' => env('PUSHER_APP_ENABLE_STATISTICS'),
         ],
@@ -57,7 +58,7 @@ return [
     /*
      * This path will be used to register the necessary routes for the package.
      */
-    'path' => 'laravel-websockets',
+    'path' => 'websockets',
 
     /*
      * Dashboard Routes Middleware
@@ -68,8 +69,7 @@ return [
      */
     'middleware' => [
         'web',
-        Authorize::class,
-      //  'admin.user'
+        'admin.user'
     ],
 
     'statistics' => [
@@ -84,7 +84,7 @@ return [
          * The Statistics Logger will, by default, handle the incoming statistics, store them
          * and then release them into the database on each interval defined below.
          */
-        'logger' => BeyondCode\LaravelWebSockets\Statistics\Logger\HttpStatisticsLogger::class,
+        'logger' => \BeyondCode\LaravelWebSockets\Statistics\Logger\HttpStatisticsLogger::class,
 
         /*
          * Here you can specify the interval in seconds at which statistics should be logged.
@@ -101,7 +101,7 @@ return [
          * Use an DNS resolver to make the requests to the statistics logger
          * default is to resolve everything to 127.0.0.1.
          */
-        'perform_dns_lookup' => true,
+        'perform_dns_lookup' => env('LARAVEL_WEBSOCKETS_PERFORM_DNS_LOOKUP', true),
     ],
 
     /*
@@ -127,6 +127,8 @@ return [
          * Passphrase for your local_cert file.
          */
         'passphrase' => env('LARAVEL_WEBSOCKETS_SSL_PASSPHRASE', null),
+
+        'verify_peer' => false,
     ],
 
     /*
