@@ -30,10 +30,12 @@ class MessageController extends Controller
             'chatId'=>['required', 'integer', 'exists:chats,id'],
             'messageType'=>['required', 'string']
         ]);
-        $patternUrl = '#((https?|ftp)://(\S*?\.\S*?))([\s)\[\]{},;"\':<]|\.\s|$)#i';
-        $patternPhone = '/[(]*\d{3}[)]*\s*[.\-\s]*\d{3}[.\-\s]*\d{4}/';
-        if (preg_match($patternUrl, $request->message) || preg_match($patternPhone, $request->message)) {
-            throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'Field message contains unresolved characters');
+        if($request->messageType == 'text') {
+            $patternUrl = '#((https?|ftp)://(\S*?\.\S*?))([\s)\[\]{},;"\':<]|\.\s|$)#i';
+            $patternPhone = '/[(]*\d{3}[)]*\s*[.\-\s]*\d{3}[.\-\s]*\d{4}/';
+            if (preg_match($patternUrl, $request->message) || preg_match($patternPhone, $request->message)) {
+                throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'Field message contains unresolved characters');
+            }
         }
         try{
         $user_id = auth()->user()->getAuthIdentifier();
