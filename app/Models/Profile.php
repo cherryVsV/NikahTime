@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Profile extends Model
 {
@@ -45,32 +46,33 @@ class Profile extends Model
         'education_id' => 'integer',
         'marital_status_id' => 'integer',
         'have_children' => 'boolean',
-        'habit_id' => 'integer',
     ];
 
 
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function education()
     {
-        return $this->belongsTo(\App\Models\Education::class, 'education_id');
+        return $this->belongsTo(Education::class, 'education_id');
     }
 
     public function maritalStatus()
     {
-        return $this->belongsTo(\App\Models\MaritalStatus::class, 'marital_status_id');
+        return $this->belongsTo(MaritalStatus::class, 'marital_status_id');
     }
 
     public function habits()
     {
         return $this->belongsToMany(\App\Models\Habit::class, 'profile_habit');
     }
+
     public function interests()
     {
         return $this->belongsToMany(\App\Models\Interest::class, 'profile_interest');
     }
+
 
 }

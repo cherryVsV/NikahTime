@@ -14,7 +14,6 @@ class CreateProfileInterestTable extends Migration
     public function up()
     {
         Schema::create('profile_interest', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('profile_id');
             $table->unsignedBigInteger('interest_id');
             $table->foreign('profile_id')

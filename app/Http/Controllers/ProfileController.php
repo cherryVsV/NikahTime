@@ -98,17 +98,21 @@ class ProfileController extends Controller
         DB::table('profile_habit')->where('profile_id', $profile->id)->delete();
         DB::table('profile_interest')->where('profile_id', $profile->id)->delete();
         foreach ($request->badHabits as $habit) {
-            $badHabit = Habit::where('title', $habit)->first();
-            $profile->habits()->save($badHabit);
+            if(!is_null($habit)) {
+                $badHabit = Habit::where('title', $habit)->first();
+                $profile->habits()->save($badHabit);
+            }
         }
         foreach ($request->interests as $title) {
-            if (Interest::where('title', $title)->exists()) {
-                $interest = Interest::where('title', $title)->first();
-                $profile->interests()->save($interest);
+            if(!is_null($title)) {
+                if (Interest::where('title', $title)->exists()) {
+                    $interest = Interest::where('title', $title)->first();
+                    $profile->interests()->save($interest);
 
-            } else {
-                $interest = Interest::create(['title' => $title]);
-                $profile->interests()->save($interest);
+                } else {
+                    $interest = Interest::create(['title' => $title]);
+                    $profile->interests()->save($interest);
+                }
             }
         }
         $profile->place_of_study = $request->placeOfStudy;

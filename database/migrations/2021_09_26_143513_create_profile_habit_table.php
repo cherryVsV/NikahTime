@@ -14,7 +14,6 @@ class CreateProfileHabitTable extends Migration
     public function up()
     {
         Schema::create('profile_habit', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('profile_id');
             $table->unsignedBigInteger('habit_id');
             $table->foreign('profile_id')

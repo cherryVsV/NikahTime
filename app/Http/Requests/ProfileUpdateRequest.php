@@ -34,8 +34,10 @@ class ProfileUpdateRequest extends FormRequest
             'education' => ['required'],
             'maritalStatus' => ['required'],
             'haveChildren' => ['boolean'],
-            'badHabits' => ['required'],
-            'interests' => ['required'],
+            'badHabits' => ['required', 'array'],
+            'badHabits.*' => ['string', 'required'],
+            'interests' => ['required', 'array'],
+            'interests.*' => ['string', 'required']
         ];
     }
 }
