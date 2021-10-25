@@ -15,6 +15,7 @@ class NewChatMessage implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
+    public $type;
     public $user;
 
     /**
@@ -22,10 +23,11 @@ class NewChatMessage implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($message, $user)
+    public function __construct($message, $user, $type)
     {
         $this->message = $message;
         $this->user = $user;
+        $this->type = $type;
     }
 
     /**
@@ -44,6 +46,9 @@ class NewChatMessage implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        return ['messageId' => $this->message];
+        return [
+            'messageId' => $this->message,
+            'type'=>$this->type
+        ];
     }
 }

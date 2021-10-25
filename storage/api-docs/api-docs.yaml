@@ -564,7 +564,13 @@ paths:
       operationId: addToUserFavourites
       responses:
         "200":
-          description: Добавление пользователя в понравившееся прошло успешно. В случае совпадения - будет вызвано событие для оповещения пользователей о взаимной симпатии
+          description: Добавление пользователя в понравившееся прошло успешно. Совпадения не было
+        "202":
+          description: Добавление пользователя в понравившееся прошло успешно. Лайки взаимные - возвращаем пользователя, с которым совпали лайки
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavouriteMatch'
         default:
           description: unexpected error
           content:
@@ -824,11 +830,14 @@ components:
         userName:
           type: string
           description: Имя пользователя, с которым создан чат
+        isOnline:
+          type: boolean
     Filter:
       required:
         - filterType
         - minAge
         - maxAge
+        - isOnline
       type: object
       properties:
         filterType:
@@ -843,6 +852,8 @@ components:
         maxAge:
           type: integer
           format: int32
+        isOnline:
+          type: boolean
         country:
           type: string
         city:
@@ -976,6 +987,7 @@ components:
         - interests
         - lastName
         - maritalStatus
+        - isOnline
       type: object
       properties:
         userId:
@@ -1047,6 +1059,8 @@ components:
             type: string
         about:
           type: string
+        isOnline:
+          type: boolean
     FavouriteUser:
       required:
         - userId
@@ -1060,6 +1074,7 @@ components:
         - interests
         - lastName
         - maritalStatus
+        - isOnline
       type: object
       properties:
         userId:
@@ -1121,6 +1136,8 @@ components:
             type: string
         about:
           type: string
+        isOnline:
+          type: boolean
     GuestUser:
       required:
         - userId
@@ -1136,6 +1153,7 @@ components:
         - lastName
         - maritalStatus
         - date
+        - isOnline
       type: object
       properties:
         userId:
@@ -1202,6 +1220,8 @@ components:
           description: "Дата просмотра профиля пользователя гостем"
           format: data-time
           default: 24-09-2021
+        isOnline:
+          type: boolean
     CodeRequest:
       required:
         - code
@@ -1277,6 +1297,7 @@ components:
         - isAuthUserMessage
         - isSeenMessage
         - numberNotSeenMessages
+        - isOnline
       type: object
       properties:
         chatId:
@@ -1290,6 +1311,8 @@ components:
           format: uri
         userName:
           type: string
+        isOnline:
+          type: boolean
         isChatBlocked:
           type: boolean
         isAuthUserBlockChat:
@@ -1318,6 +1341,7 @@ components:
         - userAvatar
         - userName
         - isChatBlocked
+        - isOnline
       type: object
       properties:
         chatId:
@@ -1329,8 +1353,28 @@ components:
           format: uri
         userName:
           type: string
+        isOnline:
+          type: boolean
         isChatBlocked:
           type: boolean
+    FavouriteMatch:
+      required:
+        - favouriteId
+        - userAvatar
+        - userName
+        - isOnline
+      type: object
+      properties:
+        isOnline:
+          type: boolean
+        favouriteId:
+          type: integer
+          format: int64
+        userAvatar:
+          type: string
+          format: uri
+        userName:
+          type: string
     Message:
       required:
         - message

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 class Profile extends Model
 {
@@ -73,6 +74,9 @@ class Profile extends Model
     {
         return $this->belongsToMany(\App\Models\Interest::class, 'profile_interest');
     }
-
+    public function isOnline()
+    {
+        return Cache::has('user-is-online-' . $this->user_id);
+    }
 
 }

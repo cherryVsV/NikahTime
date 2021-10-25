@@ -8,6 +8,7 @@ use App\Models\Like;
 use App\Models\Profile;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\URL;
 
 class FavouritesController extends Controller
 {
@@ -18,6 +19,7 @@ class FavouritesController extends Controller
             throw new ValidationDataError('ERR_FIND_USER_FAILED', 422, 'Selected user do not exists');
         }
         Like::where(['user_id' => $auth_id, 'favourite_user_id' => $userId])->delete();
+        return $this->getUserFavourites();
     }
 
     public function addToUserFavourites($userId)
@@ -31,6 +33,24 @@ class FavouritesController extends Controller
                 'user_id' => $auth_id,
                 'favourite_user_id' => $userId
             ]);
+            if(Like::where(['user_id' => $userId, 'favourite_user_id' => $auth_id])->exists()){
+                $user = Profile::find($userId);
+                $avatar = null;
+                if(!is_null($user->photos))
+                {
+                    $avatar = json_decode($user->photos)[0];
+                    if(!str_starts_with($avatar, URL::to('/') . '/storage')){
+                        $avatar = URL::to('/') . '/storage/'.$avatar;
+                    }
+                }
+                return response()->json([
+                    'favouriteId'=> $userId,
+                    'userAvatar'=> $avatar,
+                    'userName'=> $user->first_name,
+                    'isOnline'=>$user->isOnline()
+                ], 202);
+            }
+            return response(null, 200);
         } else {
             throw new ValidationDataError('ERR_ADD_FAVOURITE_FAILED', 422, 'Selected favourite user already exists in favourites');
         }

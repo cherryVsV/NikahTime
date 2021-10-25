@@ -39,21 +39,21 @@ class MessageController extends Controller
         }
         try{
         $user_id = auth()->user()->getAuthIdentifier();
-        $user = User::find($user_id);
         $chat = Chat::find($request->chatId)->first();
         if($chat->user1_id == $user_id){
             $receiverId = $chat->user2_id;
         }else{
             $receiverId = $chat->user1_id;
         }
-        Message::create([
+        $user = User::find($receiverId);
+        $message = Message::create([
             'user_id'=>$user_id,
             'chat_id'=>$request->chatId,
             'message'=>$request->message,
             'receiver_id'=>$receiverId,
             'type'=>$request->messageType
         ]);
-        event(new NewChatMessage($request->message, $user));
+        event(new NewChatMessage($message->id, $user, 'Отправлено'));
         return response(null, 200);
         }
         catch (Exception $e){
@@ -72,8 +72,14 @@ class MessageController extends Controller
             throw new ValidationDataError('ERR_MESSAGE_NOT_FOUND', 422, 'Selected message do not exists');
         }
         $message = Message::find($messageId);
+        if($message->is_seen){
+            throw new ValidationDataError('ERR_MESSAGE_ALREADY_SEEN', 422, 'Selected message is already seen');
+        }
         $message->is_seen = true;
         $message->save();
+        $userId = $message->user_id;
+        $user = User::find($userId);
+        event(new NewChatMessage($message->id, $user, 'Прочитано'));
         return response()->json($this->getMessageData($messageId), 200);
 
     }

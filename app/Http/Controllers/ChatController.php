@@ -46,7 +46,8 @@ class ChatController extends Controller
         return response()->json([
             "chatId"=> $chat->id,
             "userAvatar"=> $avatar,
-            "userName"=> $user->first_name
+            "userName"=> $user->first_name,
+            "isOnline"=>$user->isOnline()
         ], 200);
 
     }
@@ -118,7 +119,7 @@ class ChatController extends Controller
         }
 
             $chatData = ['chatId' => $chat->id, 'userAvatar' => $avatar, 'userName' => $user->first_name, 'isChatBlocked' => $chat->is_blocked,
-                'isAuthUserBlockChat' => $isAuthBlock];
+                'isAuthUserBlockChat' => $isAuthBlock, 'isOnline'=>$user->isOnline()];
             $messageData = [];
             $messages = Message::where('chat_id', $chat->id)->get();
             foreach ($messages as $message) {
@@ -170,12 +171,12 @@ class ChatController extends Controller
                 }
                 $data = ['chatId'=>$chat->id, 'userAvatar'=>$avatar, 'userName'=>$user->first_name, 'isChatBlocked'=>$chat->is_blocked, 'isAuthUserBlockChat'=>$isAuthBlock,
                     'lastMessage'=>$message->message, 'lastMessageType'=>$message->type, 'lastMessageTime'=>Carbon::parse($message->created_at)->format('d.m.Y H:i:s'), 'isAuthUserMessage'=>$isAuthMessage, 'isSeenMessage'=>$message->is_seen,
-                    'numberNotSeenMessages'=>$notSeenCount
+                    'numberNotSeenMessages'=>$notSeenCount, 'isOnline'=>$user->isOnline()
                 ];
             }else {
                 $data = ['chatId' => $chat->id, 'userAvatar' => $avatar, 'userName' => $user->first_name, 'isChatBlocked' => $chat->is_blocked, 'isAuthUserBlockChat' => $isAuthBlock,
                     'lastMessage' => null, 'lastMessageType' => null, 'lastMessageTime' => null, 'isAuthUserMessage' => $isAuthMessage, 'isSeenMessage' => null,
-                    'numberNotSeenMessages' => $notSeenCount
+                    'numberNotSeenMessages' => $notSeenCount, 'isOnline'=>$user->isOnline()
                 ];
             }
                 $chats[] = $data;
