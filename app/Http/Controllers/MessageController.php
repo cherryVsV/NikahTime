@@ -39,12 +39,16 @@ class MessageController extends Controller
         }
         try{
         $user_id = auth()->user()->getAuthIdentifier();
+        if(!Chat::where('id',$request->chatId )->exists()){
+            throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
+        }
         $chat = Chat::find($request->chatId)->first();
         if($chat->user1_id == $user_id){
             $receiverId = $chat->user2_id;
         }else{
             $receiverId = $chat->user1_id;
         }
+        //$user = User::find($receiverId);
         $user = User::find($user_id);
         $message = Message::create([
             'user_id'=>$user_id,
@@ -53,7 +57,7 @@ class MessageController extends Controller
             'receiver_id'=>$receiverId,
             'type'=>$request->messageType
         ]);
-        event(new NewChatMessage($message->id, $user, 'Отправлено'));
+        broadcast(new NewChatMessage($message->id, $user, 'Отправлено'));
         return response(null, 200);
         }
         catch (Exception $e){

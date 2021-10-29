@@ -17,6 +17,7 @@
         "laravel/passport": "^10.1",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "predis/predis": "^1.1",
         "tcg/voyager": "^1.5"
     },
     "require-dev": {
