@@ -52,6 +52,34 @@ class RegisterController extends Controller
                $token
             , 200);
         }
+        if ($request->grantType == 'phoneNumber') {
+            $this->validate($request, [
+                'phoneNumber' => ['required', 'string','max:12', 'unique:users,phone'],
+                'code' => ['required'],
+            ]);
+            if(!DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'verify'])->exists()){
+                throw new UserNotFoundError();
+            }
+            $passwordReset = DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'verify'])->first();
+            $password = $passwordReset->code;
+            if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
+                throw new VerificationError();
+            }
+            $user = User::create([
+                'phone' =>$request->phoneNumber,
+                'password' => Hash::make($password),
+                'email_verified_at'=>Carbon::now()
+            ]);
+            DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'verify'])->delete();
+            Profile::create([
+                'user_id' => $user->id
+            ]);
+            $generateToken = new GenerateAccessTokenService();
+            $token = $generateToken->generateToken($request, $request->phoneNumber, $password);
+            return response()->json(
+                $token
+                , 200);
+        }
     }
 
     public function registration(Request $request)
@@ -116,6 +144,29 @@ class RegisterController extends Controller
             // return response(null,204);
 
         }
+        if ($request->grantType == 'phoneNumber') {
+            $this->validate($request, [
+                'phoneNumber' => ['required', 'string','max:12', 'unique:users,phone'],
+                'password' => ['required', 'string', 'min:8']
+            ]);
+            $toPhone = $request->phoneNumber;
+            $code = strval(mt_rand(100000, 999999));
+            if(DB::table('password_resets')->where(['phone'=> $toPhone, 'type'=>'verify'])->exists()){
+                DB::table('password_resets')->where(['phone'=> $toPhone, 'type'=>'verify'])->delete();
+            }
+            DB::table("password_resets")->insert([
+                'phone'=> $toPhone,
+                "token" => Hash::make($code),
+                "type"=>'verify',
+                "code"=>$request->password
+            ]);
+            $sendCode = new SendCodeController();
+            $answer = $sendCode->sendPhoneCode($toPhone, $code);
+            if($answer=='ok'){
+                return response(null, 204);
+            }
+
+        }
     }
 
     public function requestRegistrationCode(Request $request)
@@ -137,6 +188,24 @@ class RegisterController extends Controller
 
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendEmailCode($toEmail, $code);
+            if($answer=='ok'){
+                return response(null, 202);
+            }
+        }
+        if($request->grantType == 'phoneNumber'){
+            $this->validate($request, [
+                'phoneNumber' => ['required', 'string','max:12', 'unique:users,phone'],
+            ]);
+            $toPhone = $request->phoneNumber;
+            $code = strval(mt_rand(100000, 999999));
+            if(!DB::table('password_resets')->where(['phone'=> $toPhone, 'type'=>'verify'])->exists()) {
+                throw new VerificationError();
+            }
+            DB::table('password_resets')->where(['phone'=> $toPhone, 'type' => 'verify'])
+                ->update(['token'=>Hash::make($code)]);
+
+            $sendCode = new SendCodeController();
+            $answer = $sendCode->sendPhoneCode($toPhone, $code);
             if($answer=='ok'){
                 return response(null, 202);
             }

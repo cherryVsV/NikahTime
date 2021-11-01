@@ -8,6 +8,7 @@
         "php": "^7.3|^8.0",
         "ext-json": "*",
         "beyondcode/laravel-websockets": "^1.12",
+        "codersstudio/sms-ru": "dev-master",
         "darkaonline/l5-swagger": "^8.0",
         "fruitcake/laravel-cors": "^2.0",
         "google/apiclient": "^2.11",

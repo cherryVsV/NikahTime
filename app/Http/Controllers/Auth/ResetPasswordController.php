@@ -29,11 +29,7 @@ class ResetPasswordController extends Controller
                 'email' => ['required', 'string', 'email', 'max:255', 'exists:users']
             ]);
             $toEmail = $request->email;
-            $code = '';
-            $array = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'));
-            for ($i = 0; $i < 14; $i++) {
-                $code .= $array[mt_rand(0, count($array) - 1)];
-            }
+            $code = $this->generateCode();
             if(DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->exists()){
                 DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->delete();
             }
@@ -44,6 +40,27 @@ class ResetPasswordController extends Controller
             ]);
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendEmailCode($toEmail, $code);
+            if($answer=='ok'){
+                return response(null, 200);
+            }
+
+        }
+        if ($request->grantType == "phoneNumber") {
+            $this->validate($request, [
+                'phoneNumber' => ['required', 'string','max:12', 'exists:users,phone'],
+            ]);
+            $toPhone = $request->phoneNumber;
+            $code = $this->generateCode();
+            if(DB::table('password_resets')->where(['phone'=> $toPhone, 'type'=>'reset'])->exists()){
+                DB::table('password_resets')->where(['phone'=> $toPhone, 'type'=>'reset'])->delete();
+            }
+            DB::table("password_resets")->insert([
+                "phone" => $toPhone,
+                "token" => Hash::make($code),
+                "type"=>'reset'
+            ]);
+            $sendCode = new SendCodeController();
+            $answer = $sendCode->sendPhoneCode($toPhone, $code);
             if($answer=='ok'){
                 return response(null, 200);
             }
@@ -64,6 +81,19 @@ class ResetPasswordController extends Controller
             ]);
 
             $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->first();
+            if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
+                throw new VerificationError();
+            }
+            return response(null, 204);
+
+        }
+        if ($request->grantType == "phoneNumber") {
+            $this->validate($request, [
+                'phoneNumber' => ['required', 'string','max:12', 'exists:users,phone', 'exists:password_resets,phone'],
+                'code' => ['required', 'string']
+            ]);
+
+            $passwordReset = DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'reset'])->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError();
             }
@@ -100,7 +130,38 @@ class ResetPasswordController extends Controller
             ], 200);
 
         }
+        if ($request->grantType == "phoneNumber") {
+            $this->validate($request, [
+                'phoneNumber' => ['required', 'string','max:12', 'exists:users,phone', 'exists:password_resets,phone'],
+                'password' => ['required', 'string', 'min:8'],
+                'code' => ['required', 'string']
+            ]);
+            $passwordReset = DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'reset'])->first();
+            if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
+                throw new VerificationError();
+            }
+            DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'reset'])->delete();
+            $user = User::where('phone', $request->phoneNumber)->first();
+            $user->password = Hash::make($request->password);
+            $user->save();
+            $generateToken = new GenerateAccessTokenService();
+            $token = $generateToken->generateToken($request, $request->phoneNumber, $request->password);
+            $profile = Profile::where('user_id', $user->id)->first();
+            return response()->json([
+                'user' => new ProfileResource($profile),
+                'tokenData' => $token
+            ], 200);
+
+        }
 
 
+    }
+    public function generateCode(){
+        $code = '';
+        $array = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'));
+        for ($i = 0; $i < 14; $i++) {
+            $code .= $array[mt_rand(0, count($array) - 1)];
+        }
+        return $code;
     }
 }

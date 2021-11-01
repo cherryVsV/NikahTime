@@ -46,7 +46,7 @@ Route::middleware("auth:api")->group(function(){
 
     Route::put('account/user/update', [ProfileController::class, 'updateUser']);
 
-    Route::post('store/image', [FileController::class, 'storeImage']);
+    Route::post('store/file', [FileController::class, 'storeFile']);
 
     Route::get('search/get/selection/users', [SearchUsersController::class, 'getSelectionUsers']);
 

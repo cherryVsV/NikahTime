@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\Exceptions\ProjectExceptions\BaseError;
 
+use Illuminate\Support\Facades\Validator;
 Use Throwable;
 use Facade\FlareClient\Http\Response;
 use Illuminate\Auth\AuthenticationException;
@@ -79,6 +80,12 @@ class Handler extends ExceptionHandler
                 $response['code'] = 422;
                 $response['title'] = 'ERR_VALIDATION_FAILED';
                 $response['detail'] = $e->validator->errors()->first();
+            }
+            if ($e instanceof \Symfony\Component\HttpFoundation\File\Exception\FileException) {
+                // create a validator and validate to throw a new ValidationException
+                return Validator::make($request->all(), [
+                    'your_file_input' => 'required|file|size:100240',
+                ])->validate();
             }
 
             if (count($response) > 0) {

@@ -3,22 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ProjectExceptions\ValidationDataError;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
 class FileController extends Controller
 {
-    public function storeImage(Request $request)
+    public function storeFile(Request $request)
     {
         $this->validate($request, [
-            'image' => 'required|mimes:jpg,png,jpeg,bmp|max:2048'
+            'fileType'=>['required', 'string']
         ]);
-        if($request->hasFile('image')) {
-            $path = Storage::disk('public')->put('images/photos', $request->image);
-            return response()->json(['imageURL'=>URL::to('/') . '/storage/'.$path]);
-        }else{
-           throw new ValidationDataError('ERR_IMAGE_UPLOAD', 422, 'Image can not be uploaded');
+        if($request->fileType == 'image') {
+            $this->validate($request, [
+                'file' => 'required|mimes:jpg,png,jpeg,bmp|max:2048'
+            ]);
+            if ($request->hasFile('file')) {
+                $path = Storage::disk('public')->put('images/photos', $request->file);
+                return response()->json(['fileURL' => URL::to('/') . '/storage/' . $path, 'fileType'=>'image']);
+            } else {
+                throw new ValidationDataError('ERR_IMAGE_UPLOAD', 422, 'Image can not be uploaded');
+            }
         }
+        if($request->fileType == 'file') {
+            if ($request->hasFile('file')) {
+                $path = Storage::disk('public')->put('files', $request->file);
+                return response()->json(['fileURL' => URL::to('/') . '/storage/' . $path, 'fileType'=>'file']);
+            } else {
+                throw new ValidationDataError('ERR_FILE_UPLOAD', 422, 'File can not be uploaded');
+            }
+        }
+       /* if($request->fileType == 'video') {
+            $this->validate($request, [
+                'file' => 'required'
+            ]);
+
+            if ($request->hasFile('file')) {
+                try {
+                    $disk = Storage::disk('local');
+                    $disk->put($request->file, fopen($request->file, 'r+'));
+                    //$path = Storage::disk('public')->put('video', $request->file);
+                    return response()->json(['fileURL']);
+                } catch (Exception $e) {
+                    throw new ValidationDataError('ERR_VIDEO_UPLOAD', 422, 'Video can not be uploaded');
+                }
+            }
+        }*/
     }
 }

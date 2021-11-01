@@ -745,25 +745,33 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - bearerAuth: []
-  /store/image:
+  /store/file:
     post:
       tags:
         - Account
-      summary: Загрузка изображения на сервер
-      operationId: storeImage
+      summary: Загрузка файлов на сервер
+      operationId: storeFile
       requestBody:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                image:
-                  type: string
-                  format: binary
-                  description: "Доступные расширения файлов - jpg,png,jpeg,bmp"
+              $ref: '#/components/schemas/File'
       responses:
         "200":
-          description: Загрузка изображения прошла успешно
+          description: Загрузка файла прошла успешно
+          content:
+            application/json:
+              schema:
+                properties:
+                  fileUrl:
+                    type: string
+                    description: 'Ссылка на файл на сервере'
+                  fileType:
+                    type: string
+                    enum:
+                      - image
+                      - file
+                      - video
         default:
           description: unexpected error
           content:
@@ -887,6 +895,22 @@ components:
         haveBadHabits:
           type: boolean
           description: Обязательный параметр для расширенного фильтра. В случае выбора привычек - передать true
+    File:
+      required:
+        - fileType
+        - file
+      type: object
+      properties:
+        fileType:
+          type: string
+          enum:
+            - image
+            - file
+            - video
+        file:
+          type: string
+          format: binary
+          description: "Доступные расширения картинок - jpg,png,jpeg,bmp. На файлы нет ограничений. На видео - не более 100мб"
     SeenUsers:
       required:
         - seenUsersId

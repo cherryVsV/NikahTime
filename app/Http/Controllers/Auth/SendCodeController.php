@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ProjectExceptions\SendingMessageError;
 use App\Http\Controllers\Controller;
+use CodersStudio\SmsRu\Facades\SmsRu;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 
@@ -26,4 +27,13 @@ class SendCodeController extends Controller
             throw new SendingMessageError();
         }
     }
+    public function sendPhoneCode($toPhone, $code){
+            $isSent = SmsRu::send($toPhone, 'Ваш код подтверждения в NikahTime: '.$code.'. Если Вы не запрашивали код подтверждения, проигнорируйте данное сообщение.');
+            if(!$isSent){
+                throw new SendingMessageError();
+            }else {
+                return 'ok';
+            }
+    }
+
 }
