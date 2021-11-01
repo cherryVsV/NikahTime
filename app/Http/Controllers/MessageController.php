@@ -42,7 +42,7 @@ class MessageController extends Controller
         if(!Chat::where('id',$request->chatId )->exists()){
             throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
         }
-        $chat = Chat::find($request->chatId)->first();
+        $chat = Chat::find($request->chatId);
         if($chat->user1_id == $user_id){
             $receiverId = $chat->user2_id;
         }else{
