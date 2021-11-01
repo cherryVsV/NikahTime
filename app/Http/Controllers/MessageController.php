@@ -56,7 +56,7 @@ class MessageController extends Controller
             'receiver_id'=>$receiverId,
             'type'=>$request->messageType
         ]);
-        broadcast(new NewChatMessage($message->id, $user, 'Отправлено'));
+        broadcast(new NewChatMessage($message->id, $user, 'Новое сообщение'));
         return response(null, 200);
         }
         catch (Exception $e){
