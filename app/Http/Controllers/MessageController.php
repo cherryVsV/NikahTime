@@ -48,8 +48,7 @@ class MessageController extends Controller
         }else{
             $receiverId = $chat->user1_id;
         }
-        //$user = User::find($receiverId);
-        $user = User::find($user_id);
+        $user = User::find($receiverId);
         $message = Message::create([
             'user_id'=>$user_id,
             'chat_id'=>$request->chatId,
@@ -83,7 +82,7 @@ class MessageController extends Controller
         $message->save();
         $userId = $message->user_id;
         $user = User::find($userId);
-       // event(new NewChatMessage($message->id, $user, 'Прочитано'));
+       event(new NewChatMessage($message->id, $user, 'Прочитано'));
         return response()->json($this->getMessageData($messageId), 200);
 
     }

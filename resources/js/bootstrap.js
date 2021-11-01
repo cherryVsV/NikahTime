@@ -37,15 +37,15 @@ window.Echo = new Echo({
 });*/
 
 
-import Echo from "laravel-echo"
+/*import Echo from "laravel-echo"
 window.io = require('socket.io-client');
     window.Echo = new Echo({
         broadcaster: 'socket.io',
         host: window.location.hostname + ':6002',
         auth: {
             headers: {
-                Authorization: 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiNzkxZGM5ZTc3Mjc4Nzc1MmFkODg4MDRlN2UxMzI2NDQ1MDJiMzk4NDZlNTY0MGRhODkxNzA1NTc5NDZhZjIwMWRiNjVhNWUyYjUzYzE3ZTciLCJpYXQiOjE2MzU1MDA2MDIuNjgyMTc2LCJuYmYiOjE2MzU1MDA2MDIuNjgyMTgzLCJleHAiOjE2MzU1ODcwMDAuNTQ4ODMsInN1YiI6IjE3Iiwic2NvcGVzIjpbXX0.Bj1XoPyp3j-_wNmBd_C9YgvwhWi821oyshQwnHdiOnPaOgCFLMPfJkrh7V6L2SD-1ZprdWW68ONmG1YudgzsaCtn38IW_tFZTU1P4okYSTLXCCgYnm6l68VypwPF42KGY5CpnigMacrkWVRDvuTmUA1u1T-bclWma1A5Ip8qtn1cvO0P13xyYyRnT47gyAocOX0J1_dyPnP3RKdFvnEzIjqRHr2BtbkpP7P39oLiJQnNnyibIY7NJviVTbYhR6Bd1zsiO45EgG6f4Qb-ya65s2A8z2npuMcLiDrZnzNHgC9Yt-AOIv9YXvs0SDWcRO1CfhwtmoHMNL0Wjh2CoR3VvaVpwOgeWTy-thKMpgl9DablsWOgCmWzJoIP4BfeVn3AduqH9VY-bedg-25j41wjSSNmXl1M0kxxofpi1knfy1lfOos-NXzDhirpheNAD8Zqm3fH3tybg97M5H5qpNXUj8ocBjvmrVFPl5px9hzjVL2-6XSy-LA8IE1lhn83j5jm5EJD-YdK3ra3115sukD8Qz0S02LPugaRlXh7rJ4-GLeL_QEjRA3yVaxbfirRU2Yq7KxYm2bhin2SPT892T2V93SKjPw7UDXLj0swm2qTuSsCtsG_woMLDG4I_OJ6wdADjPJH1JSXmLqBOGM-hU2MnVaC9NX5OkLKM-OtazZohAQ'
+                Authorization: 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiNjMyMDQ5ZDIxZWRkODQ1NDUwNWU2Y2U1YWNjMzkzMjliYjhkMDhhMzBkY2JjYTFhNTIxMjlmNGY1NDM0NTY1YmFiY2QwMzIzODJlYzJkYjIiLCJpYXQiOjE2MzU3NTg0NDIuNTU3NzQyLCJuYmYiOjE2MzU3NTg0NDIuNTU3NzUxLCJleHAiOjE2MzU4NDQ4NDAuNjQ5ODk3LCJzdWIiOiIxNyIsInNjb3BlcyI6W119.nMIcGW2Gdv14MPEndpH85B1xozEs-eGsfz8jp7HX8wglslh0MarJB_mn1X2vBdry6hhWE9mggy-rLqmAKz67deeOzsGCqnrvt7OQQ_80nllCkkTD4l6bR9q3ADyE_aCszYtIRUbSkuOf4je_XDZhknvBvUkhVNU_yNBEs34rvRKhGSXStn_dScc3i6nWLFSX17o45zHe_AZwGA8xkEvdO4Rfx9gMJjLgJP-Hg07sKScPfwU461Zo7Duq_y4IXJmGIdmYV1lKjssyVuPoplZisrSXE4Fnq-tY7gKZVmuH-Be_zIIgAwlFaBGg_RwXFXk746DD6SmVWaghGYXKne20VSrFBq8k2Z5VVcuAuN4O8rH-UOdjXbt_ZVIA1MR9340T-XrUpyPVZDz85ZyLMfjXBfyPzQLcJysAEkkTNLrxc2NHxb1AGsLWYHo47x2FBCMjxx-NN9MUSf4SIZTH_hdGKtWcIo5GKIUGKL0_1BvmNWDm6eIUQt2UsLLhNTbjvZgPs_sqNazM-AUnAhiUlb4y6uMvZY9Io3UxKS2PDeIz7femnL8xTCA7ninfMKgbff2RhNAKWBbN7sb9CUgW4DbzCTUgV3-CLbDNdmji1l_5cMaA-9z76xdWQFfiNxqkK3A0ZSeulgUYdpwN2yJyzono52tSPVzeWhm_MXWF9Z4ZqeA'
             }
         }
-    });
+    });*/
 

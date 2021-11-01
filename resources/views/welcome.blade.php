@@ -53,7 +53,7 @@
             </div>
         </div>
         <!--//timer-->
-        <div id="app"></div>
+
 
     </div>
 </div>
@@ -62,13 +62,6 @@
 <script type="text/javascript" src=" {{asset('js/moment-timezone-with-data.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/timer.js')}}"></script>
 
-<script src="{{ asset('js/app.js') }}" type="text/javascript"></script>
-<script type="text/javascript">
-    Echo.private('chats.17')
-        .listen('NewChatMessage', (e) => {
-            console.log(e);
-        });
-</script>
 <!--//scripts-->
 </body>
 </html>
