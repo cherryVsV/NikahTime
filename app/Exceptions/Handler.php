@@ -81,12 +81,12 @@ class Handler extends ExceptionHandler
                 $response['title'] = 'ERR_VALIDATION_FAILED';
                 $response['detail'] = $e->validator->errors()->first();
             }
-            if ($e instanceof \Symfony\Component\HttpFoundation\File\Exception\FileException) {
+           /* if ($e instanceof \Symfony\Component\HttpFoundation\File\Exception\FileException) {
                 // create a validator and validate to throw a new ValidationException
                 return Validator::make($request->all(), [
-                    'your_file_input' => 'required|file|size:100240',
+                    'your_file_input' => 'required|file|size:100=2400',
                 ])->validate();
-            }
+            }*/
 
             if (count($response) > 0) {
                 return response()->json([

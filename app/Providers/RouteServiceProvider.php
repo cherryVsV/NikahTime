@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use OneOffTech\TusUpload\Tus;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Tus::routes();
         $this->configureRateLimiting();
 
         $this->routes(function () {

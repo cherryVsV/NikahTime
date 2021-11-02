@@ -35,19 +35,36 @@ class FileController extends Controller
                 throw new ValidationDataError('ERR_FILE_UPLOAD', 422, 'File can not be uploaded');
             }
         }
-       /* if($request->fileType == 'video') {
-            $this->validate($request, [
-                'file' => 'required'
-            ]);
-
+     /* if($request->fileType == 'video') {
             if ($request->hasFile('file')) {
                 try {
-                    $disk = Storage::disk('local');
-                    $disk->put($request->file, fopen($request->file, 'r+'));
-                    //$path = Storage::disk('public')->put('video', $request->file);
-                    return response()->json(['fileURL']);
+                    $source = $request->file;
+                    $orig_file_size = filesize($source);
+                    $destination = 'storage/video/video.mp4';
+
+                    $chunk_size = 256; // chunk in bytes
+                    $upload_start = 0;
+
+                    $handle = fopen($source, "rb");
+
+                    $fp = fopen($destination, 'w');
+
+                    while($upload_start < $orig_file_size) {
+
+                        $contents = fread($handle, $chunk_size);
+                        fwrite($fp, $contents);
+
+                        $upload_start += strlen($contents);
+                        fseek($handle, $upload_start);
+                    }
+
+                    fclose($handle);
+                    fclose($fp);
+                    return response()->json('yes');
+                   // $path = Storage::disk('public')->put('video', $request->file);
+                   // return response()->json(['fileURL' => URL::to('/') . '/storage/' . $path, 'fileType'=>'video']);
                 } catch (Exception $e) {
-                    throw new ValidationDataError('ERR_VIDEO_UPLOAD', 422, 'Video can not be uploaded');
+                    throw new ValidationDataError('ERR_VIDEO_UPLOAD', 422, $e);
                 }
             }
         }*/

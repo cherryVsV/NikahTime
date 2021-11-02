@@ -944,6 +944,7 @@ components:
           isAuthUserMessage: true
           isSeenMessage: true
           numberNotSeenMessages: 0
+          lastMessageType: text
         - chatId: 2
           userAvatar: url
           userName: name
@@ -954,6 +955,7 @@ components:
           isAuthUserMessage: true
           isSeenMessage: false
           numberNotSeenMessages: 4
+          lastMessageType: image
     Favourite:
       type: array
       items:
