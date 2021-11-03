@@ -43,7 +43,6 @@ class ProfileResource extends JsonResource
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
             'photos'=>$images,
-            'video'=>$this->video,
             'gender' => $this->gender,
             'birthDate' => $birthDate,
             'country' => $this->country,

@@ -21,7 +21,6 @@ class CreateProfilesTable extends Migration
             $table->string('first_name', 255)->nullable();
             $table->string('last_name', 255)->nullable();
             $table->json('photos')->nullable();
-            $table->string('video')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->dateTime('birth_date')->nullable();
             $table->string('country', 255)->nullable();

@@ -797,6 +797,80 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - bearerAuth: []
+  /tariffs/get:
+    get:
+      tags:
+        - Tariffs
+      summary: Получение информации о тарифах
+      operationId: getTariffs
+      responses:
+        "200":
+          description: Информация о тарифах
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tariffs'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+          - bearerAuth: []
+  /tariffs/user/check:
+    get:
+      tags:
+        - Tariffs
+      summary: Получение информации о том, действителен ли тариф пользователя
+      operationId: checkUserTariff
+      responses:
+        "200":
+          description: Тариф пользователя действителен
+        default:
+          description: Тариф пользователя не действителен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /tariffs/payment/{tariffId):
+    put:
+      parameters:
+        - in: path
+          name: tariffId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник тарифа, который выбран для оплаты
+      tags:
+        - Tariffs
+      summary: Выбор тарифа для оплаты
+      operationId: tariffPayment
+      responses:
+        "200":
+          description: URL-адрес формы ввода данных банковской карты (платёжная форма).
+          content:
+            application/json:
+              schema:
+                properties:
+                  paymentUrl:
+                    type: string
+                    format: uri
+                  orderId:
+                    type: integer
+                    format: int64
+                    description: уникальный идентификатор заказа в платёжной системе
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+
 
 components:
   schemas:
@@ -1032,10 +1106,6 @@ components:
           items:
             type: string
             format: uri
-        video:
-          type: string
-          format: uri
-          description: Ссылка на 1 видео в профиле пользователя
         gender:
           type: string
           enum:
@@ -1122,10 +1192,6 @@ components:
           items:
             type: string
             format: uri
-        video:
-          type: string
-          format: uri
-          description: Ссылка на 1 видео в профиле пользователя
         birthDate:
           type: string
           format: data-time
@@ -1205,10 +1271,6 @@ components:
           items:
             type: string
             format: uri
-        video:
-          type: string
-          format: uri
-          description: Ссылка на 1 видео в профиле пользователя
         birthDate:
           type: string
           format: data-time
@@ -1459,6 +1521,27 @@ components:
           enum:
             - text
             - image
+    Tariffs:
+      type: array
+      items:
+        $ref: '#/components/schemas/Tariff'
+    Tariff:
+      required:
+        - tariffId
+        - tariffTitle
+        - tariffPrice
+      type: object
+      properties:
+        tariffId:
+          type: integer
+          format: int64
+        tariffTitle:
+          type: string
+        tariffPrice:
+          type: integer
+          format: int64
+        tariffDescription:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
