@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
@@ -29,9 +28,5 @@ class AuthServiceProvider extends ServiceProvider
         Passport::routes();
         Passport::tokensExpireIn(Carbon::now()->addDays(1));
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(10));
-        Gate::define('upload-via-tus', function ($user, $upload_request) {
-            // $upload_request instanceof \OneOffTech\TusUpload\Http\Requests\CreateUploadRequest
-            // ...
-        });
     }
 }
