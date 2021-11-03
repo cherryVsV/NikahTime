@@ -37,12 +37,10 @@ class FileController extends Controller
         }
       if($request->fileType == 'video') {
             if ($request->hasFile('file')) {
-                try {
-                    $path = Storage::disk('public')->put('video', $request->file);
-                   return response()->json(['fileURL' => URL::to('/') . '/storage/' . $path, 'fileType'=>'video']);
-                } catch (Exception $e) {
-                    throw new ValidationDataError('ERR_VIDEO_UPLOAD', 422, $e);
-                }
+                $path = Storage::disk('public')->put('video', $request->file);
+                return response()->json(['fileURL' => URL::to('/') . '/storage/' . $path, 'fileType'=>'video']);
+            }else {
+                throw new ValidationDataError('ERR_VIDEO_UPLOAD', 422, 'Video can not be uploaded');
             }
         }
     }

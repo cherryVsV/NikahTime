@@ -1032,6 +1032,10 @@ components:
           items:
             type: string
             format: uri
+        video:
+          type: string
+          format: uri
+          description: Ссылка на 1 видео в профиле пользователя
         gender:
           type: string
           enum:
@@ -1118,6 +1122,10 @@ components:
           items:
             type: string
             format: uri
+        video:
+          type: string
+          format: uri
+          description: Ссылка на 1 видео в профиле пользователя
         birthDate:
           type: string
           format: data-time
@@ -1197,6 +1205,10 @@ components:
           items:
             type: string
             format: uri
+        video:
+          type: string
+          format: uri
+          description: Ссылка на 1 видео в профиле пользователя
         birthDate:
           type: string
           format: data-time

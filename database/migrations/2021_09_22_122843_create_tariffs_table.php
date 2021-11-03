@@ -15,11 +15,10 @@ class CreateTariffsTable extends Migration
     {
         Schema::create('tariffs', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 255);
-            $table->text('description');
-            $table->integer('one_month_price')->nullable();
-            $table->integer('three_month_price')->nullable();
-            $table->integer('year_price')->nullable();
+            $table->text('title');
+            $table->text('description')->nullable();
+            $table->string('period');
+            $table->integer('price');
             $table->timestamps();
         });
     }

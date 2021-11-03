@@ -19,6 +19,7 @@ class Profile extends Model
     protected $fillable = [
         'user_id',
         'photos',
+        'video',
         'first_name',
         'last_name',
         'gender',

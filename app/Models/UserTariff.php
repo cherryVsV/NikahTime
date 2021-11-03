@@ -17,9 +17,9 @@ class UserTariff extends Model
     protected $fillable = [
         'user_id',
         'tariff_id',
-        'period',
         'payment_amount',
         'finished_at',
+        'is_active'
     ];
 
     /**
@@ -32,6 +32,7 @@ class UserTariff extends Model
         'user_id' => 'integer',
         'tariff_id' => 'integer',
         'finished_at' => 'timestamp',
+        'is_active'=>'boolean'
     ];
 
 

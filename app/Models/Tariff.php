@@ -17,9 +17,8 @@ class Tariff extends Model
     protected $fillable = [
         'title',
         'description',
-        'one_month_price',
-        'three_month_price',
-        'year_price',
+        'period',
+        'price'
     ];
 
     /**

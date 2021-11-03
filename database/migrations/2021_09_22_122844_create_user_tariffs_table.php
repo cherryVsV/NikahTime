@@ -19,9 +19,9 @@ class CreateUserTariffsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('tariff_id')->constrained();
-            $table->integer('period');
             $table->integer('payment_amount');
             $table->timestamp('finished_at');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
 

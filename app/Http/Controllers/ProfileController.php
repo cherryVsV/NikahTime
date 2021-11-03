@@ -80,6 +80,7 @@ class ProfileController extends Controller
             throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'The photos field length should be no more than 10');
         }
         $profile->photos = $request->photos;
+        $profile->video = $request->video;
         $profile->birth_date = $request->birthDate;
         $profile->country = $request->country;
         $profile->city = $request->city;
