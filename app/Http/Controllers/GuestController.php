@@ -19,12 +19,12 @@ class GuestController extends Controller
             throw new ValidationDataError('ERR_FIND_USER_FAILED', 422, 'Selected user do not exists');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
-        if(Guest::where(['user_id'=>$auth_id, 'guest_id'=>$userId])->exists()){
-            Guest::where(['user_id'=>$auth_id, 'guest_id'=>$userId])->delete();
+        if(Guest::where(['user_id'=>$userId, 'guest_id'=>$auth_id])->exists()){
+            Guest::where(['user_id'=>$userId, 'guest_id'=>$auth_id])->delete();
         }
         Guest::create([
-            'user_id'=>$auth_id,
-            'guest_id'=>$userId
+            'user_id'=>$userId,
+            'guest_id'=>$auth_id
         ]);
         return response(null, 200);
 
