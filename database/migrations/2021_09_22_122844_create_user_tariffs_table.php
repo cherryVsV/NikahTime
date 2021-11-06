@@ -17,8 +17,16 @@ class CreateUserTariffsTable extends Migration
 
         Schema::create('user_tariffs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('tariff_id')->constrained();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('tariff_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('CASCADE');
+            $table->foreign('tariff_id')
+                ->references('id')
+                ->on('tariffs')
+                ->onDelete('CASCADE');
             $table->integer('payment_amount');
             $table->timestamp('finished_at');
             $table->boolean('is_active')->default(true);

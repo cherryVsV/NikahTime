@@ -625,6 +625,7 @@ paths:
                   filterType: simpleFilter
                   minAge: 18
                   maxAge: 30
+                  isOnline: true
               complicatedFilter:
                 value:
                   filterType: complicatedFilter
@@ -637,6 +638,7 @@ paths:
                   haveChildren: true
                   haveBadHabits: false
                   badHabits: ["smoking"]
+                  isOnline: true
         required: true
       responses:
         "200":
@@ -789,79 +791,6 @@ paths:
       responses:
         "200":
           description: Выход прошел успешно
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-        - bearerAuth: []
-  /tariffs/get:
-    get:
-      tags:
-        - Tariffs
-      summary: Получение информации о тарифах
-      operationId: getTariffs
-      responses:
-        "200":
-          description: Информация о тарифах
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tariffs'
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-          - bearerAuth: []
-  /tariffs/user/check:
-    get:
-      tags:
-        - Tariffs
-      summary: Получение информации о том, действителен ли тариф пользователя
-      operationId: checkUserTariff
-      responses:
-        "200":
-          description: Тариф пользователя действителен
-        default:
-          description: Тариф пользователя не действителен
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      security:
-        - bearerAuth: []
-  /tariffs/payment/{tariffId):
-    put:
-      parameters:
-        - in: path
-          name: tariffId
-          schema:
-            type: integer
-          required: true
-          description: Айдишник тарифа, который выбран для оплаты
-      tags:
-        - Tariffs
-      summary: Выбор тарифа для оплаты
-      operationId: tariffPayment
-      responses:
-        "200":
-          description: URL-адрес формы ввода данных банковской карты (платёжная форма).
-          content:
-            application/json:
-              schema:
-                properties:
-                  paymentUrl:
-                    type: string
-                    format: uri
-                  orderId:
-                    type: integer
-                    format: int64
-                    description: уникальный идентификатор заказа в платёжной системе
         default:
           description: unexpected error
           content:

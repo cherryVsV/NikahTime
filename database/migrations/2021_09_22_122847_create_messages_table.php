@@ -17,14 +17,27 @@ class CreateMessagesTable extends Migration
 
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('chat_id')->constrained();
-            $table->foreignId('receiver_id')->constrained();
+            $table->unsignedBigInteger('chat_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('receiver_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('CASCADE');
+            $table->foreign('receiver_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('CASCADE');
+            $table->foreign('chat_id')
+                ->references('id')
+                ->on('chats')
+                ->onDelete('CASCADE');
             $table->text('message');
             $table->boolean('is_seen')->default('false');
             $table->string('type')->default('text');
             $table->softDeletes();
             $table->timestamps();
+
         });
 
         Schema::enableForeignKeyConstraints();

@@ -77,7 +77,8 @@ class SearchUsersController extends Controller
         $this->validate($request,[
             'filterType'=>['required', 'string'],
             'minAge'=>['required', 'integer'],
-            'maxAge'=>['required', 'integer']
+            'maxAge'=>['required', 'integer'],
+            'isOnline'=>['required', 'boolean']
         ]);
         try {
             $user_id = auth()->user()->getAuthIdentifier();
@@ -88,8 +89,14 @@ class SearchUsersController extends Controller
             if ($request->filterType == 'simpleFilter') {
                 foreach ($seenProfiles as $profile) {
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
-                    if ($age >= $request->minAge && $age <= $request->maxAge && $profile->gender != $userProfile->gender) {
-                        $filters[] = new ProfileResource($profile);
+                    if($request->isOnline) {
+                        if ($age >= $request->minAge && $age <= $request->maxAge && $profile->gender != $userProfile->gender && $profile->isOnline()) {
+                            $filters[] = new ProfileResource($profile);
+                        }
+                    }else{
+                        if ($age >= $request->minAge && $age <= $request->maxAge && $profile->gender != $userProfile->gender) {
+                            $filters[] = new ProfileResource($profile);
+                        }
                     }
                 }
             }
@@ -113,11 +120,23 @@ class SearchUsersController extends Controller
                         if ($request->haveBadHabits) {
                             $badHabits = Habit::whereIn('title', $request->badHabits)->pluck('id');
                             if (collect($badHabits)->diff(collect($profile->habits->pluck('id')))->count() == 0) {
-                                $filters[] = new ProfileResource($profile);
+                                if($request->isOnline) {
+                                    if($profile->isOnline()) {
+                                        $filters[] = new ProfileResource($profile);
+                                    }
+                                }else{
+                                    $filters[] = new ProfileResource($profile);
+                                }
                             }
                         } else {
                             if ($profile->habits->count() == 0) {
-                                $filters[] = new ProfileResource($profile);
+                                if($request->isOnline) {
+                                    if($profile->isOnline()) {
+                                        $filters[] = new ProfileResource($profile);
+                                    }
+                                }else{
+                                    $filters[] = new ProfileResource($profile);
+                                }
                             }
                         }
                     }
@@ -130,7 +149,7 @@ class SearchUsersController extends Controller
                 'code' => $e->getCode(),
                 'title' => 'ERR_GET_SELECTION_USER_DATA_FAILED',
                 'details' => $e->getMessage()],
-                404);
+                422);
         }
     }
 }
