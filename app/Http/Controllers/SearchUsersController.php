@@ -101,22 +101,20 @@ class SearchUsersController extends Controller
                 }
             }
             if ($request->filterType == 'complicatedFilter') {
-                $this->validate($request, [
-                    'country' => ['required', 'string'],
-                    'city' => ['required', 'string'],
-                    'education' => ['required', 'string', 'exists:education,title'],
-                    'maritalStatus' => ['required', 'string', 'exists:marital_statuses,title'],
-                    'haveChildren' => ['required', 'boolean'],
-                    'haveBadHabits' => ['boolean'],
-                    'badHabits' => ['array']
-                ]);
                 foreach ($seenProfiles as $profile) {
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
-                    $education = Education::where('title', $request->education)->value('id');
-                    $status = MaritalStatus::where('title', $request->maritalStatus)->value('id');
+                    $education = null;
+                    if(!is_null($request->education)) {
+                        $education = Education::where('title', $request->education)->value('id');
+                    }
+                    $status = null;
+                    if(!is_null($request->maritalStatus)) {
+                        $status = MaritalStatus::where('title', $request->maritalStatus)->value('id');
+                    }
                     if ($age >= $request->minAge && $age <= $request->maxAge && $profile->gender != $userProfile->gender
-                        && $profile->city == $request->city && $profile->country == $request->country && $profile->have_children == $request->haveChildren
-                        && $profile->education_id == $education && $profile->marital_status_id == $status) {
+                        &&( is_null($request->city) || $profile->city == $request->city) && (is_null($request->country) || $profile->country == $request->country)
+                        && (is_null($request->haveChildren) || $profile->have_children == $request->haveChildren)
+                        && (is_null($education) || $profile->education_id == $education) && (is_null($status) || $profile->marital_status_id == $status)) {
                         if ($request->haveBadHabits) {
                             $badHabits = Habit::whereIn('title', $request->badHabits)->pluck('id');
                             if (collect($badHabits)->diff(collect($profile->habits->pluck('id')))->count() == 0) {
