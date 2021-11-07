@@ -45,6 +45,9 @@ class LoginController extends Controller
             $password = $userData['password'];
             $username = $username.' apple';
         }
+        if(!is_null($user->blocked_at)){
+            throw new ValidationDataError('ERR_USER_AUTH', 403, 'Selected user is blocked!');
+        }
         $generateToken = new GenerateAccessTokenService();
         $token = $generateToken->generateToken($request, $username, $password);
         $profile = Profile::where('user_id', $user->id)->first();
