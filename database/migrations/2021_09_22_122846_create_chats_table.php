@@ -13,13 +13,12 @@ class CreateChatsTable extends Migration
      */
     public function up()
     {
-        Schema::disableForeignKeyConstraints();
 
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user1_id');
             $table->unsignedBigInteger('user2_id');
-            $table->foreign('user_id')
+            $table->foreign('user1_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('CASCADE');
@@ -33,7 +32,6 @@ class CreateChatsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::enableForeignKeyConstraints();
     }
 
     /**

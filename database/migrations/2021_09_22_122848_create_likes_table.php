@@ -13,7 +13,7 @@ class CreateLikesTable extends Migration
      */
     public function up()
     {
-        Schema::disableForeignKeyConstraints();
+
 
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
@@ -30,7 +30,6 @@ class CreateLikesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::enableForeignKeyConstraints();
     }
 
     /**

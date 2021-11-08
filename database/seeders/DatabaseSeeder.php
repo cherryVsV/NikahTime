@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(EducationSeeder::class);
         $this->call(MaritalStatusSeeder::class);
         $this->call(HabitSeeder::class);
+        $this->call(InterestSeeder::class);
         $this->call(TariffTableSeeder::class);
         Model::reguard();
 

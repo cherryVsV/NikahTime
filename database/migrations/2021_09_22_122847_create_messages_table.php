@@ -13,7 +13,7 @@ class CreateMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::disableForeignKeyConstraints();
+
 
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
@@ -33,14 +33,13 @@ class CreateMessagesTable extends Migration
                 ->on('chats')
                 ->onDelete('CASCADE');
             $table->text('message');
-            $table->boolean('is_seen')->default('false');
+            $table->boolean('is_seen')->default(false);
             $table->string('type')->default('text');
             $table->softDeletes();
             $table->timestamps();
 
         });
 
-        Schema::enableForeignKeyConstraints();
     }
 
     /**
