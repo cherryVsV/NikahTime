@@ -16,6 +16,7 @@ class CreateHabitsTable extends Migration
         Schema::create('habits', function (Blueprint $table) {
             $table->id();
             $table->string('title', 255);
+            $table->string('show_title', 255);
             $table->timestamps();
         });
     }
