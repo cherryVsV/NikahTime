@@ -7,6 +7,7 @@ use App\Models\Chat;
 use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\UserTariff;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\URL;
 
@@ -24,6 +25,9 @@ class ChatController extends Controller
             throw new ValidationDataError('ERR_USER_NOT_FOUND', 422, 'Selected user do not exists');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
+        if(!UserTariff::where('user_id', $auth_id)->whereDate('finished_at', '>', Carbon::now())->exists()){
+            throw new ValidationDataError('ERR_CHAT_CREATE', 422, 'On the free tariff, the user cannot create chats');
+        }
         if($auth_id == $userId){
             throw new ValidationDataError('ERR_CHAT_CREATE', 422, 'User can not have chat with itself');
         }

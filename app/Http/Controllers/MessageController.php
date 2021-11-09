@@ -7,6 +7,7 @@ use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Models\Chat;
 use App\Models\Message;
 use App\Models\User;
+use App\Models\UserTariff;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -25,6 +26,10 @@ class MessageController extends Controller
 
     public function sendMessage(Request $request)
     {
+        $user_id = auth()->user()->getAuthIdentifier();
+        if(!UserTariff::where('user_id', $user_id)->whereDate('finished_at', '>', Carbon::now())->exists()){
+            throw new ValidationDataError('ERR_SEND_MESSAGE', 422, 'On the free tariff, the user cannot send messages');
+        }
         $this->validate($request,[
             'message'=>['required', 'string'],
             'chatId'=>['required', 'integer', 'exists:chats,id'],
@@ -38,7 +43,6 @@ class MessageController extends Controller
             }
         }
         try{
-        $user_id = auth()->user()->getAuthIdentifier();
         if(!Chat::where('id',$request->chatId )->exists()){
             throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
         }

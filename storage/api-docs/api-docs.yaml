@@ -799,8 +799,72 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - bearerAuth: []
-
-
+  /set/user/tariff/{tariffId}:
+    put:
+      parameters:
+        - in: path
+          name: tariffId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник тарифа, которй оплатил пользователь
+      tags:
+        - Tariffs
+      summary: Сохранение тарифа, оплаченного пользователем
+      operationId: setUserTariff
+      responses:
+        "200":
+          description: Сохранение тарифа, оплаченного пользователем, прошло успешно
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /get/tariffs:
+    get:
+      tags:
+        - Tariffs
+      summary: Получение всех тарифов
+      operationId: getTariffs
+      responses:
+        "200":
+          description: Возвращаем тарифы из базы данных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tariffs'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /get/user/tariff:
+    get:
+      tags:
+        - Tariffs
+      summary: Получение тарифа пользователя
+      operationId: getUserTariff
+      responses:
+        "200":
+          description: Возвращаем тариф пользователя
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tariff'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
 components:
   schemas:
     Auth:

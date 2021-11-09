@@ -9,6 +9,7 @@ use App\Models\Habit;
 use App\Models\MaritalStatus;
 use App\Models\Profile;
 use App\Models\SeenUser;
+use App\Models\UserTariff;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,6 +20,11 @@ class SearchUsersController extends Controller
     {
         try {
             $user_id = auth()->user()->getAuthIdentifier();
+            if(!UserTariff::where('user_id', $user_id)->whereDate('finished_at', '>', Carbon::now())->exists()){
+                if(SeenUser::where('user_id', $user_id)->count()>=20) {
+                    throw new ValidationDataError('ERR_GET_SELECTION_USERS', 422, 'On the free tariff, the user can get selection only 20 users');
+                }
+            }
             $profile = Profile::where('user_id', $user_id)->first();
             $selectionIds = Profile::whereHas('interests', function ($query) use ($profile) {
                 $query->whereIn('interest_id', $profile->interests->pluck('id'));

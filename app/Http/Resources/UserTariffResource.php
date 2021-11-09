@@ -15,12 +15,9 @@ class UserTariffResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'tariff_id' => $this->tariff_id,
-            'period' => $this->period,
-            'payment_amount' => $this->payment_amount,
-            'finished_at' => $this->finished_at,
+            'tariffId' => $this->id,
+            'tariffTitle' => $this->title,
+            'tariffPrice' => $this->price
         ];
     }
 }

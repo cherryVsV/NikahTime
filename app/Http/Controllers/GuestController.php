@@ -7,9 +7,9 @@ use App\Http\Resources\ProfileResource;
 use App\Models\Guest;
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\UserTariff;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Http\Request;
 
 class GuestController extends Controller
 {
@@ -33,6 +33,9 @@ class GuestController extends Controller
     {
         try{
             $auth_id = auth()->user()->getAuthIdentifier();
+            if(!UserTariff::where('user_id', $auth_id)->whereDate('finished_at', '>', Carbon::now())->exists()){
+                throw new ValidationDataError('ERR_GET_GUESTS', 422, 'On the free tariff, the user cannot see it guests');
+            }
             $guestsIds = Guest::where('user_id', $auth_id)->pluck('guest_id');
             $guestsProfiles = Profile::whereIn('user_id', $guestsIds)->get();
             $guests = [];

@@ -7,6 +7,8 @@ use App\Http\Resources\ProfileResource;
 use App\Models\Like;
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\UserTariff;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\URL;
 
@@ -28,6 +30,11 @@ class FavouritesController extends Controller
             throw new ValidationDataError('ERR_FIND_USER_FAILED', 422, 'Selected user do not exists');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
+        if(!UserTariff::where('user_id', $auth_id)->whereDate('finished_at', '>', Carbon::now())->exists()){
+            if (Like::where('user_id', $auth_id)->count()>=5) {
+                throw new ValidationDataError('ERR_ADD_FAVOURITE', 422, 'No more than 5 likes are available on the free tariff');
+            }
+        }
         if (!Like::where(['user_id' => $auth_id, 'favourite_user_id' => $userId])->exists()) {
             Like::create([
                 'user_id' => $auth_id,

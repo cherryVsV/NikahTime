@@ -17,7 +17,7 @@ class CreateTariffsTable extends Migration
             $table->id();
             $table->text('title');
             $table->text('description')->nullable();
-            $table->string('period');
+            $table->integer('period');
             $table->integer('price');
             $table->timestamps();
         });

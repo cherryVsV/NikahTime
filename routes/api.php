@@ -10,6 +10,7 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchUsersController;
+use App\Http\Controllers\UserTariffController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -79,6 +80,12 @@ Route::middleware("auth:api")->group(function(){
     Route::get('chats/get/message/{messageId}', [MessageController::class, 'getMessage']);
 
     Route::put('chats/seen/message/{messageId}', [MessageController::class, 'makeSeenMessage']);
+
+    Route::put('set/user/tariff/{tariffId}', [UserTariffController::class, 'setUserTariff']);
+
+    Route::get('get/tariffs', [UserTariffController::class, 'getTariffs']);
+
+    Route::get('get/user/tariff', [UserTariffController::class, 'getUserTariff']);
 });
 
 

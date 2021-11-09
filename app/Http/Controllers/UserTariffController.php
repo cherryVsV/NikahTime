@@ -2,68 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserTariffStoreRequest;
-use App\Http\Requests\UserTariffUpdateRequest;
-use App\Http\Resources\UserTariffCollection;
+use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Http\Resources\UserTariffResource;
+use App\Models\Tariff;
 use App\Models\UserTariff;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class UserTariffController extends Controller
 {
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @return \App\Http\Resources\UserTariffCollection
-     */
-    public function index(Request $request)
-    {
-        $userTariffs = UserTariff::all();
 
-        return new UserTariffCollection($userTariffs);
+    public function setUserTariff($tariffId)
+    {
+        if (!Tariff::where('id', $tariffId)->exists()) {
+            throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'Selected tariff does not exist!');
+        }
+        $user_id = auth()->user()->getAuthIdentifier();
+        $tariff = Tariff::find($tariffId);
+        if (UserTariff::where('user_id', $user_id)->whereDate('finished_at', '>', Carbon::now())->exists()) {
+            UserTariff::where('user_id', $user_id)->whereDate('finished_at', '>', Carbon::now())->delete();
+        }
+        UserTariff::create([
+            'user_id' => $user_id,
+            'tariff_id' => $tariffId,
+            'payment_amount' => $tariff->price,
+            'finished_at' => Carbon::now()->addDays($tariff->period)
+        ]);
+        return response(null, 200);
+
     }
 
-    /**
-     * @param \App\Http\Requests\UserTariffStoreRequest $request
-     * @return \App\Http\Resources\UserTariffResource
-     */
-    public function store(UserTariffStoreRequest $request)
+    public function getTariffs()
     {
-        $userTariff = UserTariff::create($request->validated());
-
-        return new UserTariffResource($userTariff);
+        if (Tariff::all()->count() < 1) {
+            throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'Tariffs do not exist!');
+        }
+        $tariffs = Tariff::get();
+        $data = [];
+        foreach ($tariffs as $tariff) {
+            $data[] = new UserTariffResource($tariff);
+        }
+        return response()->json($data, 200);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\UserTariff $userTariff
-     * @return \App\Http\Resources\UserTariffResource
-     */
-    public function show(Request $request, UserTariff $userTariff)
+    public function getUserTariff()
     {
-        return new UserTariffResource($userTariff);
-    }
-
-    /**
-     * @param \App\Http\Requests\UserTariffUpdateRequest $request
-     * @param \App\Models\UserTariff $userTariff
-     * @return \App\Http\Resources\UserTariffResource
-     */
-    public function update(UserTariffUpdateRequest $request, UserTariff $userTariff)
-    {
-        $userTariff->update($request->validated());
-
-        return new UserTariffResource($userTariff);
-    }
-
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\UserTariff $userTariff
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, UserTariff $userTariff)
-    {
-        $userTariff->delete();
-
-        return response()->noContent();
+        $user_id = auth()->user()->getAuthIdentifier();
+        if (UserTariff::where('user_id', $user_id)->whereDate('finished_at', '>', Carbon::now())->exists()) {
+            $user_tariff = UserTariff::where('user_id', $user_id)->whereDate('finished_at', '>', Carbon::now())->first();
+            $tariff_id = $user_tariff->tariff_id;
+            $tariff = Tariff::find($tariff_id);
+            return response()->json([
+                new UserTariffResource($tariff)
+            ]);
+        } else {
+            throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'The authorized user does not have paid tariffs.');
+        }
     }
 }

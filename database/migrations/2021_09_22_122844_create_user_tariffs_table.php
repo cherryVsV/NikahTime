@@ -29,7 +29,6 @@ class CreateUserTariffsTable extends Migration
                 ->onDelete('CASCADE');
             $table->integer('payment_amount');
             $table->timestamp('finished_at');
-            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
 

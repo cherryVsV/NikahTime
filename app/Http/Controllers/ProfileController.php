@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\ProjectExceptions\UserNotFoundError;
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Http\Requests\ProfileStoreRequest;
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Http\Resources\ProfileCollection;
 use App\Http\Resources\ProfileResource;
 use App\Models\Education;
 use App\Models\Habit;
 use App\Models\Interest;
 use App\Models\MaritalStatus;
 use App\Models\Profile;
-use Database\Seeders\MaritalStatusSeeder;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Nette\Schema\ValidationException;
+
 
 class ProfileController extends Controller
 {
@@ -51,16 +46,6 @@ class ProfileController extends Controller
     {
         $profile = Profile::create($request->validated());
 
-        return new ProfileResource($profile);
-    }
-
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Profile $profile
-     * @return \App\Http\Resources\ProfileResource
-     */
-    public function show(Request $request, Profile $profile)
-    {
         return new ProfileResource($profile);
     }
 
@@ -130,15 +115,4 @@ class ProfileController extends Controller
 
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Profile $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, Profile $profile)
-    {
-        $profile->delete();
-
-        return response()->noContent();
-    }
 }
