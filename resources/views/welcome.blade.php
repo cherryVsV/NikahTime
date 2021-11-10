@@ -58,7 +58,7 @@
         <!--//timer-->
 
         <div><a href="/privacy/policy" style="color: white">Политика соглашения</a></div>
-        <div><a href="/user/agreement" style="color: white">Пользовательское соглашения</a></div>
+        <div><a href="/user/agreement" style="color: white">Пользовательское соглашение</a></div>
     </div>
 </div>
 <!--scripts-->
