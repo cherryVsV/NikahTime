@@ -17,6 +17,12 @@ use TCG\Voyager\Facades\Voyager;
 Route::get('/', function (){
     return view('welcome');
 });
+Route::get('/privacy/policy', function (){
+    return view('privacyPolicy');
+});
+Route::get('/user/agreement', function (){
+    return view('userAgreement');
+});
 Route::group(['prefix'=>'admin'], function(){
     Route::get('users/block',[VoyagerUserController::class, 'block'])->name('users.block');
     Voyager::routes();
