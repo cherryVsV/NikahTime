@@ -60,7 +60,7 @@
         <h3>Мы Вас ждем в Nikah Time, заполните анкету и присоединяйтесь!</h3>
 
         <div style="margin: 0 0 25px 0"><a href="https://docs.google.com/forms/d/e/1FAIpQLSegOFmhAL66m2I58lkNwWz1PKLGwODSA8vJRLz1IP1natBF8A/viewform"
-                target="_blank" style="color: #00de9b; font-size: 22px"><u>Заполнить анкету</u></a></div>
+                target="_blank" style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Заполнить анкету</a></div>
         <div><a href="/privacy/policy" style="color: white">Политика соглашения</a></div>
         <div><a href="/user/agreement" style="color: white">Пользовательское соглашение</a></div>
     </div>
