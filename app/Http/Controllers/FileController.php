@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\ProjectExceptions\ValidationDataError;
+use Exception;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -40,6 +42,24 @@ class FileController extends Controller
             } else {
                 throw new ValidationDataError('ERR_VIDEO_UPLOAD', 422, 'Video can not be uploaded');
             }
+        }
+    }
+
+    public function getFileSize(Request $request)
+    {
+        $this->validate($request, [
+            'fileURL' => ['required', 'string']
+        ]);
+        try{
+            $str=strripos($request->fileURL, "storage/");
+            $file = substr($request->fileURL, $str);
+            $size = round((File::size($file)/1024)/1024, 2) . 'Mb';
+            return response()->json([
+                'fileSize'=>$size
+            ]);
+
+        }catch(Exception $e){
+            throw  new ValidationDataError('ERR_GET_FILESIZE', 422, $e->getMessage());
         }
     }
 }

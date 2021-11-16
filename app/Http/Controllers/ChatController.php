@@ -43,7 +43,7 @@ class ChatController extends Controller
         $avatar = null;
         if(!is_null($user->photos)) {
             $avatar = json_decode($user->photos)[0];
-            if(!str_starts_with($avatar, URL::to('/') . '/storage')){
+            if(!str_starts_with($avatar, 'http')){
                 $avatar = URL::to('/') . '/storage/'.$avatar;
             }
         }
@@ -113,7 +113,7 @@ class ChatController extends Controller
         $avatar = null;
         if (!is_null($user->photos)) {
             $avatar = json_decode($user->photos)[0];
-            if(!str_starts_with($avatar, URL::to('/') . '/storage')){
+            if(!str_starts_with($avatar, 'http')){
                 $avatar = URL::to('/') . '/storage/'.$avatar;
             }
         }
@@ -155,7 +155,7 @@ class ChatController extends Controller
             if(!is_null($user->photos))
             {
                 $avatar = json_decode($user->photos)[0];
-                if(!str_starts_with($avatar, URL::to('/') . '/storage')){
+                if(!str_starts_with($avatar, 'http')){
                     $avatar = URL::to('/') . '/storage/'.$avatar;
                 }
             }

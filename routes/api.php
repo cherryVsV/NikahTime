@@ -49,6 +49,8 @@ Route::middleware("auth:api")->group(function(){
 
     Route::post('store/file', [FileController::class, 'storeFile']);
 
+    Route::post('get/file/size', [FileController::class, 'getFileSize']);
+
     Route::get('search/get/selection/users', [SearchUsersController::class, 'getSelectionUsers']);
 
     Route::post('search/save/seen/users', [SearchUsersController::class, 'saveSeenUsers']);

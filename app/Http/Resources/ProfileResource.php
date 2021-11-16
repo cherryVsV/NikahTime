@@ -31,7 +31,7 @@ class ProfileResource extends JsonResource
         }
         if(!is_null($this->photos)){
             foreach (json_decode($this->photos) as $photo){
-                if(!str_starts_with($photo, URL::to('/') . '/storage')){
+                if(!str_starts_with($photo, 'http')){
                     $photo = URL::to('/') . '/storage/'.$photo;
                 }
                 $images[] = $photo;

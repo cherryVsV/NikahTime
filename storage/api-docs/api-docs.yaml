@@ -750,7 +750,7 @@ paths:
   /store/file:
     post:
       tags:
-        - Account
+        - Files
       summary: Загрузка файлов на сервер
       operationId: storeFile
       requestBody:
@@ -774,6 +774,39 @@ paths:
                       - image
                       - file
                       - video
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /get/file/size:
+    post:
+      tags:
+        - Files
+      summary: Получение размера загруженного файла
+      operationId: getFileSize
+      requestBody:
+        description: Отправка ссылки на файл
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileURL'
+        required: true
+      responses:
+        "200":
+          description: Возвращаем размер файла в Мб
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fileSize:
+                    type: string
+              example:
+                fileSize: "48Mb"
         default:
           description: unexpected error
           content:
@@ -978,6 +1011,14 @@ components:
           type: string
           format: binary
           description: "Доступные расширения картинок - jpg,png,jpeg,bmp. На файлы нет ограничений. На видео - не более 100мб"
+    FileURL:
+      required:
+        - fileURL
+      type: object
+      properties:
+        fileURL:
+          type: string
+          format: uri
     SeenUsers:
       required:
         - seenUsersId
