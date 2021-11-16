@@ -44,4 +44,22 @@ class FileController extends Controller
             }
         }
     }
+
+    public function getFileSize(Request $request)
+    {
+        $this->validate($request, [
+            'fileURL' => ['required', 'string']
+        ]);
+        try{
+            $str=strripos($request->fileURL, "storage/");
+            $file = substr($request->fileURL, $str);
+            $size = round((File::size($file)/1024)/1024, 2) . 'Mb';
+            return response()->json([
+                'fileSize'=>$size
+            ]);
+
+        }catch(Exception $e){
+            throw  new ValidationDataError('ERR_GET_FILESIZE', 422, $e->getMessage());
+        }
+    }
 }

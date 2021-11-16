@@ -11,7 +11,7 @@ use Laravel\Passport\HasApiTokens;
 class User extends \TCG\Voyager\Models\User
 {
     use Notifiable, HasApiTokens, HasFactory;
-
+    public $additional_attributes = ['login', 'type'];
     /**
      * The attributes that are mass assignable.
      *
@@ -114,5 +114,20 @@ class User extends \TCG\Voyager\Models\User
         }
 
 
+    }
+
+    public function getLoginAttribute()
+    {
+        return $this->email ?? $this->phone ?? SocialAccount::where('user_id', $this->id)->first()->value('provider_id');
+    }
+    public function getTypeAttribute()
+    {
+        if($this->email){
+            return 'Email';
+        }else if($this->phone){
+            return 'Номер телефона';
+        }else{
+            return SocialAccount::where('user_id', $this->id)->first()->value('provider');
+        }
     }
 }
