@@ -19,7 +19,7 @@ class CreateSocialAccountsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('provider_id');
             $table->string('provider');
-            $table->text('token');
+            $table->text('token')->nullable();
             $table->timestamps();
             $table->foreign('user_id')
                 ->references('id')
