@@ -22,17 +22,19 @@ class SearchUsersController extends Controller
             $profile = Profile::where('user_id', $user_id)->first();
             $selectionIds = Profile::whereHas('interests', function ($query) use ($profile) {
                 $query->whereIn('interest_id', $profile->interests->pluck('id'));
-            })->where('gender', '!=', $profile->gender)->limit(20)->pluck('id');
+            })->where('gender', '!=', $profile->gender)->get()->pluck('id');
             $users = Profile::whereIn('id', $selectionIds)->get();
             $seenUsers = SeenUser::where('user_id', $profile->user_id)->pluck('seen_user_id');
             $selection = [];
-            foreach ($users as $user) {
-                if (count($seenUsers) > 0) {
-                    if (!$seenUsers->contains($user->user_id)) {
+            while(count($selection)<=20) {
+                foreach ($users as $user) {
+                    if (count($seenUsers) > 0) {
+                        if (!$seenUsers->contains($user->user_id)) {
+                            $selection[] = new ProfileResource($user);
+                        }
+                    } else {
                         $selection[] = new ProfileResource($user);
                     }
-                }else {
-                    $selection[] = new ProfileResource($user);
                 }
             }
             return response()->json($selection, 200);
