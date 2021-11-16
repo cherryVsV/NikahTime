@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Voyager\VoyagerUserController;
 use Illuminate\Support\Facades\Route;
 use TCG\Voyager\Facades\Voyager;
@@ -20,6 +21,9 @@ Route::get('/', function (){
 Route::get('/privacy/policy', function (){
     return view('privacyPolicy');
 });
+Route::get('/auth/{provider}', [SocialController::class, 'index']);
+Route::get('/auth/{provider}/callback', [SocialController::class, 'callback']);
+
 Route::get('/user/agreement', function (){
     return view('userAgreement');
 });

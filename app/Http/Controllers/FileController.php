@@ -18,7 +18,7 @@ class FileController extends Controller
         ]);
         if ($request->fileType == 'image') {
             $this->validate($request, [
-                'file' => 'required|mimes:jpg,png,jpeg,bmp|max:2048'
+                'file' => 'required|mimes:jpg,png,jpeg,bmp|max:10240'
             ]);
             if ($request->hasFile('file')) {
                 $path = Storage::disk('public')->put('images/photos', $request->file);
