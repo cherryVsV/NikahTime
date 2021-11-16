@@ -26,8 +26,8 @@ class SearchUsersController extends Controller
             $users = Profile::whereIn('id', $selectionIds)->get();
             $seenUsers = SeenUser::where('user_id', $profile->user_id)->pluck('seen_user_id');
             $selection = [];
-            while(count($selection)<=20) {
-                foreach ($users as $user) {
+            foreach ($users as $user) {
+                    while(count($selection)<=20) {
                     if (count($seenUsers) > 0) {
                         if (!$seenUsers->contains($user->user_id)) {
                             $selection[] = new ProfileResource($user);
