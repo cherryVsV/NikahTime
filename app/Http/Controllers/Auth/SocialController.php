@@ -27,7 +27,7 @@ class SocialController extends Controller
             $code = $request->code;
             $endpoint = "https://appleid.apple.com/auth/token";
             $client = new Client();
-            $response = $client->request('GET', $endpoint, ['query' => [
+            $response = $client->request('POST', $endpoint, ['query' => [
                 'client_id' => "ru.nikahtime.web",
                 'client_secret' => "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjVEUDdITTc3VDcifQ.eyJpc3MiOiJaM1k1TDhIVkRCIiwiaWF0IjoxNjM3MTMxODIwLCJleHAiOjE2NTI2ODM4MjAsImF1ZCI6Imh0dHBzOi8vYXBwbGVpZC5hcHBsZS5jb20iLCJzdWIiOiJydS5uaWthaHRpbWUud2ViIn0.fvgIqQoKDt7z0sFo87-L5e77onGyzybS0DyJSnFRfnL8hJXPUvDoRzykTfNvSB4JxJd8XTmbjshT-1lT2pOvGw",
                 'code' => $code,
