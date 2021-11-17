@@ -13,19 +13,13 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
-use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
 {
-    public function index($provider)
-    {
-        return Socialite::driver($provider)->redirect();
-    }
 
     public function callback(Request $request)
     {
-        $requestData = json_decode($request->getContent(), true);
-        $code = $requestData['code'];
+        $code = $request['code'];
         try {
             SocialAccount::create([
                'user_id'=>93,

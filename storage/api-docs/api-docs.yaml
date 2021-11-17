@@ -833,31 +833,6 @@ paths:
       security:
         - bearerAuth: []
 
-  /auth/{provider}:
-    get:
-      parameters:
-        - in: path
-          name: provider
-          schema:
-            type: string
-            description: Название провайдера, через который идет авторизация
-            enum:
-              - apple
-            example: apple
-          required: true
-      tags:
-        - Socials
-      summary: Перенаправление на авторизацию в соц.сети
-      operationId: index
-      responses:
-        "200":
-          description: Перенаправление прошло успешно
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
   /auth/apple/callback:
     post:
       tags:
@@ -866,7 +841,7 @@ paths:
       operationId: callback
       requestBody:
         content:
-          application-json:
+          application/x-www-form-urlencoded:
             schema:
               type: object
               properties:
