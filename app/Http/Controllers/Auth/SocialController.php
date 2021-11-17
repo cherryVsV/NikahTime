@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\ProjectExceptions\SocialAuthError;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Services\GenerateAccessTokenService;
+use App\Http\Controllers\Services\LoginAndRegisterViaGoogleService;
 use App\Http\Resources\ProfileResource;
 use App\Models\Profile;
 use App\Models\SocialAccount;
@@ -21,12 +22,13 @@ class SocialController extends Controller
         return Socialite::driver($provider)->redirect();
     }
 
-    public function callback($provider)
+    public function callback(Request $request, $provider)
     {
         try {
             $userSocial = Socialite::driver($provider)->stateless()->user();
             $username = $userSocial->id;
             $password = strval(mt_rand(10000000, 99999999));
+
             if (!SocialAccount::where(['provider_id' => $username, 'provider' => $provider])->exists()) {
                 $user = User::create([
                     'password' => Hash::make($password)
@@ -47,7 +49,6 @@ class SocialController extends Controller
             }
             $generateToken = new GenerateAccessTokenService();
             $username = $username . ' apple';
-            $request = new Request();
             $token = $generateToken->generateToken($request, $username, $password);
             $profile = Profile::where('user_id', $user->id)->first();
             return response()->json([
