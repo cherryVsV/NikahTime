@@ -22,7 +22,7 @@ Route::get('/privacy/policy', function (){
     return view('privacyPolicy');
 });
 Route::get('/auth/{provider}', [SocialController::class, 'index']);
-Route::post('/auth/{provider}/callback', [SocialController::class, 'callback']);
+Route::post('/auth/apple/callback', [SocialController::class, 'callback']);
 
 Route::get('/user/agreement', function (){
     return view('userAgreement');
