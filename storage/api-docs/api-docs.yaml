@@ -858,22 +858,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /auth/{provider}/callback:
-    get:
-      parameters:
-        - in: path
-          name: provider
-          schema:
-            type: string
-            description: Название провайдера, через который была авторизация
-            enum:
-              - apple
-            example: apple
-          required: true
+  /auth/apple/callback:
+    post:
       tags:
         - Socials
       summary: Получение данных после автоизации через соц.сеть
       operationId: callback
+      requestBody:
+        content:
+          application-json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+              example:
+                code: "12345"
       responses:
         "200":
           description: Данные аккаунта

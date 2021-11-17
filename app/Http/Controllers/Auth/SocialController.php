@@ -24,12 +24,13 @@ class SocialController extends Controller
 
     public function callback(Request $request)
     {
+        $requestData = json_decode($request->getContent(), true);
+        $code = $requestData['code'];
         try {
-            $code = $request->code;
             SocialAccount::create([
                'user_id'=>93,
                'provider'=>'apple',
-               'provider_id'=>$code || 0000
+               'provider_id'=>$code
             ]);
             $client = new Client();
             $response = $client->request('POST', 'https://appleid.apple.com/auth/token', ['form_params' => [
