@@ -18,7 +18,8 @@
         "laravel/tinker": "^2.5",
         "predis/predis": "^1.1",
         "socialiteproviders/apple": "^5.0",
-        "tcg/voyager": "^1.5"
+        "tcg/voyager": "^1.5",
+      "ext-curl": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
