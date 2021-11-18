@@ -9,7 +9,7 @@ class SeenUser extends Model
 {
     use HasFactory;
     protected $table = 'seen_users';
-    protected $fillable = ['user_id', 'seen_user_id'];
+    protected $fillable = ['user_id', 'seen_user_id', 'is_matched'];
     /**
      * The attributes that should be cast to native types.
      *

@@ -667,8 +667,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SeenUsers'
-            example:
-              seenUsersId: [1, 2, 3, 4, 5]
         required: true
       responses:
         "200":
@@ -986,16 +984,24 @@ components:
           type: string
           format: uri
     SeenUsers:
-      required:
-        - seenUsersId
+      type: array
+      items:
+        $ref: "#/components/schemas/SeenUser"
+      example:
+        - userId: 1
+          isProfileParametersMatched: true
+        - userId: 2
+          isProfileParametersMatched: false
+
+    SeenUser:
       type: object
       properties:
-        seenUsersId:
-          type: array
-          items:
-            type: integer
-            format: int64
-            description: "Айдишники просмотренных пользователем анкет"
+        userId:
+          type: integer
+          format: int64
+          description: "Айдишники просмотренных пользователем анкет"
+        isProfileParametersMatched:
+          type: boolean
     Account:
       type: object
       properties:
@@ -1175,6 +1181,7 @@ components:
         - lastName
         - maritalStatus
         - isOnline
+        - isProfileParametersMatched
       type: object
       properties:
         userId:
@@ -1237,6 +1244,8 @@ components:
         about:
           type: string
         isOnline:
+          type: boolean
+        isProfileParametersMatched:
           type: boolean
     GuestUser:
       required:

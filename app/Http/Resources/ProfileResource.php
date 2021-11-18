@@ -60,7 +60,7 @@ class ProfileResource extends JsonResource
             'about' => $this->about,
             'date' => $this->when($this->date, $this->date),
             'isOnline'=>$this->isOnline(),
-            'isProfileParametersMatched'=>$this->when($this->isProfileParametersMatched, $this->isProfileParametersMatched),
+            'isProfileParametersMatched'=>$this->when(!is_null($this->isProfileParametersMatched), $this->isProfileParametersMatched),
         ];
     }
 }

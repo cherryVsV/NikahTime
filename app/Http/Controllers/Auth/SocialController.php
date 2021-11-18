@@ -31,14 +31,6 @@ class SocialController extends Controller
 
             $content = json_decode($response->getBody(), true);
             $idToken = $content['id_token'];
-            $register = new LoginAndRegisterViaGoogleService();
-            $userData = $register->authViaGoogle($idToken, 'apple');
-           $generateToken = new GenerateAccessTokenService();
-            $user = $userData['user'];
-            $username = $userData['username'].' apple';
-            $password = $userData['password'];
-            $token = $generateToken->generateToken($request, $username, $password);
-            $profile = Profile::where('user_id', $user->id)->first();
             return redirect("intent://callback?".$request->getContent()."#Intent;package=ru.nikahtime;scheme=signinwithapple;end");
         } catch (Exception $e) {
             throw new SocialAuthError('ERR_AUTHORIZATION_FAILED', 422, $e->getMessage());

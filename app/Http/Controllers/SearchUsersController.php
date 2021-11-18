@@ -9,6 +9,7 @@ use App\Models\Habit;
 use App\Models\MaritalStatus;
 use App\Models\Profile;
 use App\Models\SeenUser;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -42,7 +43,7 @@ class SearchUsersController extends Controller
                 $profiles = Profile::where('gender', '!=', $profile->gender)->get();
                 foreach($profiles as $profile){
                     if(count($selection)<20) {
-                        $user['isProfileParametersMatched'] = false;
+                        $profile['isProfileParametersMatched'] = false;
                         if (count($seenUsers) > 0) {
                             if (!$seenUsers->contains($profile->user_id)) {
                                 $selection[] = new ProfileResource($profile);
@@ -65,26 +66,31 @@ class SearchUsersController extends Controller
 
     public function saveSeenUsers(Request $request)
     {
-       $this->validate($request, [
-           'seenUsersId'=>['required', 'array'],
-           'seenUsersId.*' => ['integer', 'required', 'exists:users,id']
-       ]);
         $user_id = auth()->user()->getAuthIdentifier();
         $seenUsers = SeenUser::where('user_id', $user_id)->pluck('seen_user_id');
-        foreach ($request->seenUsersId as $seenUser){
+        $data = json_decode($request->getContent());
+        foreach ($data as $seenUser) {
             if (count($seenUsers) > 0) {
-                if (!$seenUsers->contains($seenUser)) {
+                if (!$seenUsers->contains($seenUser->userId) && User::where('id', $seenUser->userId)->exists()) {
                     SeenUser::create([
                         'user_id' => $user_id,
-                        'seen_user_id' => $seenUser
+                        'seen_user_id' => $seenUser->userId,
+                        'is_matched' => $seenUser->isProfileParametersMatched
                     ]);
+                } else {
+                    throw new ValidationDataError('ERR_ADD_SEEN_USER', 422, 'Selected user can not be add as seen');
+                }
+            } else {
+                if (User::where('id', $seenUser->userId)->exists()) {
+                    SeenUser::create([
+                        'user_id' => $user_id,
+                        'seen_user_id' => $seenUser->userId,
+                        'is_matched' => $seenUser->isProfileParametersMatched
+                    ]);
+                } else {
+                    throw new ValidationDataError('ERR_USER_NOT_FOUND', 422, 'Selected user do not exists');
                 }
             }
-            else{
-            SeenUser::create([
-                'user_id' => $user_id,
-                'seen_user_id' => $seenUser
-            ]);}
         }
         return response(null, 200);
 
@@ -106,6 +112,7 @@ class SearchUsersController extends Controller
             $filters = [];
             if ($request->filterType == 'simpleFilter') {
                 foreach ($seenProfiles as $profile) {
+                    $profile['isProfileParametersMatched'] = (bool)SeenUser::where(['user_id' => $user_id, 'seen_user_id' => $profile->user_id])->value('is_matched');
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     if($request->isOnline) {
                         if ($age >= $request->minAge && $age <= $request->maxAge && $profile->gender != $userProfile->gender && $profile->isOnline()) {
@@ -120,6 +127,7 @@ class SearchUsersController extends Controller
             }
             if ($request->filterType == 'complicatedFilter') {
                 foreach ($seenProfiles as $profile) {
+                    $profile['isProfileParametersMatched'] = (bool)SeenUser::where(['user_id' => $user_id, 'seen_user_id' => $profile->user_id])->value('is_matched');
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     $education = null;
                     if(!is_null($request->education)) {
