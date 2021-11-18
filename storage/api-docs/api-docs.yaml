@@ -667,8 +667,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SeenUsers'
-            example:
-              seenUsersId: [1, 2, 3, 4, 5]
         required: true
       responses:
         "200":
@@ -898,47 +896,22 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - bearerAuth: []
-  /auth/{provider}:
-    get:
-      parameters:
-        - in: path
-          name: provider
-          schema:
-            type: string
-            description: Название провайдера, через который идет авторизация
-            enum:
-              - apple
-            example: apple
-          required: true
-      tags:
-        - Socials
-      summary: Перенаправление на авторизацию в соц.сети
-      operationId: index
-      responses:
-        "200":
-          description: Перенаправление прошло успешно
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /auth/{provider}/callback:
-    get:
-      parameters:
-        - in: path
-          name: provider
-          schema:
-            type: string
-            description: Название провайдера, через который была авторизация
-            enum:
-              - apple
-            example: apple
-          required: true
+  /auth/apple/callback:
+    post:
       tags:
         - Socials
       summary: Получение данных после автоизации через соц.сеть
       operationId: callback
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+              example:
+                code: "12345"
       responses:
         "200":
           description: Данные аккаунта
@@ -1075,16 +1048,23 @@ components:
           type: string
           format: uri
     SeenUsers:
-      required:
-        - seenUsersId
+      type: array
+      items:
+        $ref: "#/components/schemas/SeenUser"
+      example:
+        - userId: 1
+          isProfileParametersMatched: true
+        - userId: 2
+          isProfileParametersMatched: false
+    SeenUser:
       type: object
       properties:
-        seenUsersId:
-          type: array
-          items:
-            type: integer
-            format: int64
-            description: "Айдишники просмотренных пользователем анкет"
+        userId:
+          type: integer
+          format: int64
+          description: "Айдишники просмотренных пользователем анкет"
+        isProfileParametersMatched:
+          type: boolean
     Account:
       type: object
       properties:
@@ -1343,6 +1323,7 @@ components:
         - maritalStatus
         - date
         - isOnline
+        - isProfileParametersMatched
       type: object
       properties:
         userId:
@@ -1410,6 +1391,8 @@ components:
           format: data-time
           default: 24-09-2021
         isOnline:
+          type: boolean
+        isProfileParametersMatched:
           type: boolean
     CodeRequest:
       required:

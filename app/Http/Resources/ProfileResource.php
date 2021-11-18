@@ -58,7 +58,8 @@ class ProfileResource extends JsonResource
             'interests'=>$this->interests()->pluck('title'),
             'about' => $this->about,
             'date' => $this->when($this->date, $this->date),
-            'isOnline'=>$this->isOnline()
+            'isOnline'=>$this->isOnline(),
+            'isProfileParametersMatched'=>$this->when(!is_null($this->isProfileParametersMatched), $this->isProfileParametersMatched),
         ];
     }
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FavouritesController;
 use App\Http\Controllers\FileController;
@@ -38,6 +39,7 @@ Route::post('account/password/code/verify', [ResetPasswordController::class, 've
 
 Route::post('account/password/reset', [ResetPasswordController::class, 'resetPassword']);
 
+Route::post('auth/apple/callback', [SocialController::class, 'callback']);
 
 Route::middleware("auth:api")->group(function(){
 

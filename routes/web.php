@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\Voyager\VoyagerUserController;
 use Illuminate\Support\Facades\Route;
 use TCG\Voyager\Facades\Voyager;
@@ -24,8 +23,7 @@ Route::get('/privacy/policy', function (){
 Route::get('/user/agreement', function (){
     return view('userAgreement');
 });
-Route::get('/auth/{provider}', [SocialController::class, 'index']);
-Route::get('/auth/{provider}/callback', [SocialController::class, 'callback']);
+
 Route::group(['prefix'=>'admin'], function(){
     Route::get('users/block',[VoyagerUserController::class, 'block'])->name('users.block');
     Voyager::routes();

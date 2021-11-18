@@ -4,56 +4,27 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ProjectExceptions\SocialAuthError;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Services\GenerateAccessTokenService;
-use App\Http\Resources\ProfileResource;
-use App\Models\Profile;
-use App\Models\SocialAccount;
-use App\Models\User;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
 {
-    public function index($provider)
+    public function callback(Request $request)
     {
-        return Socialite::driver($provider)->redirect();
-    }
-
-    public function callback($provider)
-    {
+        $code = $request['code'];
         try {
-            $userSocial = Socialite::driver($provider)->stateless()->user();
-            $username = $userSocial->id;
-            $password = strval(mt_rand(10000000, 99999999));
-            if (!SocialAccount::where(['provider_id' => $username, 'provider' => $provider])->exists()) {
-                $user = User::create([
-                    'password' => Hash::make($password)
-                ]);
-                Profile::create([
-                    'user_id' => $user->id
-                ]);
-                SocialAccount::create([
-                    'user_id' => $user->id,
-                    'provider_id' => $username,
-                    'provider' => $provider
-                ]);
-            } else {
-                $social = SocialAccount::where(['provider_id' => $username, 'provider' => $provider])->first();
-                $user = User::where('id', $social->user_id)->first();
-                $user->password = Hash::make($password);
-                $user->save();
-            }
-            $generateToken = new GenerateAccessTokenService();
-            $username = $username . ' apple';
-            $request = new Request();
-            $token = $generateToken->generateToken($request, $username, $password);
-            $profile = Profile::where('user_id', $user->id)->first();
-            return response()->json([
-                'user' => new ProfileResource($profile),
-                'tokenData' => $token
-            ], 200);
+            $client = new Client();
+            $response = $client->request('POST', 'https://appleid.apple.com/auth/token', ['form_params' => [
+                'client_id' => "ru.nikahtime.web",
+                'client_secret' => "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjVEUDdITTc3VDcifQ.eyJpc3MiOiJaM1k1TDhIVkRCIiwiaWF0IjoxNjM3MTMxODIwLCJleHAiOjE2NTI2ODM4MjAsImF1ZCI6Imh0dHBzOi8vYXBwbGVpZC5hcHBsZS5jb20iLCJzdWIiOiJydS5uaWthaHRpbWUud2ViIn0.fvgIqQoKDt7z0sFo87-L5e77onGyzybS0DyJSnFRfnL8hJXPUvDoRzykTfNvSB4JxJd8XTmbjshT-1lT2pOvGw",
+                'code' => $code,
+                'grant_type' => 'authorization_code'
+            ]]);
+
+            $content = json_decode($response->getBody(), true);
+            $idToken = $content['id_token'];
+            return redirect("intent://callback?".$request->getContent()."#Intent;package=ru.nikahtime;scheme=signinwithapple;end");
         } catch (Exception $e) {
             throw new SocialAuthError('ERR_AUTHORIZATION_FAILED', 422, $e->getMessage());
         }

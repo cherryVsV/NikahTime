@@ -17,6 +17,7 @@ class CreateSeenUsersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('seen_user_id');
+            $table->boolean('is_matched');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
