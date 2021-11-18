@@ -38,6 +38,7 @@ class ProfileResource extends JsonResource
             }
         }
 
+
         return [
             'id'=>$this->user_id,
             'firstName' => $this->first_name,
@@ -58,7 +59,8 @@ class ProfileResource extends JsonResource
             'interests'=>$this->interests()->pluck('title'),
             'about' => $this->about,
             'date' => $this->when($this->date, $this->date),
-            'isOnline'=>$this->isOnline()
+            'isOnline'=>$this->isOnline(),
+            'isProfileParametersMatched'=>$this->when($this->isProfileParametersMatched, $this->isProfileParametersMatched),
         ];
     }
 }

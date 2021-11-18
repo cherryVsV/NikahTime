@@ -28,12 +28,28 @@ class SearchUsersController extends Controller
             $selection = [];
             foreach ($users as $user) {
                     if(count($selection)<20) {
+                        $user['isProfileParametersMatched'] = true;
                     if (count($seenUsers) > 0) {
                         if (!$seenUsers->contains($user->user_id)) {
                             $selection[] = new ProfileResource($user);
                         }
                     } else {
                         $selection[] = new ProfileResource($user);
+                    }
+                }
+            }
+            if(count($selection)<20){
+                $profiles = Profile::where('gender', '!=', $profile->gender)->get();
+                foreach($profiles as $profile){
+                    if(count($selection)<20) {
+                        $user['isProfileParametersMatched'] = false;
+                        if (count($seenUsers) > 0) {
+                            if (!$seenUsers->contains($profile->user_id)) {
+                                $selection[] = new ProfileResource($profile);
+                            }
+                        } else {
+                            $selection[] = new ProfileResource($profile);
+                        }
                     }
                 }
             }

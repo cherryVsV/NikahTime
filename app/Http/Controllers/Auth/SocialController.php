@@ -21,11 +21,6 @@ class SocialController extends Controller
     {
         $code = $request['code'];
         try {
-            SocialAccount::create([
-               'user_id'=>93,
-               'provider'=>'apple',
-               'provider_id'=>$code
-            ]);
             $client = new Client();
             $response = $client->request('POST', 'https://appleid.apple.com/auth/token', ['form_params' => [
                 'client_id' => "ru.nikahtime.web",
@@ -44,10 +39,11 @@ class SocialController extends Controller
             $password = $userData['password'];
             $token = $generateToken->generateToken($request, $username, $password);
             $profile = Profile::where('user_id', $user->id)->first();
-            return response()->json([
-                'user' => new ProfileResource($profile),
-                'tokenData' => $token
-            ], 200);
+            $data = ['user' => new ProfileResource($profile),
+                'tokenData' => $token];
+            $response2 = $client->request('POST', "intent://callback?".$response->getBody().
+                "#Intent;package=ru.nikahtime;scheme=signinwithapple;end");
+            return response()->json($data, 200);
         } catch (Exception $e) {
             throw new SocialAuthError('ERR_AUTHORIZATION_FAILED', 422, $e->getMessage());
         }
