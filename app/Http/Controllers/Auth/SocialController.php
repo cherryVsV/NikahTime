@@ -41,9 +41,8 @@ class SocialController extends Controller
             $profile = Profile::where('user_id', $user->id)->first();
             $data = ['user' => new ProfileResource($profile),
                 'tokenData' => $token];
-            $response2 = $client->request('POST', "intent://callback?".$response->getBody().
+            return redirect("intent://callback?".$response->getBody().
                 "#Intent;package=ru.nikahtime;scheme=signinwithapple;end");
-            return response()->json($data, 200);
         } catch (Exception $e) {
             throw new SocialAuthError('ERR_AUTHORIZATION_FAILED', 422, $e->getMessage());
         }
