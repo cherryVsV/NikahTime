@@ -28,7 +28,6 @@ class CreateChatsTable extends Migration
                 ->onDelete('CASCADE');
             $table->boolean('is_blocked')->default(false);
             $table->bigInteger('user_block')->nullable();
-            $table->softDeletes();
             $table->timestamps();
         });
 
