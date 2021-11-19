@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\FormFields\CityFormField;
 use Illuminate\Support\ServiceProvider;
 use TCG\Voyager\Facades\Voyager;
 
@@ -15,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Voyager::addFormField(CityFormField::class);
     }
 
     /**
