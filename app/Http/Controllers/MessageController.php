@@ -8,9 +8,11 @@ use App\Models\Chat;
 use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
+use App\Notifications\RealTimeNotification;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class MessageController extends Controller
 {
@@ -40,6 +42,7 @@ class MessageController extends Controller
         }
         try{
         $user_id = auth()->user()->getAuthIdentifier();
+        $sender = Profile::where('user_id',$user_id)->first();
         if(!Chat::where('id',$request->chatId )->exists()){
             throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
         }
@@ -58,23 +61,20 @@ class MessageController extends Controller
             'type'=>$request->messageType
         ]);
         broadcast(new NewChatMessage($message->id, $user, 'Новое сообщение'));
-        if($user->notification_id) {
-            $notification_id = $user->notification_id;
-            $title = "Новое сообщение от пользователя " . Profile::where('user_id', $user_id)->value('first_name');
-            $message = $request->message;
-            $id = $user->id;
-            $type = "basic";
-
-            $res = send_notification_FCM($notification_id, $title, $message, $id, $type);
-            if ($res == 1) {
-                return response(null, 200);
-            } else {
-                throw new ValidationDataError('ERR_SEND_PUSH_NOTIFICATION', 422, 'Notification can not be sent!');
-
+        if(!is_null($user->notification_id)){
+            $avatar = null;
+            if (!is_null($sender->photos)) {
+                $avatar = json_decode($sender->photos)[0];
+                if(!str_starts_with($avatar, 'http')){
+                    $avatar = URL::to('/') . '/storage/'.$avatar;
+                }
             }
-        }else {
-            return response(null, 200);
+            $user->notify(new RealTimeNotification('Новое сообщение', $request->message,
+                $avatar, $user->notification_id));
         }
+
+        return response(null, 200);
+
         }
         catch (Exception $e){
             return response()->json([
