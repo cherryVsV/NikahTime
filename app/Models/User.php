@@ -23,7 +23,8 @@ class User extends \TCG\Voyager\Models\User
         'email',
         'password',
         'blocked_at',
-        'email_verified_at'
+        'email_verified_at',
+        'notification_id'
     ];
 
     /**

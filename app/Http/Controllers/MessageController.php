@@ -6,6 +6,7 @@ use App\Events\NewChatMessage;
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Models\Chat;
 use App\Models\Message;
+use App\Models\Profile;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -57,7 +58,23 @@ class MessageController extends Controller
             'type'=>$request->messageType
         ]);
         broadcast(new NewChatMessage($message->id, $user, 'Новое сообщение'));
-        return response(null, 200);
+        if($user->notification_id) {
+            $notification_id = $user->notification_id;
+            $title = "Новое сообщение от пользователя " . Profile::where('user_id', $user_id)->value('first_name');
+            $message = $request->message;
+            $id = $user->id;
+            $type = "basic";
+
+            $res = send_notification_FCM($notification_id, $title, $message, $id, $type);
+            if ($res == 1) {
+                return response(null, 200);
+            } else {
+                throw new ValidationDataError('ERR_SEND_PUSH_NOTIFICATION', 422, 'Notification can not be sent!');
+
+            }
+        }else {
+            return response(null, 200);
+        }
         }
         catch (Exception $e){
             return response()->json([
