@@ -3,17 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ProjectExceptions\PasswordIncorrectError;
-use App\Exceptions\ProjectExceptions\UserNotFoundError;
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Services\GenerateAccessTokenService;
 use App\Http\Resources\ProfileResource;
 use App\Models\Profile;
-use App\Models\SocialAccount;
-use DateTime;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Exception;
@@ -47,6 +43,10 @@ class LoginController extends Controller
         }
         if(!is_null($user->blocked_at)){
             throw new ValidationDataError('ERR_USER_AUTH', 403, 'Selected user is blocked!');
+        }
+        if($request->has('notificationId') && !User::where('notification_id', $request->notificationId)->exists()) {
+            $user->notification_id = $request->notificationId;
+            $user->save();
         }
         $generateToken = new GenerateAccessTokenService();
         $token = $generateToken->generateToken($request, $username, $password);

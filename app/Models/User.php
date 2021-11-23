@@ -24,7 +24,8 @@ class User extends \TCG\Voyager\Models\User
         'email',
         'password',
         'blocked_at',
-        'email_verified_at'
+        'email_verified_at',
+        'notification_id'
     ];
 
     /**
@@ -119,7 +120,7 @@ class User extends \TCG\Voyager\Models\User
 
     public function getLoginAttribute()
     {
-        return $this->email ?? $this->phone ?? SocialAccount::where('user_id', $this->id)->first()->value('provider_id');
+        return $this->email ?? $this->phone ?? SocialAccount::where('user_id', $this->id)->value('provider_id');
     }
     public function getTypeAttribute()
     {
@@ -128,7 +129,7 @@ class User extends \TCG\Voyager\Models\User
         }else if($this->phone){
             return 'Номер телефона';
         }else{
-            return SocialAccount::where('user_id', $this->id)->first()->value('provider');
+            return SocialAccount::where('user_id', $this->id)->value('provider');
         }
     }
 }

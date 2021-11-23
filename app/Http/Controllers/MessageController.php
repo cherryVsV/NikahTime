@@ -61,6 +61,12 @@ class MessageController extends Controller
             'type'=>$request->messageType
         ]);
         broadcast(new NewChatMessage($message->id, $user, 'Новое сообщение'));
+            if(!is_null($user->notification_id)){
+                return $this->sendNotification($user->notification_id, array(
+                    "title" => "Личные сообщения",
+                    "body" => "Вы получили сообщение"
+                ));
+            }
         return response(null, 200);
         }
         catch (Exception $e){
@@ -103,6 +109,39 @@ class MessageController extends Controller
             'isAuthUserMessage'=>$isAuthUserMessage, 'messageType'=>$message->type, 'messageId'=>$message->id, 'isMessageSeen'=>$message->is_seen];
 
     }
+
+    public function sendNotification($device_token, $message)
+    {
+        $SERVER_API_KEY = 'AAAA7lhkIJw:APA91bHWE_uMLI15hP0WD7RPS-QKFYVP0mnGxENbV6FmdmGuTc5Lvi7ZExQ_9-Xr1V40ulH0YRDutkgPBXiBHKFTnKr8kDURJUF9QkAtH6zSVS7Ybyq8nzvvtJ97rAUJfWHB3npLpdkP';
+
+        $data = [
+            "to" => $device_token,
+            "notification" => $message
+        ];
+        $dataString = json_encode($data);
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+
+        return $response;
+    }
+
+
 
 
 }
