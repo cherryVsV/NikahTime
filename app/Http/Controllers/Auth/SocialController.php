@@ -4,11 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\ProjectExceptions\SocialAuthError;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Services\GenerateAccessTokenService;
-use App\Http\Controllers\Services\LoginAndRegisterViaGoogleService;
-use App\Http\Resources\ProfileResource;
-use App\Models\Profile;
-use App\Models\SocialAccount;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;

@@ -6,12 +6,11 @@ use App\Events\NewChatMessage;
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Models\Chat;
 use App\Models\Message;
-use App\Models\Profile;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
+
 
 class MessageController extends Controller
 {
@@ -41,7 +40,6 @@ class MessageController extends Controller
         }
         try{
         $user_id = auth()->user()->getAuthIdentifier();
-        $sender = Profile::where('user_id',$user_id)->first();
         if(!Chat::where('id',$request->chatId )->exists()){
             throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
         }
@@ -61,13 +59,6 @@ class MessageController extends Controller
         ]);
         broadcast(new NewChatMessage($message->id, $user, 'Новое сообщение'));
         if(!is_null($user->notification_id)){
-            $avatar = null;
-            if (!is_null($sender->photos)) {
-                $avatar = json_decode($sender->photos)[0];
-                if(!str_starts_with($avatar, 'http')){
-                    $avatar = URL::to('/') . '/storage/'.$avatar;
-                }
-            }
             return $this->sendNotification($user->notification_id, array(
                 "title" => "Личные сообщения",
                 "body" => "Вы получили сообщение"
@@ -122,9 +113,9 @@ class MessageController extends Controller
     {
         $SERVER_API_KEY = 'AAAA7lhkIJw:APA91bHWE_uMLI15hP0WD7RPS-QKFYVP0mnGxENbV6FmdmGuTc5Lvi7ZExQ_9-Xr1V40ulH0YRDutkgPBXiBHKFTnKr8kDURJUF9QkAtH6zSVS7Ybyq8nzvvtJ97rAUJfWHB3npLpdkP';
 
-        // payload data, it will vary according to requirement
+
         $data = [
-            "to" => $device_token, // for single device id
+            "to" => $device_token,
             "notification" => $message
         ];
         $dataString = json_encode($data);

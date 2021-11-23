@@ -18,7 +18,6 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "predis/predis": "^1.1",
-        "socialiteproviders/apple": "^5.0",
         "tcg/voyager": "^1.5"
     },
     "require-dev": {
