@@ -27,13 +27,16 @@ class ChatController extends Controller
         if($auth_id == $userId){
             throw new ValidationDataError('ERR_CHAT_CREATE', 422, 'User can not have chat with itself');
         }
-        if(!Chat::where(['user1_id'=>$auth_id, 'user2_id'=>$userId])->orWhere(['user2_id'=>$auth_id, 'user1_id'=>$userId])->exists()){
+        if(!Chat::where(['user1_id'=>$auth_id, 'user2_id'=>$userId])->exists() && !Chat::where(['user2_id'=>$auth_id, 'user1_id'=>$userId])->exists()){
             $chat = Chat::create([
                 'user1_id'=>$auth_id,
                 'user2_id'=>$userId
             ]);
         }else{
-            $chat = Chat::where(['user1_id'=>$auth_id, 'user2_id'=>$userId])->orWhere(['user2_id'=>$auth_id, 'user1_id'=>$userId])->get();
+            $chat = Chat::where(['user1_id'=>$auth_id, 'user2_id'=>$userId])->first();
+            if(is_null($chat)){
+                $chat = Chat::where(['user2_id'=>$auth_id, 'user1_id'=>$userId])->first();
+            }
         }
         $user = Profile::where('user_id', $userId)->first();
         $avatar = null;
