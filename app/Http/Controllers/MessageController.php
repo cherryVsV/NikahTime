@@ -69,8 +69,10 @@ class MessageController extends Controller
                     $avatar = URL::to('/') . '/storage/'.$avatar;
                 }
             }
-            $user->notify(new RealTimeNotification('Новое сообщение', $request->message,
-                $avatar, $user->notification_id));
+            return $this->sendNotification($user->notification_id, array(
+                "title" => "Новое сообщение",
+                "body" => $request->message
+            ));
         }
 
         return response(null, 200);
@@ -115,6 +117,38 @@ class MessageController extends Controller
         return ['message'=>$message->message, 'messageTime'=>Carbon::parse($message->created_at)->format('d.m.Y H:i:s'),
             'isAuthUserMessage'=>$isAuthUserMessage, 'messageType'=>$message->type, 'messageId'=>$message->id, 'isMessageSeen'=>$message->is_seen];
 
+    }
+
+    public function sendNotification($device_token, $message)
+    {
+        $SERVER_API_KEY = 'AAAA7lhkIJw:APA91bHWE_uMLI15hP0WD7RPS-QKFYVP0mnGxENbV6FmdmGuTc5Lvi7ZExQ_9-Xr1V40ulH0YRDutkgPBXiBHKFTnKr8kDURJUF9QkAtH6zSVS7Ybyq8nzvvtJ97rAUJfWHB3npLpdkP';
+
+        // payload data, it will vary according to requirement
+        $data = [
+            "to" => $device_token, // for single device id
+            "data" => $message
+        ];
+        $dataString = json_encode($data);
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+
+        curl_close($ch);
+
+        return $response;
     }
 
 
