@@ -8,7 +8,6 @@ use App\Models\Chat;
 use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
-use App\Notifications\RealTimeNotification;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -70,8 +69,8 @@ class MessageController extends Controller
                 }
             }
             return $this->sendNotification($user->notification_id, array(
-                "title" => "Новое сообщение",
-                "body" => $message->message
+                "title" => "Личные сообщения",
+                "body" => "Вы получили сообщение"
             ));
         }
 
