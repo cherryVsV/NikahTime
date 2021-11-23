@@ -71,7 +71,7 @@ class MessageController extends Controller
             }
             return $this->sendNotification($user->notification_id, array(
                 "title" => "Новое сообщение",
-                "body" => "Hello"
+                "body" => $message->message
             ));
         }
 
