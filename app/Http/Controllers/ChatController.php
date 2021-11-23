@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Models\Chat;
+use App\Models\Like;
 use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
@@ -28,10 +29,14 @@ class ChatController extends Controller
             throw new ValidationDataError('ERR_CHAT_CREATE', 422, 'User can not have chat with itself');
         }
         if(!Chat::where(['user1_id'=>$auth_id, 'user2_id'=>$userId])->exists() && !Chat::where(['user2_id'=>$auth_id, 'user1_id'=>$userId])->exists()){
-            $chat = Chat::create([
-                'user1_id'=>$auth_id,
-                'user2_id'=>$userId
-            ]);
+            if(Like::where(['user_id' => $auth_id, 'favourite_user_id' => $userId])->exists() && Like::where(['user_id' => $userId, 'favourite_user_id' => $auth_id])->exists()) {
+                $chat = Chat::create([
+                    'user1_id' => $auth_id,
+                    'user2_id' => $userId
+                ]);
+            }else{
+                throw new ValidationDataError('ERR_CHAT_CREATE', 403, 'Users do not have mutual sympathy');
+            }
         }else{
             $chat = Chat::where(['user1_id'=>$auth_id, 'user2_id'=>$userId])->first();
             if(is_null($chat)){
