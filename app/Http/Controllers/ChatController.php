@@ -33,7 +33,7 @@ class ChatController extends Controller
                 'user2_id'=>$userId
             ]);
         }else{
-            $chat = Chat::where(['user1_id'=>$auth_id, 'user2_id'=>$userId])->orWhere(['user2_id'=>$auth_id, 'user1_id'=>$userId])->first();
+            $chat = Chat::where(['user1_id'=>$auth_id, 'user2_id'=>$userId])->orWhere(['user2_id'=>$auth_id, 'user1_id'=>$userId])->get();
         }
         $user = Profile::where('user_id', $userId)->first();
         $avatar = null;
