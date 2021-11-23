@@ -71,7 +71,7 @@ class MessageController extends Controller
             }
             return $this->sendNotification($user->notification_id, array(
                 "title" => "Новое сообщение",
-                "text" => $request->message
+                "body" => "Hello"
             ));
         }
 
@@ -126,7 +126,7 @@ class MessageController extends Controller
         // payload data, it will vary according to requirement
         $data = [
             "to" => $device_token, // for single device id
-            "data" => $message
+            "notification" => $message
         ];
         $dataString = json_encode($data);
 
