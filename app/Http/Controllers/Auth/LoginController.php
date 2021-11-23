@@ -10,6 +10,7 @@ use App\Http\Controllers\Services\GenerateAccessTokenService;
 use App\Http\Resources\ProfileResource;
 use App\Models\Profile;
 use App\Models\SocialAccount;
+use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -24,7 +25,8 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $this->validate($request, [
-           'grantType'=>['required', 'string']
+            'grantType'=>['required', 'string'],
+            'notificationId'=>['required', 'string']
         ]);
         $checkUserData = new CheckUserDataController();
         $userData = $checkUserData->checkUserData($request);
@@ -48,7 +50,7 @@ class LoginController extends Controller
         if(!is_null($user->blocked_at)){
             throw new ValidationDataError('ERR_USER_AUTH', 403, 'Selected user is blocked!');
         }
-        if($request->has('notificationId')) {
+        if($request->has('notificationId') && !User::where('notification_id', $request->notificationId)->exists()) {
             $user->notification_id = $request->notificationId;
             $user->save();
         }
