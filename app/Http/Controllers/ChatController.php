@@ -70,7 +70,7 @@ class ChatController extends Controller
     public function blockChat($chatId)
     {
         $auth_id = auth()->user()->getAuthIdentifier();
-        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->orWhere(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
+        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->exists() && !Chat::where(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
         {
             throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
         }
@@ -89,7 +89,7 @@ class ChatController extends Controller
     public function deleteChat($chatId)
     {
         $auth_id = auth()->user()->getAuthIdentifier();
-        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->orWhere(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
+        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->exists() && !Chat::where(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
         {
             throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
         }
@@ -102,7 +102,7 @@ class ChatController extends Controller
     public function getChatInformation($chatId)
     {
         $auth_id = auth()->user()->getAuthIdentifier();
-        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->orWhere(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
+        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->exists() && !Chat::where(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
         {
             throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
         }
@@ -112,7 +112,10 @@ class ChatController extends Controller
     public function getChat($chatId)
     {
         $auth_id = auth()->user()->getAuthIdentifier();
-        $chat = Chat::where(['id' => $chatId, 'user1_id' => $auth_id])->orWhere(['id' => $chatId, 'user2_id' => $auth_id])->first();
+        $chat = Chat::where(['id' => $chatId, 'user1_id' => $auth_id])->first();
+        if(is_null($chat)){
+            $chat = Chat::where(['id' => $chatId, 'user2_id' => $auth_id])->first();
+        }
         if ($chat->user1_id == $auth_id) {
             $user = Profile::where('user_id', $chat->user2_id)->first();
         } else {
