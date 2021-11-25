@@ -29,14 +29,14 @@ class ChatController extends Controller
             throw new ValidationDataError('ERR_CHAT_CREATE', 422, 'User can not have chat with itself');
         }
         if(!Chat::where(['user1_id'=>$auth_id, 'user2_id'=>$userId])->exists() && !Chat::where(['user2_id'=>$auth_id, 'user1_id'=>$userId])->exists()){
-            if(Like::where(['user_id' => $auth_id, 'favourite_user_id' => $userId])->exists() && Like::where(['user_id' => $userId, 'favourite_user_id' => $auth_id])->exists()) {
+            //if(Like::where(['user_id' => $auth_id, 'favourite_user_id' => $userId])->exists() && Like::where(['user_id' => $userId, 'favourite_user_id' => $auth_id])->exists()) {
                 $chat = Chat::create([
                     'user1_id' => $auth_id,
                     'user2_id' => $userId
                 ]);
-            }else{
+           /* }else{
                 throw new ValidationDataError('ERR_CHAT_CREATE', 403, 'Users do not have mutual sympathy');
-            }
+            }*/
         }else{
             $chat = Chat::where(['user1_id'=>$auth_id, 'user2_id'=>$userId])->first();
             if(is_null($chat)){
@@ -66,7 +66,7 @@ class ChatController extends Controller
     public function blockChat($chatId)
     {
         $auth_id = auth()->user()->getAuthIdentifier();
-        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->orWhere(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
+        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->exists() && !Chat::where(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
         {
             throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
         }
@@ -85,7 +85,7 @@ class ChatController extends Controller
     public function deleteChat($chatId)
     {
         $auth_id = auth()->user()->getAuthIdentifier();
-        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->orWhere(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
+        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->exists() && !Chat::where(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
         {
             throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
         }
@@ -98,7 +98,7 @@ class ChatController extends Controller
     public function getChatInformation($chatId)
     {
         $auth_id = auth()->user()->getAuthIdentifier();
-        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->orWhere(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
+        if(!Chat::where(['id'=>$chatId, 'user1_id'=>$auth_id])->exists() && !Chat::where(['id'=>$chatId, 'user2_id'=>$auth_id])->exists())
         {
             throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
         }
@@ -108,7 +108,10 @@ class ChatController extends Controller
     public function getChat($chatId)
     {
         $auth_id = auth()->user()->getAuthIdentifier();
-        $chat = Chat::where(['id' => $chatId, 'user1_id' => $auth_id])->orWhere(['id' => $chatId, 'user2_id' => $auth_id])->first();
+        $chat = Chat::where(['id' => $chatId, 'user1_id' => $auth_id])->first();
+        if(is_null($chat)){
+            $chat = Chat::where(['id' => $chatId, 'user2_id' => $auth_id])->first();
+        }
         if ($chat->user1_id == $auth_id) {
             $user = Profile::where('user_id', $chat->user2_id)->first();
         } else {
@@ -145,7 +148,7 @@ class ChatController extends Controller
     public function getChatsInformation()
     {
         $auth_id = auth()->user()->getAuthIdentifier();
-        $userChats = Chat::where('user1_id',$auth_id)->orWhere('user2_id',$auth_id)->get();
+        $userChats = Chat::where('user1_id',$auth_id)->OrWhere('user2_id',$auth_id)->get();
         $chats = [];
         foreach($userChats as $chat){
             if($chat->user1_id == $auth_id)
