@@ -817,8 +817,16 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - bearerAuth: []
-  /account/logout:
+  /account/logout/{token}:
     get:
+      parameters:
+        - in: path
+          name: token
+          schema:
+            type: string
+          required: true
+          example: rgmkrigui7664ry74yfnvg495gikvm09876543
+          description: Токен устройства, с которого произошел выход
       tags:
         - Account
       summary: Выход пользователя из аккаунта

@@ -21,8 +21,8 @@ class ChatController extends Controller
 
     public function addUserChat($userId)
     {
-        if(!User::where('id', $userId)->exists()){
-            throw new ValidationDataError('ERR_USER_NOT_FOUND', 422, 'Selected user do not exists');
+        if(!User::where('id', $userId)->exists() || !is_null(User::where('id', $userId)->value('blocked_at'))){
+            throw new ValidationDataError('ERR_USER_NOT_FOUND', 422, 'Selected user do not exists or is blocked');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
         if($auth_id == $userId){

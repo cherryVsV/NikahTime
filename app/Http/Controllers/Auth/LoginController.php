@@ -25,7 +25,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $this->validate($request, [
-            'grantType'=>['required', 'string']
+            'grantType' => ['required', 'string']
         ]);
         $checkUserData = new CheckUserDataController();
         $userData = $checkUserData->checkUserData($request);
@@ -38,34 +38,44 @@ class LoginController extends Controller
             }
             $password = $request->password;
         }
-        if($request->grantType=='googleIdToken'){
+        if ($request->grantType == 'googleIdToken') {
             $password = $userData['password'];
-            $username = $username.' google';
+            $username = $username . ' google';
         }
-        if($request->grantType=='appleIdToken'){
+        if ($request->grantType == 'appleIdToken') {
             $password = $userData['password'];
-            $username = $username.' apple';
+            $username = $username . ' apple';
         }
-        if(!is_null($user->blocked_at)){
+        if (!is_null($user->blocked_at)) {
             throw new ValidationDataError('ERR_USER_AUTH', 403, 'Selected user is blocked!');
         }
-        if($request->has('notificationId') && !User::where('notification_id', $request->notificationId)->exists()) {
-            $user->notification_id = $request->notificationId;
+        if ($request->has('notificationId')) {
+            if (!is_null($user->notification_id)) {
+                $not_tokens = json_decode($user->notification_id);
+                if (!in_array($request->notificationId, $not_tokens)) {
+                    $not_tokens[] = $request->notificationId;
+                }
+
+            } else {
+                $not_tokens[] = $request->notificationId;
+            }
+            $user->notification_id = $not_tokens;
             $user->save();
         }
         $generateToken = new GenerateAccessTokenService();
         $token = $generateToken->generateToken($request, $username, $password);
         $profile = Profile::where('user_id', $user->id)->first();
         return response()->json([
-                'user'=> new ProfileResource($profile),
-                'tokenData' =>$token
+            'user' => new ProfileResource($profile),
+            'tokenData' => $token
         ], 200);
 
     }
 
-    public function logout()
+    public function logout($token)
     {
         try {
+            $user = User::find(auth()->user()->getAuthIdentifier());
             $accessToken = auth()->user()->token();
             $refreshToken = DB::table('oauth_refresh_tokens')
                 ->where('access_token_id', $accessToken->id)
@@ -73,6 +83,16 @@ class LoginController extends Controller
                     'revoked' => true
                 ]);
             $accessToken->revoke();
+            if (!is_null($user->notification_id)) {
+                $not_tokens = json_decode($user->notification_id);
+                if (in_array($token, $not_tokens)) {
+                    $array = array_flip(  $not_tokens);
+                    unset ($array[$token]);
+                    $not_tokens = array_flip($array);
+                }
+            }
+            $user->notification_id = $not_tokens;
+            $user->save();
             return response(null, 200);
         } catch (Exception $e) {
             return response()->json([

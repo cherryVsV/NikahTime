@@ -42,7 +42,7 @@ Route::post('auth/apple/callback', [SocialController::class, 'callback']);
 
 Route::middleware("auth:api")->group(function(){
 
-    Route::get('account/logout', [LoginController::class, 'logOut']);
+    Route::get('account/logout/{token}', [LoginController::class, 'logOut']);
 
     Route::get('account/user', [ProfileController::class, 'getUser']);
 

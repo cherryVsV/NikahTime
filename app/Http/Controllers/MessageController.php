@@ -49,6 +49,9 @@ class MessageController extends Controller
         }else{
             $receiverId = $chat->user1_id;
         }
+        if(!is_null(User::where('id', $receiverId)->value('blocked_at'))){
+            throw new ValidationDataError('ERR_SEND_MESSAGE_FAILED', 422, 'Selected user is blocked');
+        }
         $user = User::find($receiverId);
         $message = Message::create([
             'user_id'=>$user_id,
@@ -59,10 +62,12 @@ class MessageController extends Controller
         ]);
         broadcast(new NewChatMessage($message->id, $user, 'Новое сообщение'));
         if(!is_null($user->notification_id)){
-            return $this->sendNotification($user->notification_id, array(
-                "title" => "Личные сообщения",
-                "body" => "Вы получили сообщение"
-            ));
+            foreach(json_decode($user->notification_id) as $item) {
+                 $this->sendNotification($item, array(
+                    "title" => "Личные сообщения",
+                    "body" => "Вы получили сообщение"
+                ));
+            }
         }
 
         return response(null, 200);
@@ -137,7 +142,6 @@ class MessageController extends Controller
         $response = curl_exec($ch);
 
         curl_close($ch);
-
         return $response;
     }
 
