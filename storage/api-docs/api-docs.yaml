@@ -847,7 +847,7 @@ paths:
     post:
       tags:
         - Socials
-      summary: Получение данных после автоизации через соц.сеть
+      summary: Получение данных после авторизации через соц.сеть
       operationId: callback
       requestBody:
         content:
@@ -872,6 +872,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /complain:
+    post:
+      tags:
+        - Complains
+      summary: Отправка жалобы
+      operationId: makeComplain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  format: int64
+                  description: Айдишник пользователя, на которого подается жалоба
+                title:
+                  type: string
+                  description: название жалобы
+              example:
+                userId: 88
+                title: "Пропаганда вражды и разжигание ненависти"
+      responses:
+        "200":
+          description: Жалоба подана успешно
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
 
 
 components:

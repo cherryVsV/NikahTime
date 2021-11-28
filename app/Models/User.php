@@ -53,6 +53,12 @@ class User extends \TCG\Voyager\Models\User
         return $this->HasMany(\App\Models\Chat::class);
     }
 
+    public function complains()
+    {
+        return $this->HasMany(\App\Models\Complain::class);
+    }
+
+
     public function likes()
     {
         return $this->HasMany(\App\Models\Like::class);

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\FavouritesController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\GuestController;
@@ -83,6 +84,8 @@ Route::middleware("auth:api")->group(function(){
     Route::get('chats/get/message/{messageId}', [MessageController::class, 'getMessage']);
 
     Route::put('chats/seen/message/{messageId}', [MessageController::class, 'makeSeenMessage']);
+
+    Route::post('complain', [ComplaintController::class, 'makeComplain']);
 });
 
 
