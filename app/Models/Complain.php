@@ -9,7 +9,7 @@ class Complain extends Model
 {
     use HasFactory;
     protected $table = 'complains';
-    protected $fillable = ['title', 'user_id', 'user_complain_id'];
+    protected $fillable = ['title', 'user_id', 'user_complain_id', 'message'];
 
     /**
      * The attributes that should be cast to native types.

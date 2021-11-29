@@ -129,7 +129,7 @@ class ChatController extends Controller
             $isAuthBlock = true;
         }
 
-            $chatData = ['chatId' => $chat->id, 'userAvatar' => $avatar, 'userName' => $user->first_name, 'isChatBlocked' => $chat->is_blocked,
+            $chatData = ['chatId' => $chat->id, 'userId'=>$user->user_id, 'userAvatar' => $avatar, 'userName' => $user->first_name, 'isChatBlocked' => $chat->is_blocked,
                 'isAuthUserBlockChat' => $isAuthBlock, 'isOnline'=>$user->isOnline()];
             $messageData = [];
             $messages = Message::where('chat_id', $chat->id)->get();

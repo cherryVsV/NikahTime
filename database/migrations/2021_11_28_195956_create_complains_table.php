@@ -18,6 +18,7 @@ class CreateComplainsTable extends Migration
             $table->string('title');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('user_complain_id');
+            $table->string('message');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

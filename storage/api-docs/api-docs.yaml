@@ -891,9 +891,13 @@ paths:
                 title:
                   type: string
                   description: название жалобы
+                message:
+                  type: string
+                  description: комментарий к жалобе
               example:
                 userId: 88
                 title: "Пропаганда вражды и разжигание ненависти"
+                message: "Пропаганда вражды и разжигание ненависти"
       responses:
         "200":
           description: Жалоба подана успешно
@@ -1445,6 +1449,7 @@ components:
     Chat:
       required:
         - chatId
+        - userId
         - userAvatar
         - userName
         - isChatBlocked
@@ -1463,6 +1468,9 @@ components:
           description: "Для подгрузки сообщений в чате для запроса используется в качестве параметра
            и для прослушивания события отправки сообщения в данном чате,
             в названии события необходимо будет указывать id чата"
+        userId:
+          type: integer
+          format: int64
         userAvatar:
           type: string
           format: uri
