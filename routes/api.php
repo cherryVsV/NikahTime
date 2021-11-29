@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\FavouritesController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\GuestController;
@@ -43,7 +44,7 @@ Route::post('auth/apple/callback', [SocialController::class, 'callback']);
 
 Route::middleware("auth:api")->group(function(){
 
-    Route::get('account/logout', [LoginController::class, 'logOut']);
+    Route::get('account/logout/{token}', [LoginController::class, 'logOut']);
 
     Route::get('account/user', [ProfileController::class, 'getUser']);
 
@@ -86,6 +87,8 @@ Route::middleware("auth:api")->group(function(){
     Route::put('chats/seen/message/{messageId}', [MessageController::class, 'makeSeenMessage']);
 
     Route::put('set/user/tariff/{tariffId}', [UserTariffController::class, 'setUserTariff']);
+
+    Route::post('complain', [ComplaintController::class, 'makeComplain']);
 
     Route::get('get/tariffs', [UserTariffController::class, 'getTariffs']);
 

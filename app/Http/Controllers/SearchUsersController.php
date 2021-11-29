@@ -38,10 +38,14 @@ class SearchUsersController extends Controller
                     $user['isProfileParametersMatched'] = true;
                     if (count($seenUsers) > 0) {
                         if (!$seenUsers->contains($user->user_id)) {
-                            $selection[] = new ProfileResource($user);
+                            if(is_null(User::where('id', $user->user_id)->value('blocked_at'))) {
+                                $selection[] = new ProfileResource($user);
+                            }
                         }
                     } else {
-                        $selection[] = new ProfileResource($user);
+                        if(is_null(User::where('id', $user->user_id)->value('blocked_at'))) {
+                            $selection[] = new ProfileResource($user);
+                        }
                     }
                 }
             }
@@ -52,10 +56,14 @@ class SearchUsersController extends Controller
                         $profile['isProfileParametersMatched'] = false;
                         if (count($seenUsers) > 0) {
                             if (!$seenUsers->contains($profile->user_id)) {
-                                $selection[] = new ProfileResource($profile);
+                                if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                    $selection[] = new ProfileResource($profile);
+                                }
                             }
                         } else {
-                            $selection[] = new ProfileResource($profile);
+                            if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                $selection[] = new ProfileResource($profile);
+                            }
                         }
                     }
                 }
@@ -121,11 +129,15 @@ class SearchUsersController extends Controller
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     if ($request->isOnline) {
                         if ($age >= $request->minAge && $age <= $request->maxAge && $profile->gender != $userProfile->gender && $profile->isOnline()) {
-                            $filters[] = new ProfileResource($profile);
+                            if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                $filters[] = new ProfileResource($profile);
+                            }
                         }
                     } else {
                         if ($age >= $request->minAge && $age <= $request->maxAge && $profile->gender != $userProfile->gender) {
-                            $filters[] = new ProfileResource($profile);
+                            if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                $filters[] = new ProfileResource($profile);
+                            }
                         }
                     }
                 }
@@ -151,20 +163,28 @@ class SearchUsersController extends Controller
                             if (collect($badHabits)->diff(collect($profile->habits->pluck('id')))->count() == 0) {
                                 if ($request->isOnline) {
                                     if ($profile->isOnline()) {
-                                        $filters[] = new ProfileResource($profile);
+                                        if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                            $filters[] = new ProfileResource($profile);
+                                        }
                                     }
                                 } else {
-                                    $filters[] = new ProfileResource($profile);
+                                    if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                        $filters[] = new ProfileResource($profile);
+                                    }
                                 }
                             }
                         } else {
                             if ($profile->habits->count() == 0) {
                                 if ($request->isOnline) {
                                     if ($profile->isOnline()) {
-                                        $filters[] = new ProfileResource($profile);
+                                        if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                            $filters[] = new ProfileResource($profile);
+                                        }
                                     }
                                 } else {
-                                    $filters[] = new ProfileResource($profile);
+                                    if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                        $filters[] = new ProfileResource($profile);
+                                    }
                                 }
                             }
                         }

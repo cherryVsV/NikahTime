@@ -22,8 +22,8 @@ class ChatController extends Controller
 
     public function addUserChat($userId)
     {
-        if(!User::where('id', $userId)->exists()){
-            throw new ValidationDataError('ERR_USER_NOT_FOUND', 422, 'Selected user do not exists');
+        if(!User::where('id', $userId)->exists() || !is_null(User::where('id', $userId)->value('blocked_at'))){
+            throw new ValidationDataError('ERR_USER_NOT_FOUND', 422, 'Selected user do not exists or is blocked');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
         if(!UserTariff::where('user_id', $auth_id)->whereDate('finished_at', '>', Carbon::now())->exists()){
@@ -133,7 +133,7 @@ class ChatController extends Controller
             $isAuthBlock = true;
         }
 
-            $chatData = ['chatId' => $chat->id, 'userAvatar' => $avatar, 'userName' => $user->first_name, 'isChatBlocked' => $chat->is_blocked,
+            $chatData = ['chatId' => $chat->id, 'userId'=>$user->user_id, 'userAvatar' => $avatar, 'userName' => $user->first_name, 'isChatBlocked' => $chat->is_blocked,
                 'isAuthUserBlockChat' => $isAuthBlock, 'isOnline'=>$user->isOnline()];
             $messageData = [];
             $messages = Message::where('chat_id', $chat->id)->get();

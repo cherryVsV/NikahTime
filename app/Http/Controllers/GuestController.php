@@ -15,8 +15,8 @@ class GuestController extends Controller
 {
     public function addUserGuest($userId)
     {
-        if(!User::where('id', $userId)->exists()){
-            throw new ValidationDataError('ERR_FIND_USER_FAILED', 422, 'Selected user do not exists');
+        if(!User::where('id', $userId)->exists() || !is_null(User::where('id', $userId)->value('blocked_at'))){
+            throw new ValidationDataError('ERR_FIND_USER_FAILED', 422, 'Selected user do not exists or is blocked');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
         if(Guest::where(['user_id'=>$userId, 'guest_id'=>$auth_id])->exists()){
@@ -40,9 +40,11 @@ class GuestController extends Controller
             $guestsProfiles = Profile::whereIn('user_id', $guestsIds)->get();
             $guests = [];
             foreach($guestsProfiles as $guest){
-                $date = Carbon::parse(Guest::where('guest_id', $guest->user_id)->first()->value('created_at'))->format('d-m-Y');
-                $guest->date = $date;
-                $guests[] = new ProfileResource($guest);
+                if(is_null(User::where('id', $guest->user_id)->value('blocked_at'))) {
+                    $date = Carbon::parse(Guest::where('guest_id', $guest->user_id)->first()->value('created_at'))->format('d-m-Y');
+                    $guest->date = $date;
+                    $guests[] = new ProfileResource($guest);
+                }
             }
             return response()->json($guests, 200);
 

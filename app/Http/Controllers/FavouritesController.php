@@ -26,8 +26,8 @@ class FavouritesController extends Controller
 
     public function addToUserFavourites($userId)
     {
-        if (!User::where('id', $userId)->exists()) {
-            throw new ValidationDataError('ERR_FIND_USER_FAILED', 422, 'Selected user do not exists');
+        if (!User::where('id', $userId)->exists() || !is_null(User::where('id', $userId)->value('blocked_at'))) {
+            throw new ValidationDataError('ERR_FIND_USER_FAILED', 422, 'Selected user do not exists or is blocked');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
         if(!UserTariff::where('user_id', $auth_id)->whereDate('finished_at', '>', Carbon::now())->exists()){
@@ -40,7 +40,7 @@ class FavouritesController extends Controller
                 'user_id' => $auth_id,
                 'favourite_user_id' => $userId
             ]);
-            if(Like::where(['user_id' => $userId, 'favourite_user_id' => $auth_id])->exists()){
+            if(Like::where(['user_id' => $userId, 'favourite_user_id' => $auth_id])->exists() && is_null(User::where('id', $userId)->value('blocked_at'))){
                 $user = Profile::find($userId);
                 $avatar = null;
                 if(!is_null($user->photos))
@@ -72,7 +72,9 @@ class FavouritesController extends Controller
             $favouritesProfiles = Profile::whereIn('user_id', $favouritesIds)->get();
             $favourites = [];
             foreach ($favouritesProfiles as $favourite) {
-                $favourites[] = new ProfileResource($favourite);
+                if (is_null(User::where('id', $favourite->user_id)->value('blocked_at'))){
+                    $favourites[] = new ProfileResource($favourite);
+                }
             }
             return response()->json($favourites, 200);
 
