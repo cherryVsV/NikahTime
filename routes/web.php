@@ -23,6 +23,9 @@ Route::get('/privacy/policy', function (){
 Route::get('/user/agreement', function (){
     return view('userAgreement');
 });
+Route::get('/user/app_use_terms', function(){
+    return view('appUseTerms');
+});
 
 Route::group(['prefix'=>'admin'], function(){
     Route::get('users/block',[VoyagerUserController::class, 'block'])->name('users.block');
