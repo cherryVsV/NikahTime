@@ -69,6 +69,7 @@
                                            target="_blank" style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Project manager & Brandmaker NikahTime.ru - Рамиль Алюшев</a></div>
         <div><a href="/privacy/policy" style="color: white">Политика конфиденциальности</a></div>
         <div><a href="/user/agreement" style="color: white">Пользовательское соглашение</a></div>
+        <div><a href="/user/app_use_terms" style="color: white">Правила пользования приложением</a></div>
     </div>
 </div>
 <!--scripts-->
