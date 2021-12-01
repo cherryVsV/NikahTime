@@ -26,6 +26,9 @@ Route::get('/user/agreement', function (){
 Route::get('/user/app_use_terms', function(){
     return view('appUseTerms');
 });
+Route::get('/support', function(){
+    return view('support');
+});
 
 Route::group(['prefix'=>'admin'], function(){
     Route::get('users/block',[VoyagerUserController::class, 'block'])->name('users.block');
