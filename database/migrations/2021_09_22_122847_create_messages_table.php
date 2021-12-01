@@ -35,7 +35,6 @@ class CreateMessagesTable extends Migration
             $table->text('message');
             $table->boolean('is_seen')->default(false);
             $table->string('type')->default('text');
-            $table->softDeletes();
             $table->timestamps();
 
         });
