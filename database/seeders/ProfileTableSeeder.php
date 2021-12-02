@@ -18,7 +18,7 @@ class ProfileTableSeeder extends Seeder
      */
     public function run()
     {
-        $users = [
+        /*$users = [
             [
                 'phone' => '89178730547', 'email'=>'Veter717@list.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Артур', 'last_name' => 'Ахметгалиев',
                 'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1_cbiwayJ8Tle2ejbxYA4m_5FHfJnvN-O'], 'gender' => 'male',
@@ -688,7 +688,359 @@ class ProfileTableSeeder extends Seeder
                 'education_id' => 5, 'place_of_study' => 'КГФЭИ', 'work_position' => 'Бухгалтер',
                 'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Чтение', 'Рисование']
             ]
-        ];
+        ];*/
+        $users = [
+            [
+                'phone' => '79661721235', 'email'=>'i.riahimov@yandex.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Ринат', 'last_name' => 'Абдуллин',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1NpCMQ-0VP3RahPO3k4jitmuKZBwZ3dFN'], 'gender' => 'male',
+                'birth_date' => '24.11.1985', 'country' => 'Россия', 'city' => 'Пенза', 'contact_phone_number' => '79661721235',
+                'education_id' => 5, 'place_of_study' => 'Педагогический институт', 'work_position' => '', 'habits'=>['alcohol'],
+                'place_of_work' => 'Охрана', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Футбол']
+            ],
+            [
+                'phone' => '79263549031', 'email'=>'rin135sh@yandex.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Ринат', 'last_name' => 'Шазизов',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1WevPz2uHw0g8zkr4rzpLmbHBjIvR6C4_', 'https://drive.google.com/u/0/open?usp=forms_web&id=1FiOEUWDwcyOccyBllh668LvCN0N_Y5Vz'], 'gender' => 'male',
+                'birth_date' => '17.04.1980', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79263549031',
+                'education_id' => 4, 'place_of_study' => 'Н/В', 'work_position' => 'Специалист по лазерам',
+                'place_of_work' => 'Производство', 'marital_status_id' => 3, 'have_children' => false, 'interests' => ['Инвестиции']
+            ],
+            [
+                'phone' => '79053734719', 'email'=>'gulaok@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Гульнара', 'last_name' => 'Гарифуллина',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1UMkvyl4hWQD_0CRfrKx2zvvvG7c75mZZ'], 'gender' => 'female',
+                'birth_date' => '01.12.1976', 'country' => 'Россия', 'city' => 'Набережные челны', 'contact_phone_number' => '79053734719',
+                'education_id' => 5, 'place_of_study' => 'Казанский государственный университет', 'work_position' => 'Мастер ногтевого сервиса',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['увлекаюсь всем']
+            ],
+            [
+                'phone' => '79513583312', 'email'=>'ramil4ik.ramil58@gmail.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Рамиль', 'last_name' => 'Туишев',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1DZjAH2Vt7jdGn9pDErYBwSRWNSl44gpM'], 'gender' => 'male',
+                'birth_date' => '20.12.1995', 'country' => 'Россия', 'city' => 'Пенза', 'contact_phone_number' => '79513583312',
+                'education_id' => 5, 'place_of_study' => 'ПГУ', 'work_position' => 'Логист', 'habits'=>['other'],
+                'place_of_work' => 'Сфера обслуживания', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Авто']
+            ],
+            [
+                'phone' => '79873464109', 'email'=>'ramilka2106@icloud.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Рамиля', 'last_name' => 'Валиуллина',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1-EFM5_UlU9rXQ8zB80WXUg-kT92cGOGB', 'https://drive.google.com/u/0/open?usp=forms_web&id=1sFqC7PMhNFmkSOS8JJL2jke_IC2qG4Ab', 'https://drive.google.com/u/0/open?usp=forms_web&id=1uppBkjgMZkIdy1DoWk6thWXN8i7l-j7Y', 'https://drive.google.com/u/0/open?usp=forms_web&id=1427DyB8qDFZo9AFTYaXj0iulnczX9RgW'], 'gender' => 'female',
+                'birth_date' => '01.12.1990', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79873464109',
+                'education_id' => 5, 'place_of_study' => 'Оренбургский Государственный Аграрный Университет', 'work_position' => 'Юрист',
+                'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Активный отдых']
+            ],
+            [
+                'phone' => '79871465561', 'email'=>'ajgul.usm@yandex.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Айгуль', 'last_name' => 'Усманова',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1kRfeeuk5dqAPtQx8OMc3fuap25Q4n7He'], 'gender' => 'female',
+                'birth_date' => '13.11.1970', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79871465561',
+                'education_id' => 3, 'place_of_study' => '', 'work_position' => 'Диетсестра', 'habits'=>['alcohol'],
+                'place_of_work' => 'Медицина', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Вязание']
+            ],
+            [
+                'phone' => '79600397080', 'email'=>'marat.xxx3@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Марат', 'last_name' => 'Валиев',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1DpixmUxd44_3cngsuJfLbXHbO66Vsl6Y', 'https://drive.google.com/u/0/open?usp=forms_web&id=1RPC1exPROa7RSmTRL_XHSC_z6CQJYYH8'], 'gender' => 'male',
+                'birth_date' => '01.12.1979', 'country' => 'Россия', 'city' => 'Казань', 'contact_phone_number' => '79600397080',
+                'education_id' => 3, 'place_of_study' => '', 'work_position' => '', 'habits'=>['other'],
+                'place_of_work' => 'Малый бизнес', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Мото']
+            ],
+            [
+                'phone' => '79154265577', 'email'=>'777g777r@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Гульнара', 'last_name' => 'Юсупова',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1rc2j7L6Swo2bgXO88bUQcbGRNwaq_BKE', 'https://drive.google.com/u/0/open?usp=forms_web&id=1araDDkftF1ofyDN0UlToA7zN4ILGcf8I', 'https://drive.google.com/u/0/open?usp=forms_web&id=1yxMKhoiE5hedg93-by2pUPYk665XYYbs'], 'gender' => 'female',
+                'birth_date' => '01.12.1982', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79154265577',
+                'education_id' => 5, 'place_of_study' => '', 'work_position' => '',
+                'place_of_work' => 'Медицина', 'marital_status_id' => 1, 'have_children' => false
+            ],
+            [
+                'phone' => '79033402540', 'email'=>'gadem911@gmail.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Адель', 'last_name' => 'Гайнутдинов',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1olnH5CYSVSgzPqEJKt_lwYnhSxcCLD8Z'], 'gender' => 'male',
+                'birth_date' => '01.12.1994', 'country' => 'Россия', 'city' => 'Мытищи', 'contact_phone_number' => '79033402540',
+                'education_id' => 5, 'place_of_study' => 'КНИТУ-КАИ', 'work_position' => 'Инженер-программист', 'habits'=>['other'],
+                'place_of_work' => 'В сфере образования', 'marital_status_id' => 3, 'have_children' => false, 'interests' => ['Чтение', 'Психология', 'Кататься на лыжах']
+            ],
+            [
+                'phone' => '79267576966', 'email'=>'rameliya90@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Рамиля', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1J4k5_lOhJt-ri4g4T6EKuLlPXmrsmU05'], 'gender' => 'female',
+                'birth_date' => '01.12.1990', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79267576966',
+                'education_id' => 5, 'place_of_study' => 'ВГАВТ', 'work_position' => 'Экономист',
+                'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Прогулки на свежем воздухе']
+            ],
+            [
+                'phone' => '79262564011', 'email'=>'sanij19@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Сания', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1lSqM8oXE0EZmlan8CQv_RC0GQSWfKOo'], 'gender' => 'female',
+                'birth_date' => '01.12.1969', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79262564011',
+                'education_id' => 3, 'place_of_study' => 'Техникум', 'work_position' => '',
+                'place_of_work' => 'Торговля', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Плавание', 'Танцы']
+            ],
+            [
+                'phone' => '79777186550', 'email'=>'galiya.aisit@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Галия', 'last_name' => 'Айситулина',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1w8UGwswK7fVZkHVcFvtbxs8svFzIxDzB', 'https://drive.google.com/u/0/open?usp=forms_web&id=1DApgXF5asAkSl9oJiqjcKLCrLQy1RHIe'], 'gender' => 'female',
+                'birth_date' => '14.07.1970', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79777186550',
+                'education_id' => 5, 'place_of_study' => '', 'work_position' => 'Косметолог',
+                'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Чтение', 'Путешествия', 'Лечить', 'Красоту дарить']
+            ],
+            [
+                'phone' => '79067363482', 'email'=>'Masrus@yandex.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Нагим', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1XfZp6Stb4MI4c7On9fDE7xQcV5rQyVJS'], 'gender' => 'male',
+                'birth_date' => '01.12.1961', 'country' => 'Россия', 'city' => 'Балашиха', 'contact_phone_number' => '79067363482',
+                'education_id' => 5, 'place_of_study' => 'ТаиИИТ', 'work_position' => 'Жд инженер',
+                'place_of_work' => 'Жд', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Футбол']
+            ],
+            [
+                'phone' => '79047627345', 'email'=>'gmalik45@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Гульнара', 'last_name' => 'Маликова',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1eM1rXCQLKn5eTChBHe8YU8g80D9MNkm-'], 'gender' => 'female',
+                'birth_date' => '01.03.1973', 'country' => 'Россия', 'city' => 'Санкт - Петербург', 'contact_phone_number' => '79047627345',
+                'education_id' => 5, 'place_of_study' => 'Московский государственный социальный университет', 'work_position' => '',
+                'place_of_work' => 'Медицина, психология, бизнес', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Путешествия', 'Психология', 'Готовка', 'Домашние цветы', 'Чтение']
+            ],
+            [
+                'phone' => '79091757478', 'email'=>'alina241011@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Алена', 'last_name' => 'Ковригина',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1_2EjWkesho3nlQMXeZF7wV4aBsdQvSWD'], 'gender' => 'female',
+                'birth_date' => '18.07.1977', 'country' => 'Россия', 'city' => 'Курганская область', 'contact_phone_number' => '79091757478',
+                'education_id' => 5, 'place_of_study' => 'КГУ', 'work_position' => '',
+                'place_of_work' => 'Культура', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Кулинария']
+            ],
+            [
+                'phone' => '79652528910', 'email'=>'alsutagirova695@gmail.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Альмируша', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1AuvBGXUEc9-vr86nOIF5YAJnLWHoOvCM'], 'gender' => 'female',
+                'birth_date' => '01.12.1971', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79652528910',
+                'education_id' => 5, 'place_of_study' => 'Огу', 'work_position' => '', 'habits'=>['other'],
+                'place_of_work' => 'Социальная сфера', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Чтение']
+            ],
+            [
+                'phone' => '79222832330', 'email'=>'renat.dolotkazun@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Ринат', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=19Ik4WaITSG_inv8jvJ3W5Y-VRNuz96Qo', 'https://drive.google.com/u/0/open?usp=forms_web&id=1FFGxBCzFJafm-EAyzxnn_4Vskki7u26J'], 'gender' => 'male',
+                'birth_date' => '13.02.1975', 'country' => 'Россия', 'city' => 'Татарстан', 'contact_phone_number' => '79222832330',
+                'education_id' => 3, 'place_of_study' => 'Коледж', 'work_position' => '', 'habits'=>['alcohol'],
+                'place_of_work' => 'Строительство', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Рыбалка']
+            ],
+            [
+                'phone' => '79104693265', 'email'=>'Ilsyr112@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Ильсур', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=12xUwIDXnMqGF9Hz9XyWMgnmmwbthkOL5'], 'gender' => 'male',
+                'birth_date' => '01.12.1991', 'country' => 'Россия', 'city' => 'Татарстан', 'contact_phone_number' => '79104693265',
+                'education_id' => 5, 'place_of_study' => 'ГУУ', 'work_position' => 'Руководитель среднего звена',
+                'place_of_work' => 'Теплоэнергетика', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Плавание']
+            ],
+            [
+                'phone' => '79254879494', 'email'=>'7792362@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Ринат', 'last_name' => 'Биктимиров',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1dRZTHzvPb0eUxIqA8w5Mx_63fouX7PND', 'https://drive.google.com/u/0/open?usp=forms_web&id=1S1VNlqc2Sk4ZJLmmoBd8TIsw1GIrPaYZ', 'https://drive.google.com/u/0/open?usp=forms_web&id=1yfipsnriE-t7u8RdmLkpRXOnqDKLkNYj'], 'gender' => 'male',
+                'birth_date' => '01.12.1984', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79254879494',
+                'education_id' => 4, 'place_of_study' => 'Казанское высшее военное училище', 'work_position' => 'Начальник отдела', 'habits'=>['other'],
+                'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Чтение', 'Велоспорт', 'Диджеинг']
+            ],
+            [
+                'phone' => '79992144967', 'email'=>'maysungiza@gmail.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Фаина', 'last_name' => 'Гизатулина',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1HNe9kNXQwtJlRqM9tmf5pAzl8e-_O0Wd'], 'gender' => 'female',
+                'birth_date' => '01.12.1997', 'country' => 'Россия', 'city' => 'Санкт-Петербург', 'contact_phone_number' => '79992144967',
+                'education_id' => 3, 'place_of_study' => 'Медицинский колледж 1', 'work_position' => 'Парикмахер',
+                'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Йога']
+            ],
+            [
+                'phone' => '79153298385', 'email'=>'ravilchik06@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Равиль', 'last_name' => 'Невретдинов',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1vJSqjLEAc8TtqURwXmrySsbaG03gbLv0'], 'gender' => 'male',
+                'birth_date' => '01.12.1983', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79153298385',
+                'education_id' => 5, 'place_of_study' => 'Мипп', 'work_position' => 'Юрист',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Хоккей']
+            ],
+            [
+                'phone' => '79518986642', 'email'=>'Islamiya.Hisamova@tatar.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Исламия', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1o4rA44yEtZ105ZmQsEX463TVtpL1p4uX'], 'gender' => 'female',
+                'birth_date' => '01.12.1985', 'country' => 'Россия', 'city' => 'Казань', 'contact_phone_number' => '79518986642',
+                'education_id' => 5, 'place_of_study' => 'КГУ', 'work_position' => '',
+                'place_of_work' => 'Медицинская организация', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Земледелие']
+            ],
+            [
+                'phone' => '79379199029', 'email'=>'romanikhina98@bk.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Карина', 'last_name' => 'Романихина',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1e-cGClzfMQHGXzR1AzolJqXkk5utk-iv'], 'gender' => 'female',
+                'birth_date' => '26.11.1986', 'country' => 'Россия', 'city' => 'Каменка', 'contact_phone_number' => '79379199029',
+                'education_id' => 5, 'place_of_study' => 'ПГПУ им. В. Г. Белинского', 'work_position' => '',
+                'place_of_work' => 'Бюджет', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Дом']
+            ],
+            [
+                'phone' => '79372195502', 'email'=>'gulsum_rr@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Гульсум', 'last_name' => 'Рахматуллина',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1emuWgQLrvAw3u6akHIRHW2QswLE-JxjX'], 'gender' => 'female',
+                'birth_date' => '01.12.1982', 'country' => 'Россия', 'city' => 'Тольятти', 'contact_phone_number' => '79372195502',
+                'education_id' => 5, 'place_of_study' => 'Московский гос. соц. университет', 'work_position' => '',
+                'place_of_work' => 'Бухгалтерия', 'marital_status_id' => 3, 'have_children' => false, 'interests' => ['Работа']
+            ],
+            [
+                'phone' => '79114904373', 'email'=>'zaletdinovrust@gmail.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Рустам', 'last_name' => 'Залетдинов',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=15U0ap4tyd08eeX4mi5gpwssqXbm0xVku'], 'gender' => 'male',
+                'birth_date' => '03.04.1978', 'country' => 'Россия', 'city' => 'Гурьевск, Калининградская область', 'contact_phone_number' => '79114904373',
+                'education_id' => 5, 'place_of_study' => 'ТИТЛП, КГТУ', 'work_position' => '',
+                'place_of_work' => 'Производство', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Чтение', 'Баскетбол']
+            ],
+            [
+                'phone' => '79655832622', 'email'=>'93.alina777@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Алина', 'last_name' => 'Мустафина',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1t_ZyZIokXyyWAfLpJ8d9FzLoAGl_wRF7'], 'gender' => 'female',
+                'birth_date' => '06.04.1993', 'country' => 'Россия', 'city' => 'Казань, Ново-Савиновский р-он', 'contact_phone_number' => '79655832622',
+                'education_id' => 5, 'place_of_study' => 'ИСГЗ', 'work_position' => 'Экономист',
+                'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Кататься на коньках', 'Вязание крючком']
+            ],
+            [
+                'phone' => '79111704430', 'email'=>'Mrguzel@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Гузель', 'last_name' => 'Мирсагатова',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=19whbaphBDt3M6dIRpYpbZ-Fui7QSvUro', 'https://drive.google.com/u/0/open?usp=forms_web&id=1XccK-WIEcdyuAFuZByBpx-cJ1pEidM_a', 'https://drive.google.com/u/0/open?usp=forms_web&id=18__xda--IfMy2fsfbH0LSC1bjzYIrnDE', 'https://drive.google.com/u/0/open?usp=forms_web&id=1qFxCeHUXqzBQzL7gPI7bQyJia_NxLJwE', 'https://drive.google.com/u/0/open?usp=forms_web&id=17_XTe4dantotnCPZRx4FyPSYG6wztrqS'], 'gender' => 'female',
+                'birth_date' => '11.03.1969', 'country' => 'Россия', 'city' => 'Санкт-петербург', 'contact_phone_number' => '79111704430',
+                'education_id' => 5, 'place_of_study' => 'Лиижт', 'work_position' => '',
+                'place_of_work' => 'Недвижимость', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Путешествия']
+            ],
+            [
+                'phone' => '79119795909', 'email'=>'rimma1105@rambler.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Римма', 'last_name' => 'Гарифуллина',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1sQGB-p8nAAY1m-Erayltvy2cpIVf3Kg0', 'https://drive.google.com/u/0/open?usp=forms_web&id=1IdyAjn87n3B_4hUVRSECptWxwpZT-6hW'], 'gender' => 'female',
+                'birth_date' => '16.01.1964', 'country' => 'Россия', 'city' => 'Санкт-Петербург', 'contact_phone_number' => '79119795909',
+                'education_id' => 5, 'place_of_study' => 'Ленинградский институт авиационного приборостроения', 'work_position' => 'Руководитель НКО',
+                'place_of_work' => 'Благотворительность', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Народно-прикладное творчество']
+            ],
+            [
+                'phone' => '79271337395', 'email'=>'Allaivakhnenko@yandex.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Алла', 'last_name' => 'Ивахненко',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1RdFY2lWTgPW1maE8fUZtSesmc9Tb-kDS', 'https://drive.google.com/u/0/open?usp=forms_web&id=19QZszdDowsW9XUev6IZe_wi3HLKN0L2R'], 'gender' => 'female',
+                'birth_date' => '22.10.1992', 'country' => 'Россия', 'city' => 'Химки', 'contact_phone_number' => '79271337395',
+                'education_id' => 5, 'place_of_study' => 'СГУ им. Н.Г Чернышевского. философский факультет', 'work_position' => 'Педагог',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => false, 'interests' => ['Вокал']
+            ],
+            [
+                'phone' => '79650374361', 'email'=>'john72355@gmail.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Альфис', 'last_name' => 'Ибатуллин',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1gyZ7wj9dajm6TUUIEiUgHWqRkEXKM-aP'], 'gender' => 'male',
+                'birth_date' => '01.12.1982', 'country' => 'Россия', 'city' => 'Санкт-Петербург', 'contact_phone_number' => '79650374361',
+                'education_id' => 5, 'place_of_study' => 'ЛТА', 'work_position' => 'Предприниматель',
+                'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Велосипед']
+            ],
+            [
+                'phone' => '79521105998', 'email'=>'sycheeva@list.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Альбина', 'last_name' => 'Сычева',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1-pyR3Z70BHhcKjBq6xfjhmJc24vnzGyC'], 'gender' => 'female',
+                'birth_date' => '03.05.1962', 'country' => 'Россия', 'city' => 'Калининград', 'contact_phone_number' => '79521105998',
+                'education_id' => 5, 'place_of_study' => 'Зоотехническое педагогическое', 'work_position' => 'Не работаю',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Вязание', 'Рукоделие']
+            ],
+            [
+                'phone' => '79055899903', 'email'=>'rustamkaa@list.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Рустам', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1Qa6ypvHdcGMjwl9_oIrCSuEF8GchK3WH'], 'gender' => 'male',
+                'birth_date' => '01.12.1987', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79055899903',
+                'education_id' => 5, 'place_of_study' => 'МГИУ', 'work_position' => 'Юрист',
+                'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Футбол', 'Теннис', 'Плавание', 'Турник', 'Велосипед', 'Чтение']
+            ],
+            [
+                'phone' => '79254349880', 'email'=>'jgjb9351@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Евгений', 'last_name' => 'Заболотный',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1W3Df7L3PtBSFWlQmytaD5sue5Q1mTPq1'], 'gender' => 'male',
+                'birth_date' => '05.05.1993', 'country' => 'Россия', 'city' => 'Село Ташлык', 'contact_phone_number' => '79254349880',
+                'education_id' => 5, 'place_of_study' => 'ПГУ им. Т. Г. Шевченко', 'work_position' => '',
+                'place_of_work' => 'Розничная торговля', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Единоборства']
+            ],
+            [
+                'phone' => '79210942221', 'email'=>'roza12345678@yandex.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Роза', 'last_name' => 'Фалалеева',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1weZ02KGjvosPd3Y2M3INOLhxGiqReqwr', 'https://drive.google.com/u/0/open?usp=forms_web&id=1qoeJzWfQ3HMVongoJ1hYhgHXI1RqkX7B'], 'gender' => 'female',
+                'birth_date' => '14.06.1960', 'country' => 'Россия', 'city' => 'Санкт-Петербург', 'contact_phone_number' => '79210942221',
+                'education_id' => 5, 'place_of_study' => 'Университет', 'work_position' => 'Психолог',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Путешествия']
+            ],
+            [
+                'phone' => '79600475856', 'email'=>'sabirov.fargat@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Фаргат', 'last_name' => 'Сабиров',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1YroCqCe4iWyMq5aZI3P4RqJIe46MAbXs', 'https://drive.google.com/u/0/open?usp=forms_web&id=1ryXRiDpt0cYtLBqkrU1VPg8-Eee0cgOS'], 'gender' => 'male',
+                'birth_date' => '11.06.1987', 'country' => 'Россия', 'city' => 'Арск', 'contact_phone_number' => '79600475856',
+                'education_id' => 3, 'place_of_study' => 'Арский педагогический колледж', 'work_position' => 'Комплектовщик',
+                'place_of_work' => 'Молочный склад', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Требование знания']
+            ],
+            [
+                'phone' => '79378500398', 'email'=>'N1a9i8l3@rambler.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Наиль', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=11hhYvReU8_UgSlg4wRWLBRrPS2vmmR5P'], 'gender' => 'male',
+                'birth_date' => '23.11.1983', 'country' => 'Россия', 'city' => 'РБ', 'contact_phone_number' => '79378500398',
+                'education_id' => 5, 'place_of_study' => 'Педагогическое', 'work_position' => '',  'habits'=>['alcohol'],
+                'place_of_work' => 'Образовательное', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Прогулки']
+            ],
+            [
+                'phone' => '79673707608', 'email'=>'Zugrya- 2011@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Зугря', 'last_name' => 'Саитбатталова',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1N9g_PeMWfrgTICcAa-dpo3qN3cVzUHcl'], 'gender' => 'female',
+                'birth_date' => '17.10.1958', 'country' => 'Россия', 'city' => 'ПГТ \"Васильево\" РТ.', 'contact_phone_number' => '79673707608',
+                'education_id' => 5, 'place_of_study' => 'АГТУ', 'work_position' => 'Педагог (на пенсии)',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Кроссворды', 'Шахматы', 'Искусство']
+            ],
+            [
+                'phone' => '79198897969', 'email'=>'Hodokk@inbox.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Фярит', 'last_name' => 'Зинатулин',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1oOZFfTLDn8EhCv_mOY93u5bR6CX2ywmt'], 'gender' => 'male',
+                'birth_date' => '01.12.1985', 'country' => 'Россия', 'city' => 'Ростов на Дону', 'contact_phone_number' => '79198897969',
+                'education_id' => 2, 'place_of_study' => '', 'work_position' => 'Слесарь', 'habits'=>['other'],
+                'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Чтение']
+            ],
+            [
+                'phone' => '79600483823', 'email'=>'nakipov.rustem@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Рустем', 'last_name' => 'Накипов',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1EeF0SBjP8xudzmphSGdN4Y8cCkCON3H7', 'https://drive.google.com/u/0/open?usp=forms_web&id=18ydg4bSL0XbrnZzW00SICOiHa1fiM3bS'], 'gender' => 'male',
+                'birth_date' => '01.12.1967', 'country' => 'Россия', 'city' => 'Казань', 'contact_phone_number' => '79600483823',
+                'education_id' => 3, 'place_of_study' => '', 'work_position' => 'Водитель',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Спорт', 'Дача', 'Природа']
+            ],
+            [
+                'phone' => '79992049450', 'email'=>'Salyamiskak@yandex.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Искак', 'last_name' => 'Салямов',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1BppZGWtFI7i7_vvn3_JbU7bRMjpn2gsK', 'https://drive.google.com/u/0/open?usp=forms_web&id=1GgnyQpms20MiVlmzvagfZg5CIOjpWTqM'], 'gender' => 'male',
+                'birth_date' => '29.05.93', 'country' => 'Россия', 'city' => 'Пенза', 'contact_phone_number' => '79992049450',
+                'education_id' => 5, 'place_of_study' => 'ГБОУ СПО ПК 33', 'work_position' => '', 'habits'=>['other'],
+                'place_of_work' => 'ВС РФ', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Футбол', 'Гитара', 'Отдых на природе', 'Рыбалка']
+            ],
+            [
+                'phone' => '79062162311', 'email'=>'kamirit@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Фарит', 'last_name' => 'Садретдинов',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1yzPUYp7eqOYUMleotHNwCrjPUbf_RMNY', 'https://drive.google.com/u/0/open?usp=forms_web&id=1k1rkbpe_5UKw9O6sZ8S6fCsXTrKpVn_Z', 'https://drive.google.com/u/0/open?usp=forms_web&id=1_7Ol3ZjQ8FAgvNMUir7UTeu5u6RDC-z3', 'https://drive.google.com/u/0/open?usp=forms_web&id=1LPZQR1bYAiShX9HmRYxqVrOakHBOOLBV'], 'gender' => 'male',
+                'birth_date' => '01.12.1974', 'country' => 'Россия', 'city' => 'Калининград', 'contact_phone_number' => '79062162311',
+                'education_id' => 5, 'place_of_study' => 'МЭСИ Московский университет', 'work_position' => 'Индивидуальный  предприниматель',
+                'place_of_work' => 'Магазин одежды', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Фитнес', 'Теннис', 'Путешествия']
+            ],
+            [
+                'phone' => '79110067432', 'email'=>'mail@yusupof.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Тимур', 'last_name' => 'Юсупов',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1Uxtg506-3NiU33JevD_bKh8mFundmzpk'], 'gender' => 'male',
+                'birth_date' => '01.12.1979', 'country' => 'Россия', 'city' => 'Санкт-Петербург', 'contact_phone_number' => '79110067432',
+                'education_id' => 5, 'place_of_study' => 'Образования в сфере управления, государственного и муниципального управления в сфере национальной безопасности и педагогики и психологии', 'work_position' => '',
+                'place_of_work' => 'Делаю онлайн-курсы по научному саморазвитию и психологии, веду познавательную программу в соцсетях', 'marital_status_id' => 1, 'have_children' => true, 'interests' => ['Самообразование', 'Путешествия', 'Общение', 'Йога', 'Публицистика']
+            ],
+            [
+                'phone' => '79650805474', 'email'=>'lolaspb358@gmail.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Лола', 'last_name' => 'Жалолова',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1vcyg67KFWo9TMg2IJuVD68Nx-hXN84bg', 'https://drive.google.com/u/0/open?usp=forms_web&id=1Mf4w2e6bG2RQbrVayb-ODBMKxNwLw_rR', 'https://drive.google.com/u/0/open?usp=forms_web&id=1EM648HK6BjOiJnV6xXHV-iTX7XZVXTks'], 'gender' => 'female',
+                'birth_date' => '08.09.1981', 'country' => 'Россия', 'city' => 'Санкт-Петербург', 'contact_phone_number' => '79650805474',
+                'education_id' => 4, 'place_of_study' => 'СпбГУТД', 'work_position' => 'Дизайнер',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Дизайн одежды', 'Времяпрепровождение с детьми', 'Путешествия', 'Получение новых навыков и знаний в различных сферах']
+            ],
+            [
+                'phone' => '905523031352', 'email'=>'medınamumına12@gmaıl.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Мадина', 'last_name' => 'Мухаметали',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1Cgilbze6ElxDj_tMbmBvLhGQGnK7OvBo', 'https://drive.google.com/u/0/open?usp=forms_web&id=1rbXfcQ251wk3BQ7k0w4PJDcNJ5bpFBqn', 'https://drive.google.com/u/0/open?usp=forms_web&id=1v2oQ66QUBqmb6S1Jkuqjo2ifvfVmrRIi'], 'gender' => 'female',
+                'birth_date' => '04.09.1988', 'country' => 'Турция', 'city' => 'Анталия', 'contact_phone_number' => '905523031352',
+                'education_id' => 5, 'place_of_study' => 'Юридическое', 'work_position' => 'Специалист по недвижимости',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => false, 'interests' => ['Плавание', 'Прогулки']
+            ],
+            [
+                'phone' => '79035692350', 'email'=>'cyprus-good@yandex.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Рашит', 'last_name' => 'Фахретдинов',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1Ywzzo_febqa1ZVXgiFheUB02C_BUZ--0', 'https://drive.google.com/u/0/open?usp=forms_web&id=1ejtJ3k-Uww-BvL0y99unMzUCnypzyRCk', 'https://drive.google.com/u/0/open?usp=forms_web&id=1nafUpl-fLBGoqhSnaMa3BJvrw8rUQsyY'], 'gender' => 'male',
+                'birth_date' => '12.02.1982', 'country' => 'Россия', 'city' => 'Москва', 'contact_phone_number' => '79035692350',
+                'education_id' => 5, 'place_of_study' => 'МГГУ', 'work_position' => 'Тренер по боксу',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Спорт']
+            ],
+            [
+                'phone' => '79377793368', 'email'=>'trifolegssz@gmail.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Олег', 'last_name' => 'Трифонов',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1bnTA08P-joTRRcXROjY4LfceBuu7cAA7'], 'gender' => 'male',
+                'birth_date' => '14.02.1963', 'country' => 'Россия', 'city' => 'Казань', 'contact_phone_number' => '79377793368',
+                'education_id' => 4, 'place_of_study' => '', 'work_position' => 'Хозяин',
+                'place_of_work' => 'Собственное дело', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Рисование', 'Стихи', 'Велосипед', 'Плавание', 'Баня', 'Поездки по озерам', 'Закаливание', 'Теннис', 'Волейбол']
+            ],
+            [
+                'phone' => '79178715872', 'email'=>'elmirag472@gmail.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Эльмира', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1jkNe02D-myq5zSmo2gXeg1lhDeHAhkNS'], 'gender' => 'female',
+                'birth_date' => '13.01.1974', 'country' => 'Россия', 'city' => 'Казань', 'contact_phone_number' => '79178715872',
+                'education_id' => 5, 'place_of_study' => 'КГПУ', 'work_position' => 'Учитель',
+                'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Готовка', 'Путешествия']
+            ],
+            [
+                'phone' => '79297286303', 'email'=>'ENIKEEV.020984@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Радик', 'last_name' => '',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1eW2xzZNFDtut8byFVkX4CqJYWqJLv9KC'], 'gender' => 'male',
+                'birth_date' => '01.12.1984', 'country' => 'Россия', 'city' => 'Васильево', 'contact_phone_number' => '79297286303',
+                'education_id' => 5, 'place_of_study' => 'ВУЗ', 'work_position' => '',
+                'place_of_work' => 'Грузоперевозки', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Спорт']
+            ],
+            [
+                'phone' => '79372939000', 'email'=>'rks7878@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Ринат', 'last_name' => 'Сибгатуллин',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1CAof8OTSjK2TewB2ixgk-CxmbP5DNSRe', 'https://drive.google.com/u/0/open?usp=forms_web&id=11rlqve8IaEPiEFC6zIufYsbEEP1meD0j', 'https://drive.google.com/u/0/open?usp=forms_web&id=1YcRw1YXU3P03qrRjDAGSoHZtHnWM6fY7'], 'gender' => 'male',
+                'birth_date' => '02.07.1978', 'country' => 'Россия', 'city' => 'Казань, Челны', 'contact_phone_number' => '79372939000',
+                'education_id' => 5, 'place_of_study' => 'КГУ (КамПИ, сегодня филиал КГУ)', 'work_position' => 'Коммерческий директор',
+                'place_of_work' => 'Транспорт', 'marital_status_id' => 3, 'have_children' => true, 'interests' => ['Верховая езда']
+            ],
+            [
+                'phone' => '79370036123', 'email'=>'lianazai@mail.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Лиана', 'last_name' => 'Зайнутдинова',
+                'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1FGSMxWEmfWhGCXGzNUmP_qSznibuEv0y', 'https://drive.google.com/u/0/open?usp=forms_web&id=1ayRdJ4BbuJDPizCu6WaPxXvdPg-BwGY2', 'https://drive.google.com/u/0/open?usp=forms_web&id=1CGHYwdcef2rclkBIqE7ygKsdugYqTll2', 'https://drive.google.com/u/0/open?usp=forms_web&id=1gbN17WVlFj_pip2vuNMcBs84SF7JlpVN'], 'gender' => 'female',
+                'birth_date' => '28.02.1991', 'country' => 'Россия', 'city' => 'Казань', 'contact_phone_number' => '79370036123',  'habits'=>['alcohol'],
+                'education_id' => 5, 'place_of_study' => 'Казанский федеральный университет', 'work_position' => 'Я проджект-менеджер онлайн-школы - помогаю продюсерам и экспертам запускать свои онлайн-продукты. Работаю удаленно более 1,5 года.',
+                'place_of_work' => '', 'marital_status_id' => 1, 'have_children' => false, 'interests' => ['Чтение', 'Танцы', 'Прогулки', 'Путешествия', 'Изучение иностранных языков']
+            ],
+            ];
         foreach ($users as $user) {
             $account = User::create([
                 'phone' => $user['phone'],
