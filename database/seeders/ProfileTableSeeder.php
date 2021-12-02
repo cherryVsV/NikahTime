@@ -690,7 +690,7 @@ class ProfileTableSeeder extends Seeder
             ]
         ];*/
         $users = [
-            [
+           /* [
                 'phone' => '79661721235', 'email'=>'i.riahimov@yandex.ru', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Ринат', 'last_name' => 'Абдуллин',
                 'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1NpCMQ-0VP3RahPO3k4jitmuKZBwZ3dFN'], 'gender' => 'male',
                 'birth_date' => '24.11.1985', 'country' => 'Россия', 'city' => 'Пенза', 'contact_phone_number' => '79661721235',
@@ -892,7 +892,7 @@ class ProfileTableSeeder extends Seeder
                 'birth_date' => '22.10.1992', 'country' => 'Россия', 'city' => 'Химки', 'contact_phone_number' => '79271337395',
                 'education_id' => 5, 'place_of_study' => 'СГУ им. Н.Г Чернышевского. философский факультет', 'work_position' => 'Педагог',
                 'place_of_work' => '', 'marital_status_id' => 3, 'have_children' => false, 'interests' => ['Вокал']
-            ],
+            ],*/
             [
                 'phone' => '79650374361', 'email'=>'john72355@gmail.com', 'password' => Hash::make("NxKjbxEW"), 'first_name' => 'Альфис', 'last_name' => 'Ибатуллин',
                 'photos' => ['https://drive.google.com/u/0/open?usp=forms_web&id=1gyZ7wj9dajm6TUUIEiUgHWqRkEXKM-aP'], 'gender' => 'male',
