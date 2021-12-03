@@ -48,6 +48,8 @@ Route::middleware("auth:api")->group(function(){
 
     Route::get('account/user', [ProfileController::class, 'getUser']);
 
+    Route::get('account/user/{userId}', [ProfileController::class, 'getUserById']);
+
     Route::put('account/user/update', [ProfileController::class, 'updateUser']);
 
     Route::post('store/file', [FileController::class, 'storeFile']);
