@@ -23,7 +23,7 @@ class SearchUsersController extends Controller
             $profile = Profile::where('user_id', $user_id)->first();
             $selectionIds = Profile::whereHas('interests', function ($query) use ($profile) {
                 $query->whereIn('interest_id', $profile->interests->pluck('id'));
-            })->get()->pluck('id');
+            })->where('id', '!=', $profile->id)->get()->pluck('id');
             $users = Profile::whereIn('id', $selectionIds)->get();
             $seenUsers = SeenUser::where('user_id', $profile->user_id)->pluck('seen_user_id');
             $selection = [];
@@ -44,7 +44,7 @@ class SearchUsersController extends Controller
                 }
             }
             if(count($selection)<20){
-                $profiles = Profile::get();
+                $profiles = Profile::where('id', '!=', $profile->id)->get();
                 foreach($profiles as $profile){
                     if(count($selection)<20) {
                         $profile['isProfileParametersMatched'] = false;
@@ -129,7 +129,7 @@ class SearchUsersController extends Controller
                             }
                         }
                     }else{
-                        if ($age >= $request->minAge && $age <= $request->maxAge ) {
+                        if ($age >= $request->minAge && $age <= $request->maxAge) {
                             if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                 $filters[] = new ProfileResource($profile);
                             }
