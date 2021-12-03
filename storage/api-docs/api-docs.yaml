@@ -313,6 +313,34 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - bearerAuth: []
+  /account/user/{userId}:
+    get:
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник пользователя, профиль которого получаем
+      tags:
+        - Account
+      summary: Получение профиля пользователя по айди
+      operationId: getUserById
+      responses:
+        "200":
+          description: Информация о пользователе
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
   /chats/user:
     get:
       tags:

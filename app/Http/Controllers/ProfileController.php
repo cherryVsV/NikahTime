@@ -13,6 +13,7 @@ use App\Models\Habit;
 use App\Models\Interest;
 use App\Models\MaritalStatus;
 use App\Models\Profile;
+use App\Models\User;
 use Database\Seeders\MaritalStatusSeeder;
 use Exception;
 use Illuminate\Http\Request;
@@ -43,25 +44,25 @@ class ProfileController extends Controller
         }
     }
 
-    /**
-     * @param \App\Http\Requests\ProfileStoreRequest $request
-     * @return \App\Http\Resources\ProfileResource
-     */
-    public function store(ProfileStoreRequest $request)
+    public function getUserById($userId)
     {
-        $profile = Profile::create($request->validated());
+        if(!User::where('id', $userId)->exists() || !is_null(User::where('id', $userId)->value('blocked_at'))){
+            throw new ValidationDataError('ERR_FIND_USER_FAILED', 422, 'Selected user do not exists or is blocked');
+        }
+        try{
+            $profile = Profile::where('user_id', $userId)->first();
+            return response()->json([
+                new ProfileResource($profile)
+            ], 200);
 
-        return new ProfileResource($profile);
-    }
+        }catch (Exception $e) {
+            return response()->json([
+                'code' => $e->getCode(),
+                'title' => 'ERR_GET_USER_DATA_FAILED',
+                'details' => $e->getMessage()],
+                404);
+        }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Profile $profile
-     * @return \App\Http\Resources\ProfileResource
-     */
-    public function show(Request $request, Profile $profile)
-    {
-        return new ProfileResource($profile);
     }
 
     /**
@@ -130,15 +131,4 @@ class ProfileController extends Controller
 
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Profile $profile
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, Profile $profile)
-    {
-        $profile->delete();
-
-        return response()->noContent();
-    }
 }
