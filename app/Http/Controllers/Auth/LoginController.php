@@ -25,7 +25,8 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $this->validate($request, [
-            'grantType' => ['required', 'string']
+            'grantType' => ['required', 'string'],
+            'notificationId'=>['string']
         ]);
         $checkUserData = new CheckUserDataController();
         $userData = $checkUserData->checkUserData($request);
