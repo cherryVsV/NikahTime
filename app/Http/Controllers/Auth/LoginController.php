@@ -20,7 +20,8 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $this->validate($request, [
-            'grantType' => ['required', 'string']
+            'grantType' => ['required', 'string'],
+            'notificationId'=>['string']
         ]);
         $checkUserData = new CheckUserDataController();
         $userData = $checkUserData->checkUserData($request);
@@ -83,7 +84,10 @@ class LoginController extends Controller
                 if (in_array($token, $not_tokens)) {
                     $array = array_flip(  $not_tokens);
                     unset ($array[$token]);
-                    $not_tokens = array_flip($array);
+                    $not_tokens = null;
+                    foreach (array_flip( $array) as $item){
+                        $not_tokens[] = $item;
+                    }
                 }
             }
             $user->notification_id = $not_tokens;
