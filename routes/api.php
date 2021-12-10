@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\BlockUserController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\FavouritesController;
@@ -49,6 +50,10 @@ Route::middleware("auth:api")->group(function(){
     Route::get('account/user', [ProfileController::class, 'getUser']);
 
     Route::get('account/user/{userId}', [ProfileController::class, 'getUserById']);
+
+    Route::put('block/user/{userId}', [BlockUserController::class, 'blockUserById']);
+
+    Route::delete('block/user/delete/{userId}', [BlockUserController::class, 'unblockUserById']);
 
     Route::put('account/user/update', [ProfileController::class, 'updateUser']);
 

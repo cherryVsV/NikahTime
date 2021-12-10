@@ -8,6 +8,7 @@ use App\Models\Like;
 use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\UserBlock;
 use App\Models\UserTariff;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\URL;
@@ -26,6 +27,9 @@ class ChatController extends Controller
             throw new ValidationDataError('ERR_USER_NOT_FOUND', 422, 'Selected user do not exists or is blocked');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
+        if(UserBlock::where(['user_id'=> $userId, 'block_user_id'=>$auth_id])->exists() || UserBlock::where(['block_user_id'=> $userId, 'user_id'=>$auth_id])->exists()){
+            throw new ValidationDataError('ERR_USER_BLOCKED', 422, 'Selected user is blocked or blocked auth user');
+        }
         if(!UserTariff::where('user_id', $auth_id)->whereDate('finished_at', '>', Carbon::now())->exists()){
             throw new ValidationDataError('ERR_CHAT_CREATE', 422, 'On the free tariff, the user cannot create chats');
         }
@@ -76,11 +80,14 @@ class ChatController extends Controller
         }
         $chat = Chat::find($chatId);
         if($chat->is_blocked){
-            $chat->user_block= null;
-        }else{
-            $chat->user_block= $auth_id;
+            if($chat->user_block == $auth_id ) {
+                $chat->user_block = null;
+                $chat->is_blocked = !$chat->is_blocked;
+            }
+        }else {
+            $chat->user_block = $auth_id;
+            $chat->is_blocked = !$chat->is_blocked;
         }
-        $chat->is_blocked = !$chat->is_blocked;
         $chat->save();
         return response()->json($this->getChat($chatId), 200);
 

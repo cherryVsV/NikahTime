@@ -63,6 +63,12 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->HasMany(\App\Models\Like::class);
     }
+
+    public function blocks()
+    {
+        return $this->HasMany(\App\Models\UserBlock::class);
+    }
+
     public function seenUsers()
     {
         return $this->HasMany(\App\Models\SeenUser::class);
