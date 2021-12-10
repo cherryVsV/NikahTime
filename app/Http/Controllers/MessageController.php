@@ -40,8 +40,8 @@ class MessageController extends Controller
         }
         try{
         $user_id = auth()->user()->getAuthIdentifier();
-        if(!Chat::where('id',$request->chatId )->exists()){
-            throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists');
+        if(!Chat::where('id',$request->chatId )->exists() || Chat::where(['id'=> $request->chatId, 'is_blocked'=>true])->exists()){
+            throw new ValidationDataError('ERR_CHAT_NOT_FOUND', 422, 'Selected chat do not exists or is blocked');
         }
         $chat = Chat::find($request->chatId);
         if($chat->user1_id == $user_id){

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ProjectExceptions\BaseError;
 use App\Exceptions\ProjectExceptions\ValidationDataError;
 use App\Http\Resources\ProfileResource;
 use App\Models\Like;
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\UserBlock;
 use Exception;
 use Illuminate\Support\Facades\URL;
 
@@ -28,6 +30,9 @@ class FavouritesController extends Controller
             throw new ValidationDataError('ERR_FIND_USER_FAILED', 422, 'Selected user do not exists or is blocked');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
+        if(UserBlock::where(['user_id'=> $userId, 'block_user_id'=>$auth_id])->exists() || UserBlock::where(['block_user_id'=> $userId, 'user_id'=>$auth_id])->exists()){
+            throw new ValidationDataError('ERR_USER_BLOCKED', 422, 'Selected user is blocked or blocked auth user');
+        }
         if (!Like::where(['user_id' => $auth_id, 'favourite_user_id' => $userId])->exists()) {
             Like::create([
                 'user_id' => $auth_id,

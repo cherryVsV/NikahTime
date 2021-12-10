@@ -341,6 +341,54 @@ paths:
                 $ref: '#/components/schemas/Error'
       security:
         - bearerAuth: []
+  /block/user/{userId}:
+    put:
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник пользователя, которого хотим заблокировать
+      tags:
+        - Block User
+      summary: Блокировка пользователя по айди (блокируем чат с авторизованным пользователем, если он есть, удаляем из избранного, запрет повторного добавления в избранное и начала чата)
+      operationId: blockUserById
+      responses:
+        "200":
+          description: Пользователь успешно заблокирован
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: []
+  /block/user/delete/{userId}:
+    delete:
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Айдишник пользователя, которого хотим разблокировать
+      tags:
+        - Block User
+      summary: Удаление из блокировки пользователя по айди
+      operationId: unblockUserById
+      responses:
+        "200":
+          description: Пользователь успешно разблокирован
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        - bearerAuth: [ ]
   /chats/user:
     get:
       tags:
