@@ -23,7 +23,7 @@ class SearchUsersController extends Controller
             $profile = Profile::where('user_id', $user_id)->first();
             $selectionIds = Profile::whereHas('interests', function ($query) use ($profile) {
                 $query->whereIn('interest_id', $profile->interests->pluck('id'));
-            })->where('id', '!=', $profile->id)->get()->pluck('id');
+            })->where('user_id', '<>', $user_id)->get()->pluck('id');
             $users = Profile::whereIn('id', $selectionIds)->get();
             $seenUsers = SeenUser::where('user_id', $profile->user_id)->pluck('seen_user_id');
             $selection = [];

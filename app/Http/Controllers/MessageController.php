@@ -60,7 +60,7 @@ class MessageController extends Controller
             'receiver_id'=>$receiverId,
             'type'=>$request->messageType
         ]);
-        broadcast(new NewChatMessage($message->id, $user, 'Новое сообщение'));
+        broadcast(new NewChatMessage($message->id, $request->chat_id, $user, 'Новое сообщение'));
         if(!is_null($user->notification_id)){
             foreach(json_decode($user->notification_id) as $item) {
                  $this->sendNotification($item, array(
@@ -96,7 +96,7 @@ class MessageController extends Controller
         $message->save();
         $userId = $message->user_id;
         $user = User::find($userId);
-       event(new NewChatMessage($message->id, $user, 'Прочитано'));
+        event(new NewChatMessage($message->id, $message->chat_id, $user, 'Прочитано'));
         return response()->json($this->getMessageData($messageId), 200);
 
     }
@@ -110,7 +110,8 @@ class MessageController extends Controller
             $isAuthUserMessage = true;
         }
         return ['message'=>$message->message, 'messageTime'=>Carbon::parse($message->created_at)->format('d.m.Y H:i:s'),
-            'isAuthUserMessage'=>$isAuthUserMessage, 'messageType'=>$message->type, 'messageId'=>$message->id, 'isMessageSeen'=>$message->is_seen];
+            'isAuthUserMessage'=>$isAuthUserMessage, 'messageType'=>$message->type, 'messageId'=>$message->id, 'isMessageSeen'=>$message->is_seen,
+            'chatId'=>$message->chat_id];
 
     }
 
