@@ -26,10 +26,19 @@
             <img src="{{asset('images/logo.png')}}" alt="логотип">
         </div>
 
-        <h4>Первый международный центр создания семьи Ханума Ханым для мусульман со всего мира в декабре этого года запускает уникальное мобильное приложение NikahTime! Центр семьи активно работает с 2010 г. в Казани и уже помог найти родного человека нескольким тысячам человек. Целями приложения являются предоставление более масштабного выбора кандидатов, организация тёплых встреч. Свахи центра всегда будут рядом с вами. Для бесплатного пользования функционалом приложения просим Вас в срок до 22:00 часов 17.12.2021 года актуализировать свои анкетные данные, <a href ="https://sms.ru/2naHG" target="_blank" style="color: #00de9b; font-size: 17px; border-bottom: 1px #00de9b solid;">перейдя по ссылке</a>.
+        <h4>Первый международный центр создания семьи Ханума Ханым для мусульман со всего мира в декабре этого года
+            запускает уникальное мобильное приложение NikahTime! Центр семьи активно работает с 2010 г. в Казани и уже
+            помог найти родного человека нескольким тысячам человек. Целями приложения являются предоставление более
+            масштабного выбора кандидатов, организация тёплых встреч. Свахи центра всегда будут рядом с вами. Для
+            бесплатного пользования функционалом приложения просим Вас в срок до 22:00 часов 17.12.2021 года
+            актуализировать свои анкетные данные, <a href="https://sms.ru/2naHG" target="_blank"
+                                                     style="color: #00de9b; font-size: 17px; border-bottom: 1px #00de9b solid;">перейдя
+                по ссылке</a>.
             <div>С уважением, Директор международного центра создания семьи Наиля Ханум Зиганшина.</div>
             <div>Да поможет нам Аллах!</div>
-            <div>По всем возникающим  вопросам можно обращаться на e-mail: <p  style="color: #00de9b; font-size: 17px;">nikahtime@bk.ru</p></div></h4>
+            <div>По всем возникающим вопросам можно обращаться на e-mail: <p style="color: #00de9b; font-size: 17px;">
+                    nikahtime@bk.ru</p></div>
+        </h4>
         <!--timer-->
         <div class="agileits-timer">
             <div class="clock">
@@ -59,14 +68,31 @@
         <!--//timer-->
 
         <h3>Мы Вас ждем в Nikah Time, заполните анкету и присоединяйтесь!</h3>
-
-        <div style="margin: 0 0 25px 0"><a href="https://docs.google.com/forms/d/e/1FAIpQLSegOFmhAL66m2I58lkNwWz1PKLGwODSA8vJRLz1IP1natBF8A/viewform"
-                                           target="_blank" style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Заполнить анкету</a></div>
-
+        <div style="margin: 0 0 25px 0; font-size: 25px; color:white">
+            Ссылки для скачивания:
+            <a href="https://apps.apple.com/ru/app/nikah-time/id1593398215" target="_blank"
+               style="margin-right: 15px; margin-left: 10px;"><i class="fa fa-apple" aria-hidden="true"
+                                              style="font-size: 35px; color: #00de9b;"></i></a>
+            <a href="https://play.google.com/store/apps/details?id=ru.nikahtime" target="_blank"><i class="fa fa-play"
+                                                                                               aria-hidden="true"
+                                                                                               style="font-size: 35px; color: #00de9b"></i></a>
+        </div>
+        <div style="margin: 0 0 25px 0"><a href="https://instagram.com/nikah_time.ru?utm_medium=copy_link"
+                                           target="_blank"
+                                           style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Наш
+                инстаграм</a></div>
+        <div style="margin: 0 0 25px 0"><a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSegOFmhAL66m2I58lkNwWz1PKLGwODSA8vJRLz1IP1natBF8A/viewform"
+                target="_blank" style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Заполнить
+                анкету</a></div>
         <div style="margin: 0 0 25px 0"><a href="https://www.instagram.com/nailya_ziganshina/"
-                target="_blank" style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Директор центра создания семьи NikahTime.ru - Наиля Зиганшина</a></div>
+                                           target="_blank"
+                                           style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Директор
+                центра создания семьи NikahTime.ru - Наиля Зиганшина</a></div>
         <div style="margin: 0 0 25px 0"><a href="https://www.instagram.com/alyushev_ramil/"
-                                           target="_blank" style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Project manager & Brandmaker NikahTime.ru - Рамиль Алюшев</a></div>
+                                           target="_blank"
+                                           style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Project
+                manager & Brandmaker NikahTime.ru - Рамиль Алюшев</a></div>
         <div><a href="/privacy/policy" style="color: white">Политика конфиденциальности</a></div>
         <div><a href="/user/agreement" style="color: white">Пользовательское соглашение</a></div>
         <div><a href="/user/app_use_terms" style="color: white">Правила пользования приложением</a></div>
@@ -76,6 +102,7 @@
 <script type="text/javascript" src=" {{asset('js/moment.js')}}"></script>
 <script type="text/javascript" src=" {{asset('js/moment-timezone-with-data.js')}}"></script>
 <script type="text/javascript" src="{{asset('js/timer.js')}}"></script>
+<script src="https://use.fontawesome.com/7fb2475ded.js"></script>
 <!--//scripts-->
 </body>
 </html>
