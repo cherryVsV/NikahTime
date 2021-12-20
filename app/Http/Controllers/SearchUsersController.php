@@ -23,7 +23,7 @@ class SearchUsersController extends Controller
             $profile = Profile::where('user_id', $user_id)->first();
             $selectionIds = Profile::whereHas('interests', function ($query) use ($profile) {
                 $query->whereIn('interest_id', $profile->interests->pluck('id'));
-            })->where('user_id', '<>', $user_id)->get()->pluck('id');
+            })->where('user_id', '!=', $user_id)->pluck('id');
             $users = Profile::whereIn('id', $selectionIds)->get();
             $seenUsers = SeenUser::where('user_id', $profile->user_id)->pluck('seen_user_id');
             $selection = [];
@@ -44,19 +44,19 @@ class SearchUsersController extends Controller
                 }
             }
             if(count($selection)<20){
-                $profiles = Profile::where('id', '!=', $profile->id)->get();
-                foreach($profiles as $profile){
+                $profiles = Profile::where('user_id', '!=', $user_id)->get();
+                foreach($profiles as $userProfile){
                     if(count($selection)<20) {
-                        $profile['isProfileParametersMatched'] = false;
+                        $userProfile['isProfileParametersMatched'] = false;
                         if (count($seenUsers) > 0) {
-                            if (!$seenUsers->contains($profile->user_id)) {
-                                if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
-                                    $selection[] = new ProfileResource($profile);
+                            if (!$seenUsers->contains($userProfile->user_id)) {
+                                if(is_null(User::where('id', $userProfile->user_id)->value('blocked_at'))) {
+                                    $selection[] = new ProfileResource($userProfile);
                                 }
                             }
                         } else {
-                            if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
-                                $selection[] = new ProfileResource($profile);
+                            if(is_null(User::where('id', $userProfile->user_id)->value('blocked_at'))) {
+                                $selection[] = new ProfileResource($userProfile);
                             }
                         }
                     }
@@ -79,7 +79,7 @@ class SearchUsersController extends Controller
         $data = json_decode($request->getContent());
         foreach ($data as $seenUser) {
             if (count($seenUsers) > 0) {
-                if (!$seenUsers->contains($seenUser->userId) && User::where('id', $seenUser->userId)->exists()) {
+                if (!$seenUsers->contains($seenUser->userId) && User::where('id', $seenUser->userId)->exists() && $seenUser->userId !=$user_id) {
                     SeenUser::create([
                         'user_id' => $user_id,
                         'seen_user_id' => $seenUser->userId,
@@ -114,7 +114,6 @@ class SearchUsersController extends Controller
         ]);
         try {
             $user_id = auth()->user()->getAuthIdentifier();
-            $userProfile = Profile::where('user_id', $user_id)->first();
             $seenUsers = SeenUser::where('user_id', $user_id)->pluck('seen_user_id');
             $seenProfiles = Profile::whereIn('user_id', $seenUsers)->get();
             $filters = [];
@@ -142,11 +141,11 @@ class SearchUsersController extends Controller
                     $profile['isProfileParametersMatched'] = (bool)SeenUser::where(['user_id' => $user_id, 'seen_user_id' => $profile->user_id])->value('is_matched');
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     $education = null;
-                    if(!is_null($request->education)) {
+                    if($request->education) {
                         $education = Education::where('title', $request->education)->value('id');
                     }
                     $status = null;
-                    if(!is_null($request->maritalStatus)) {
+                    if($request->maritalStatus) {
                         $status = MaritalStatus::where('title', $request->maritalStatus)->value('id');
                     }
                     if ($age >= $request->minAge && $age <= $request->maxAge
