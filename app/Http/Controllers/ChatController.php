@@ -159,7 +159,10 @@ class ChatController extends Controller
     public function getChatsInformation()
     {
         $auth_id = auth()->user()->getAuthIdentifier();
-        $userChats = Chat::where('user1_id',$auth_id)->orWhere('user2_id',$auth_id)->get();
+        $userChats = Chat::where(function($query) use($auth_id){
+            $query->where('user1_id',$auth_id)
+                ->orWhere('user2_id',$auth_id);
+        })->get();
         $chats = [];
         foreach($userChats as $chat){
             if($chat->user1_id == $auth_id)
