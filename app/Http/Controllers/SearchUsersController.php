@@ -148,6 +148,10 @@ class SearchUsersController extends Controller
                     if($request->maritalStatus) {
                         $status = MaritalStatus::where('title', $request->maritalStatus)->value('id');
                     }
+                    logger($profile->city);
+                    logger($request->city);
+                    logger(trim($profile->city) == trim($request->city));
+                    logger('----');
                     if ($age >= $request->minAge && $age <= $request->maxAge
                         &&(is_null($request->city) || trim($profile->city) == trim($request->city)) && (is_null($request->country) || $profile->country == $request->country)
                         && (is_null($request->haveChildren) || $profile->have_children == $request->haveChildren)
