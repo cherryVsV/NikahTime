@@ -153,8 +153,8 @@ class SearchUsersController extends Controller
                     logger(trim($profile->city) == trim($request->city));
                     logger('----');
                     if ($age >= $request->minAge && $age <= $request->maxAge
-                        &&(is_null($request->city) || trim($profile->city) == trim($request->city)) && (is_null($request->country) || $profile->country == $request->country)
-                        && (is_null($request->haveChildren) || $profile->have_children == $request->haveChildren)
+                        &&(!$request->has('city') || trim($profile->city) == trim($request->city)) && (!$request->has('country') || $profile->country == $request->country)
+                        && (!$request->has('haveChildren') || $profile->have_children == $request->haveChildren)
                         && (is_null($education) || $profile->education_id == $education) && (is_null($status) || $profile->marital_status_id == $status)) {
                         if ($request->haveBadHabits) {
                             $badHabits = Habit::whereIn('title', $request->badHabits)->pluck('id');
