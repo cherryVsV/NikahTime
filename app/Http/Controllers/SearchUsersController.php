@@ -149,10 +149,9 @@ class SearchUsersController extends Controller
                         $status = MaritalStatus::where('title', $request->maritalStatus)->value('id');
                     }
                     if ($age >= $request->minAge && $age <= $request->maxAge
-                        &&(is_null($request->city) || $profile->city == $request->city) && (is_null($request->country) || $profile->country == $request->country)
+                        &&(is_null($request->city) || $profile->city == str_replace(array("\r\n", "\r", "\n"), '',  strip_tags($request->city))) && (is_null($request->country) || $profile->country == $request->country)
                         && (is_null($request->haveChildren) || $profile->have_children == $request->haveChildren)
                         && (is_null($education) || $profile->education_id == $education) && (is_null($status) || $profile->marital_status_id == $status)) {
-                        logger('yyyy');
                         if ($request->haveBadHabits) {
                             $badHabits = Habit::whereIn('title', $request->badHabits)->pluck('id');
                             if (collect($badHabits)->diff(collect($profile->habits->pluck('id')))->count() == 0) {
