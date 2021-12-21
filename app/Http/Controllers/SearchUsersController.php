@@ -152,7 +152,7 @@ class SearchUsersController extends Controller
                         &&(!$request->has('city') || trim($profile->city) == trim($request->city)) && (!$request->has('country') || $profile->country == $request->country)
                         && (!$request->has('haveChildren') || $profile->have_children == $request->haveChildren)
                         && (is_null($education) || $profile->education_id == $education) && (is_null($status) || $profile->marital_status_id == $status)) {
-                        if ($request->haveBadHabits) {
+                        if ($request->haveBadHabits && $request->has('badHabits')) {
                             $badHabits = Habit::whereIn('title', $request->badHabits)->pluck('id');
                             if (collect($badHabits)->diff(collect($profile->habits->pluck('id')))->count() == 0) {
                                 if($request->isOnline) {
@@ -174,20 +174,17 @@ class SearchUsersController extends Controller
                                         if ($profile->isOnline()) {
                                             if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                                 $filters[] = new ProfileResource($profile);
-                                                logger('nnnn');
                                             }
                                         }
                                     } else {
                                         if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                             $filters[] = new ProfileResource($profile);
-                                            logger('kkkk');
                                         }
                                     }
                                 }
                             }else{
                                 if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                     $filters[] = new ProfileResource($profile);
-                                    logger('bbbb');
                                 }
                             }
                         }

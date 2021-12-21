@@ -60,7 +60,7 @@ class MessageController extends Controller
             'receiver_id'=>$receiverId,
             'type'=>$request->messageType
         ]);
-        broadcast(new NewChatMessage($message->id, $request->chat_id, $user, 'Новое сообщение'));
+        broadcast(new NewChatMessage($message->id, $request->chatId, $user, 'Новое сообщение'));
         if(!is_null($user->notification_id)){
             foreach(json_decode($user->notification_id) as $item) {
                  $this->sendNotification($item, array(
