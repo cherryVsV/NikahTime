@@ -64,7 +64,7 @@ class MessageController extends Controller
                 'receiver_id' => $receiverId,
                 'type' => $request->messageType
             ]);
-            broadcast(new NewChatMessage($message->id, $user, 'Новое сообщение'));
+            broadcast(new NewChatMessage($message->id, $request->chatId, $user, 'Новое сообщение'));
             if (!is_null($user->notification_id)) {
                 foreach(json_decode($user->notification_id) as $item) {
                     $this->sendNotification($item, array(
@@ -97,7 +97,7 @@ class MessageController extends Controller
         $message->save();
         $userId = $message->user_id;
         $user = User::find($userId);
-        event(new NewChatMessage($message->id, $user, 'Прочитано'));
+        event(new NewChatMessage($message->id, $message->chat_id, $user, 'Прочитано'));
         return response()->json($this->getMessageData($messageId), 200);
 
     }

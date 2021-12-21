@@ -17,15 +17,17 @@ class NewChatMessage implements ShouldBroadcast
     public $message;
     public $type;
     public $user;
+    public $chat;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($message, $user, $type)
+    public function __construct($message, $chat, $user, $type)
     {
         $this->message = $message;
+        $this->chat = $chat;
         $this->user = $user;
         $this->type = $type;
     }
@@ -48,6 +50,7 @@ class NewChatMessage implements ShouldBroadcast
     {
         return [
             'messageId' => $this->message,
+            'chatId'=>$this->chat,
             'type'=>$this->type
         ];
     }

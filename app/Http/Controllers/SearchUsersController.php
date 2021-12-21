@@ -154,36 +154,42 @@ class SearchUsersController extends Controller
                         $status = MaritalStatus::where('title', $request->maritalStatus)->value('id');
                     }
                     if ($age >= $request->minAge && $age <= $request->maxAge
-                        && (is_null($request->city) || $profile->city == $request->city) && (is_null($request->country) || $profile->country == $request->country)
-                        && (is_null($request->haveChildren) || $profile->have_children == $request->haveChildren)
+                        &&(!$request->has('city') || trim($profile->city) == trim($request->city)) && (!$request->has('country') || $profile->country == $request->country)
+                        && (!$request->has('haveChildren') || $profile->have_children == $request->haveChildren)
                         && (is_null($education) || $profile->education_id == $education) && (is_null($status) || $profile->marital_status_id == $status)) {
-                        if ($request->haveBadHabits) {
+                        if ($request->haveBadHabits && $request->has('badHabits')) {
                             $badHabits = Habit::whereIn('title', $request->badHabits)->pluck('id');
                             if (collect($badHabits)->diff(collect($profile->habits->pluck('id')))->count() == 0) {
-                                if ($request->isOnline) {
-                                    if ($profile->isOnline()) {
+                                if($request->isOnline) {
+                                    if($profile->isOnline()) {
                                         if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                             $filters[] = new ProfileResource($profile);
                                         }
                                     }
-                                } else {
+                                }else{
                                     if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                         $filters[] = new ProfileResource($profile);
                                     }
                                 }
                             }
                         } else {
-                            if ($profile->habits->count() == 0) {
-                                if ($request->isOnline) {
-                                    if ($profile->isOnline()) {
-                                        if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                            if($request->has('haveBadHabits')) {
+                                if ($profile->habits->count() == 0) {
+                                    if ($request->isOnline) {
+                                        if ($profile->isOnline()) {
+                                            if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                                $filters[] = new ProfileResource($profile);
+                                            }
+                                        }
+                                    } else {
+                                        if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                             $filters[] = new ProfileResource($profile);
                                         }
                                     }
-                                } else {
-                                    if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
-                                        $filters[] = new ProfileResource($profile);
-                                    }
+                                }
+                            }else{
+                                if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                    $filters[] = new ProfileResource($profile);
                                 }
                             }
                         }
