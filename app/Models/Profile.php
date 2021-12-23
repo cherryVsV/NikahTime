@@ -33,6 +33,7 @@ class Profile extends Model
         'marital_status_id',
         'have_children',
         'about',
+        'nationality'
     ];
 
     /**

@@ -57,6 +57,7 @@ class ProfileResource extends JsonResource
             'badHabits'=>$this->habits()->pluck('title'),
             'interests'=>$this->interests()->pluck('title'),
             'about' => $this->about,
+            'nationality'=>$this->nationality,
             'date' => $this->when($this->date, $this->date),
             'isOnline'=>$this->isOnline(),
             'isProfileParametersMatched'=>$this->when(!is_null($this->isProfileParametersMatched), $this->isProfileParametersMatched),

@@ -91,6 +91,7 @@ class ProfileController extends Controller
         $status = MaritalStatus::where('title', $request->maritalStatus)->first();
         $profile->marital_status_id = $status->id;
         $profile->have_children = $request->haveChildren;
+        $profile->nationality = $request->nationality;
         DB::table('profile_habit')->where('profile_id', $profile->id)->delete();
         DB::table('profile_interest')->where('profile_id', $profile->id)->delete();
         foreach ($request->badHabits as $habit) {

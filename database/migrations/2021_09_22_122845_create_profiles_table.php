@@ -33,6 +33,7 @@ class CreateProfilesTable extends Migration
             $table->foreignId('marital_status_id')->nullable()->constrained();
             $table->boolean('have_children')->nullable();
             $table->string('about')->nullable();
+            $table->string('nationality')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')
