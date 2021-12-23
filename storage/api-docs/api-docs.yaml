@@ -1295,6 +1295,8 @@ components:
           type: string
         isOnline:
           type: boolean
+        nationality:
+          type: string
     FavouriteUser:
       required:
         - userId
@@ -1373,6 +1375,8 @@ components:
           type: string
         isOnline:
           type: boolean
+        nationality:
+          type: string
         isProfileParametersMatched:
           type: boolean
     GuestUser:
@@ -1451,6 +1455,8 @@ components:
           items:
             type: string
         about:
+          type: string
+        nationality:
           type: string
         date:
           type: string
