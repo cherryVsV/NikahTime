@@ -279,7 +279,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/UserProfile'
         required: true
       responses:
         "200":
@@ -718,7 +718,8 @@ paths:
                   haveChildren: true
                   haveBadHabits: false
                   badHabits: ["smoking"]
-                  isOnline: true
+                  isOnline: true,
+                  nationality: null
         required: true
       responses:
         "200":
@@ -1268,6 +1269,88 @@ components:
           type: integer
           format: int64
         refreshToken:
+          type: string
+    UserProfile:
+      required:
+        - badHabits
+        - birthDate
+        - city
+        - contactPhoneNumber
+        - country
+        - education
+        - firstName
+        - gender
+        - haveСhildren
+        - interests
+        - lastName
+        - maritalStatus
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        photos:
+          type: array
+          description: Массив ссылок на фотограйии пользователя. Первая ссылка - основное
+            фото пользователя.
+          items:
+            type: string
+            format: uri
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+        birthDate:
+          type: string
+          format: data-time
+          default: 24-09-2021
+        country:
+          type: string
+        city:
+          type: string
+        contactPhoneNumber:
+          type: string
+        education:
+          type: string
+          description: "Уровень образования. Может принимать следущие значения: ос\
+                новное общее / basic general, среднее общее / secondary general, средн\
+                ее профессиональное / secondary vocational, высшее (бакалавр, специали\
+                ст) / higher (bachelor, specialist), высшее (магистр) / higher (мaster),\
+                \ учёная степень / academic degree"
+          enum:
+            - basicGeneral
+            - secondaryGeneral
+            - secondaryVocational
+            - higherBachelorOrSpecialist
+            - higherMaster
+            - academicDegree
+        placeOfStudy:
+          type: string
+        placeOfWork:
+          type: string
+        workPosition:
+          type: string
+        maritalStatus:
+          type: string
+          enum:
+            - notMarried
+            - married
+            - divorced
+        haveСhildren:
+          type: boolean
+        badHabits:
+          type: array
+          items:
+            $ref: '#/components/schemas/BadHabit'
+        interests:
+          type: array
+          items:
+            type: string
+        about:
+          type: string
+        nationality:
           type: string
     User:
       required:

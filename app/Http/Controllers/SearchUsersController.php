@@ -38,12 +38,12 @@ class SearchUsersController extends Controller
                     $user['isProfileParametersMatched'] = true;
                     if (count($seenUsers) > 0) {
                         if (!$seenUsers->contains($user->user_id)) {
-                            if(is_null(User::where('id', $user->user_id)->value('blocked_at'))) {
+                            if (is_null(User::where('id', $user->user_id)->value('blocked_at'))) {
                                 $selection[] = new ProfileResource($user);
                             }
                         }
                     } else {
-                        if(is_null(User::where('id', $user->user_id)->value('blocked_at'))) {
+                        if (is_null(User::where('id', $user->user_id)->value('blocked_at'))) {
                             $selection[] = new ProfileResource($user);
                         }
                     }
@@ -51,17 +51,17 @@ class SearchUsersController extends Controller
             }
             if (count($selection) < 20) {
                 $profiles = Profile::where('user_id', '!=', $user_id)->get();
-                foreach($profiles as $userProfile){
+                foreach ($profiles as $userProfile) {
                     if (count($selection) < 20) {
                         $userProfile['isProfileParametersMatched'] = false;
                         if (count($seenUsers) > 0) {
                             if (!$seenUsers->contains($userProfile->user_id)) {
-                                if(is_null(User::where('id', $userProfile->user_id)->value('blocked_at'))) {
+                                if (is_null(User::where('id', $userProfile->user_id)->value('blocked_at'))) {
                                     $selection[] = new ProfileResource($userProfile);
                                 }
                             }
                         } else {
-                            if(is_null(User::where('id', $userProfile->user_id)->value('blocked_at'))) {
+                            if (is_null(User::where('id', $userProfile->user_id)->value('blocked_at'))) {
                                 $selection[] = new ProfileResource($userProfile);
                             }
                         }
@@ -85,7 +85,7 @@ class SearchUsersController extends Controller
         $data = json_decode($request->getContent());
         foreach ($data as $seenUser) {
             if (count($seenUsers) > 0) {
-                if (!$seenUsers->contains($seenUser->userId) && User::where('id', $seenUser->userId)->exists() && $seenUser->userId !=$user_id) {
+                if (!$seenUsers->contains($seenUser->userId) && User::where('id', $seenUser->userId)->exists() && $seenUser->userId != $user_id) {
                     SeenUser::create([
                         'user_id' => $user_id,
                         'seen_user_id' => $seenUser->userId,
@@ -128,13 +128,13 @@ class SearchUsersController extends Controller
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     if ($request->isOnline) {
                         if ($age >= $request->minAge && $age <= $request->maxAge && $profile->isOnline()) {
-                            if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                            if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                 $filters[] = new ProfileResource($profile);
                             }
                         }
                     } else {
                         if ($age >= $request->minAge && $age <= $request->maxAge) {
-                            if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                            if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                 $filters[] = new ProfileResource($profile);
                             }
                         }
@@ -146,50 +146,45 @@ class SearchUsersController extends Controller
                 foreach ($seenProfiles as $profile) {
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     $education = null;
-                    if ($request->education) {
+                    if (!is_null($request->education)) {
                         $education = Education::where('title', $request->education)->value('id');
                     }
                     $status = null;
-                    if ($request->maritalStatus) {
+                    if (!is_null($request->maritalStatus)) {
                         $status = MaritalStatus::where('title', $request->maritalStatus)->value('id');
                     }
                     if ($age >= $request->minAge && $age <= $request->maxAge
-                        &&(!$request->has('city') || trim($profile->city) == trim($request->city)) && (!$request->has('country') || $profile->country == $request->country)
-                        && (!$request->has('haveChildren') || $profile->have_children == $request->haveChildren)
-                        && (is_null($education) || $profile->education_id == $education) && (is_null($status) || $profile->marital_status_id == $status)) {
-                        if ($request->haveBadHabits && $request->has('badHabits')) {
+                        && (is_null($request->city) || trim($profile->city) == trim($request->city)) && (is_null($request->country) || $profile->country == $request->country)
+                        && (is_null($request->haveChildren) || $profile->have_children == $request->haveChildren)
+                        && (is_null($education) || $profile->education_id == $education) && (is_null($status) || $profile->marital_status_id == $status)
+                        && (is_null($request->nationality) || $profile->nationality == $request->nationality)) {
+                        if ($request->haveBadHabits && !is_null($request->badHabits)) {
                             $badHabits = Habit::whereIn('title', $request->badHabits)->pluck('id');
                             if (collect($badHabits)->diff(collect($profile->habits->pluck('id')))->count() == 0) {
-                                if($request->isOnline) {
-                                    if($profile->isOnline()) {
-                                        if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                if ($request->isOnline) {
+                                    if ($profile->isOnline()) {
+                                        if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                             $filters[] = new ProfileResource($profile);
                                         }
                                     }
-                                }else{
-                                    if(is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                } else {
+                                    if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                         $filters[] = new ProfileResource($profile);
                                     }
                                 }
                             }
                         } else {
-                            if($request->has('haveBadHabits')) {
-                                if ($profile->habits->count() == 0) {
-                                    if ($request->isOnline) {
-                                        if ($profile->isOnline()) {
-                                            if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
-                                                $filters[] = new ProfileResource($profile);
-                                            }
-                                        }
-                                    } else {
+                            if ($profile->habits->count() == 0) {
+                                if ($request->isOnline) {
+                                    if ($profile->isOnline()) {
                                         if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                             $filters[] = new ProfileResource($profile);
                                         }
                                     }
-                                }
-                            }else{
-                                if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
-                                    $filters[] = new ProfileResource($profile);
+                                } else {
+                                    if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                        $filters[] = new ProfileResource($profile);
+                                    }
                                 }
                             }
                         }

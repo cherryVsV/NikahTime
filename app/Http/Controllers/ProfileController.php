@@ -26,7 +26,13 @@ class ProfileController extends Controller
     {
         try {
             $user_id = auth()->user()->getAuthIdentifier();
-            $profile = Profile::where('user_id', $user_id)->first();
+            if(Profile::where('user_id', $user_id)->exists()) {
+                $profile = Profile::where('user_id', $user_id)->first();
+            }else{
+                $profile = Profile::create([
+                    'user_id'=>$user_id
+                ]);
+            }
             return response()->json([
                 new ProfileResource($profile)
             ], 200);
@@ -72,43 +78,57 @@ class ProfileController extends Controller
         $profile->first_name = $request->firstName;
         $profile->last_name = $request->lastName;
         $profile->gender = $request->gender;
-        if (count($request->photos) > 10) {
-            throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'The photos field length should be no more than 10');
+        if(!is_null($request->photos)) {
+            if (count($request->photos) > 10) {
+                throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'The photos field length should be no more than 10');
+            }
         }
         $profile->photos = $request->photos;
         $profile->birth_date = $request->birthDate;
         $profile->country = $request->country;
         $profile->city = $request->city;
         $profile->contact_phone_number = $request->contactPhoneNumber;
-        if (!Education::where('title', $request->education)->exists()) {
-            throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'The education field do not exist in Education');
+        if(!is_null($request->education)) {
+            if (!Education::where('title', $request->education)->exists()) {
+                throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'The education field do not exist in Education');
+            }
+            $education = Education::where('title', $request->education)->first();
+            $profile->education_id = $education->id;
+        }else{
+            $profile->education_id = null;
         }
-        $education = Education::where('title', $request->education)->first();
-        $profile->education_id = $education->id;
-        if (!MaritalStatus::where('title', $request->maritalStatus)->exists()) {
-            throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'The maritalStatus field do not exist in MaritalStatus');
+        if(!is_null($request->maritalStatus)) {
+            if (!MaritalStatus::where('title', $request->maritalStatus)->exists()) {
+                throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'The maritalStatus field do not exist in MaritalStatus');
+            }
+            $status = MaritalStatus::where('title', $request->maritalStatus)->first();
+            $profile->marital_status_id = $status->id;
+        }else{
+            $profile->marital_status_id = null;
         }
-        $status = MaritalStatus::where('title', $request->maritalStatus)->first();
-        $profile->marital_status_id = $status->id;
         $profile->have_children = $request->haveChildren;
         $profile->nationality = $request->nationality;
         DB::table('profile_habit')->where('profile_id', $profile->id)->delete();
         DB::table('profile_interest')->where('profile_id', $profile->id)->delete();
-        foreach ($request->badHabits as $habit) {
-            if(!is_null($habit)) {
-                $badHabit = Habit::where('title', $habit)->first();
-                $profile->habits()->save($badHabit);
+        if(!is_null($request->badHabits)) {
+            foreach ($request->badHabits as $habit) {
+                if (!is_null($habit)) {
+                    $badHabit = Habit::where('title', $habit)->first();
+                    $profile->habits()->save($badHabit);
+                }
             }
         }
-        foreach ($request->interests as $title) {
-            if(!is_null($title)) {
-                if (Interest::where('title', $title)->exists()) {
-                    $interest = Interest::where('title', $title)->first();
-                    $profile->interests()->save($interest);
+        if(!is_null($request->interests)) {
+            foreach ($request->interests as $title) {
+                if (!is_null($title)) {
+                    if (Interest::where('title', $title)->exists()) {
+                        $interest = Interest::where('title', $title)->first();
+                        $profile->interests()->save($interest);
 
-                } else {
-                    $interest = Interest::create(['title' => $title]);
-                    $profile->interests()->save($interest);
+                    } else {
+                        $interest = Interest::create(['title' => $title]);
+                        $profile->interests()->save($interest);
+                    }
                 }
             }
         }
