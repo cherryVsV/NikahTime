@@ -141,18 +141,19 @@ class SearchUsersController extends Controller
                     $profile['isProfileParametersMatched'] = (bool)SeenUser::where(['user_id' => $user_id, 'seen_user_id' => $profile->user_id])->value('is_matched');
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     $education = null;
-                    if($request->education) {
+                    if(!is_null($request->education)) {
                         $education = Education::where('title', $request->education)->value('id');
                     }
                     $status = null;
-                    if($request->maritalStatus) {
+                    if(!is_null($request->maritalStatus)) {
                         $status = MaritalStatus::where('title', $request->maritalStatus)->value('id');
                     }
                     if ($age >= $request->minAge && $age <= $request->maxAge
-                        &&(!$request->has('city') || trim($profile->city) == trim($request->city)) && (!$request->has('country') || $profile->country == $request->country)
-                        && (!$request->has('haveChildren') || $profile->have_children == $request->haveChildren)
-                        && (is_null($education) || $profile->education_id == $education) && (is_null($status) || $profile->marital_status_id == $status)) {
-                        if ($request->haveBadHabits && $request->has('badHabits')) {
+                        &&(is_null($request->city) || trim($profile->city) == trim($request->city)) && (is_null($request->country) || $profile->country == $request->country)
+                        && (is_null($request->haveChildren) || $profile->have_children == $request->haveChildren)
+                        && (is_null($education) || $profile->education_id == $education) && (is_null($status) || $profile->marital_status_id == $status)
+                        && (is_null($request->nationality) || $profile->nationality == $request->nationality)) {
+                        if ($request->haveBadHabits && !is_null($request->badHabits)) {
                             $badHabits = Habit::whereIn('title', $request->badHabits)->pluck('id');
                             if (collect($badHabits)->diff(collect($profile->habits->pluck('id')))->count() == 0) {
                                 if($request->isOnline) {
@@ -168,7 +169,7 @@ class SearchUsersController extends Controller
                                 }
                             }
                         } else {
-                            if($request->has('haveBadHabits')) {
+                            if(!$request->haveBadHabits) {
                                 if ($profile->habits->count() == 0) {
                                     if ($request->isOnline) {
                                         if ($profile->isOnline()) {
