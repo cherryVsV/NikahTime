@@ -174,17 +174,23 @@ class SearchUsersController extends Controller
                                 }
                             }
                         } else {
-                            if ($profile->habits->count() == 0) {
-                                if ($request->isOnline) {
-                                    if ($profile->isOnline()) {
+                            if(!$request->haveBadHabits) {
+                                if ($profile->habits->count() == 0) {
+                                    if ($request->isOnline) {
+                                        if ($profile->isOnline()) {
+                                            if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                                $filters[] = new ProfileResource($profile);
+                                            }
+                                        }
+                                    } else {
                                         if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
                                             $filters[] = new ProfileResource($profile);
                                         }
                                     }
-                                } else {
-                                    if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
-                                        $filters[] = new ProfileResource($profile);
-                                    }
+                                }
+                            }else{
+                                if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                    $filters[] = new ProfileResource($profile);
                                 }
                             }
                         }
