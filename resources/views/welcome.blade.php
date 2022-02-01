@@ -34,7 +34,7 @@
             актуализировать свои анкетные данные, <a href="https://sms.ru/2naHG" target="_blank"
                                                      style="color: #00de9b; font-size: 17px; border-bottom: 1px #00de9b solid;">перейдя
                 по ссылке</a>.
-            <div>С уважением, Директор международного центра создания семьи Наиля Ханум Зиганшина.</div>
+            <div>С уважением, Директор международного центра создания семьи.</div>
             <div>Да поможет нам Аллах!</div>
             <div>По всем возникающим вопросам можно обращаться на e-mail: <p style="color: #00de9b; font-size: 17px;">
                     nikahtime@bk.ru</p></div>
@@ -68,7 +68,6 @@
         <!--//timer-->
 
         <h3>Мы Вас ждем в Nikah Time, заполните анкету и присоединяйтесь!</h3>
-
         <div style="margin: 0 0 25px 0; font-size: 25px; color:white">
             Ссылки для скачивания:
             <a href="https://apps.apple.com/ru/app/nikah-time/id1593398215" target="_blank"
@@ -82,16 +81,10 @@
                                            target="_blank"
                                            style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Наш
                 инстаграм</a></div>
-
         <div style="margin: 0 0 25px 0"><a
                 href="https://docs.google.com/forms/d/e/1FAIpQLSegOFmhAL66m2I58lkNwWz1PKLGwODSA8vJRLz1IP1natBF8A/viewform"
                 target="_blank" style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Заполнить
                 анкету</a></div>
-
-        <div style="margin: 0 0 25px 0"><a href="https://www.instagram.com/nailya_ziganshina/"
-                                           target="_blank"
-                                           style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Директор
-                центра создания семьи NikahTime.ru - Наиля Зиганшина</a></div>
         <div style="margin: 0 0 25px 0"><a href="https://www.instagram.com/alyushev_ramil/"
                                            target="_blank"
                                            style="color: #00de9b; font-size: 22px; border-bottom: 1px #00de9b solid;">Project
