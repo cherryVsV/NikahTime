@@ -29,7 +29,7 @@ class SearchUsersController extends Controller
             $profile = Profile::where('user_id', $user_id)->first();
             $selectionIds = Profile::whereHas('interests', function ($query) use ($profile) {
                 $query->whereIn('interest_id', $profile->interests->pluck('id'));
-            })->where('user_id', '!=', $user_id)->pluck('id');
+            })->where('user_id', '!=', $user_id)->where('gender', '!=', $profile->gender)->pluck('id');
             $users = Profile::whereIn('id', $selectionIds)->get();
             $seenUsers = SeenUser::where('user_id', $profile->user_id)->pluck('seen_user_id');
             $selection = [];
@@ -50,7 +50,7 @@ class SearchUsersController extends Controller
                 }
             }
             if (count($selection) < 20) {
-                $profiles = Profile::where('user_id', '!=', $user_id)->get();
+                $profiles = Profile::where('user_id', '!=', $user_id)->where('gender', '!=', $profile->gender)->get();
                 foreach ($profiles as $userProfile) {
                     if (count($selection) < 20) {
                         $userProfile['isProfileParametersMatched'] = false;
