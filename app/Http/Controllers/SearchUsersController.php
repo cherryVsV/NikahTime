@@ -150,7 +150,7 @@ class SearchUsersController extends Controller
                         $status = MaritalStatus::where('title', $request->maritalStatus)->value('id');
                     }
                     $city = false;
-                    if(!is_null($profile->city)){
+                    if(!is_null($profile->city) && !is_null($request->city)){
                         $city = strpos(mb_strtolower($profile->city), mb_strtolower($request->city)) || strpos(mb_strtolower($request->city), mb_strtolower($profile->city)) !== false;
                     }
                     if ($age >= $request->minAge && $age <= $request->maxAge
