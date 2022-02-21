@@ -119,12 +119,16 @@ class SearchUsersController extends Controller
         ]);
         try {
             $user_id = auth()->user()->getAuthIdentifier();
-            $seenUsers = SeenUser::where('user_id', $user_id)->pluck('seen_user_id');
-            $seenProfiles = Profile::whereIn('user_id', $seenUsers)->get();
+            $prof = Profile::where('user_id', $user_id)->first();
+            $seenUsers = User::all()->pluck('id');
+            $seenProfiles = Profile::whereIn('user_id', $seenUsers)->where('gender', '!=', $prof->gender)->get();
+            $user_interests = $prof->interests->pluck('id')->toArray();
+
             $filters = [];
             if ($request->filterType == 'simpleFilter') {
                 foreach ($seenProfiles as $profile) {
-                    $profile['isProfileParametersMatched'] = (bool)SeenUser::where(['user_id' => $user_id, 'seen_user_id' => $profile->user_id])->value('is_matched');
+                    $profile_interests = $profile->interests->pluck('id')->toArray();
+                    $profile['isProfileParametersMatched'] = $this->getIntersect($user_interests, $profile_interests);
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     if ($request->isOnline) {
                         if ($age >= $request->minAge && $age <= $request->maxAge && $profile->isOnline()) {
@@ -142,8 +146,9 @@ class SearchUsersController extends Controller
                 }
             }
             if ($request->filterType == 'complicatedFilter') {
-                $profile['isProfileParametersMatched'] = (bool)SeenUser::where(['user_id' => $user_id, 'seen_user_id' => $profile->user_id])->value('is_matched');
                 foreach ($seenProfiles as $profile) {
+                    $profile_interests = $profile->interests->pluck('id')->toArray();
+                    $profile['isProfileParametersMatched'] = $this->getIntersect($user_interests, $profile_interests);
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     $education = null;
                     if (!is_null($request->education)) {
@@ -153,14 +158,24 @@ class SearchUsersController extends Controller
                     if (!is_null($request->maritalStatus)) {
                         $status = MaritalStatus::where('title', $request->maritalStatus)->value('id');
                     }
+                    $city = false;
+                    if(!is_null($profile->city) && !is_null($request->city)){
+                        $city = strpos(mb_strtolower($profile->city), mb_strtolower($request->city)) || strpos(mb_strtolower($request->city), mb_strtolower($profile->city)) !== false;
+                    }
                     if ($age >= $request->minAge && $age <= $request->maxAge
-                        && (is_null($request->city) || trim($profile->city) == trim($request->city)) && (is_null($request->country) || $profile->country == $request->country)
+                        && (is_null($request->city) || $city)
+                        && (is_null($request->country) || $profile->country == $request->country)
                         && (is_null($request->haveChildren) || $profile->have_children == $request->haveChildren)
                         && (is_null($education) || $profile->education_id == $education) && (is_null($status) || $profile->marital_status_id == $status)
                         && (is_null($request->nationality) || $profile->nationality == $request->nationality)) {
-                        if ($request->haveBadHabits && !is_null($request->badHabits)) {
-                            $badHabits = Habit::whereIn('title', $request->badHabits)->pluck('id');
-                            if (collect($badHabits)->diff(collect($profile->habits->pluck('id')))->count() == 0) {
+                        if ($request->haveBadHabits == true ) {
+                            if(!is_null($request->badHabits)) {
+                                $badHabits = Habit::whereIn('title', $request->badHabits)->pluck('id');
+                                $is_match = collect($badHabits)->diff(collect($profile->habits->pluck('id')))->count() == 0;
+                            }else{
+                                $is_match = $profile->habits->count()>0;
+                            }
+                            if ($is_match) {
                                 if ($request->isOnline) {
                                     if ($profile->isOnline()) {
                                         if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
@@ -173,8 +188,8 @@ class SearchUsersController extends Controller
                                     }
                                 }
                             }
-                        } else {
-                            if(!$request->haveBadHabits) {
+                        }else if ($request->haveBadHabits == false) {
+                            if(!is_null($request->haveBadHabits)) {
                                 if ($profile->habits->count() == 0) {
                                     if ($request->isOnline) {
                                         if ($profile->isOnline()) {
@@ -189,8 +204,16 @@ class SearchUsersController extends Controller
                                     }
                                 }
                             }else{
-                                if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
-                                    $filters[] = new ProfileResource($profile);
+                                if ($request->isOnline) {
+                                    if ($profile->isOnline()) {
+                                        if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                            $filters[] = new ProfileResource($profile);
+                                        }
+                                    }
+                                } else {
+                                    if (is_null(User::where('id', $profile->user_id)->value('blocked_at'))) {
+                                        $filters[] = new ProfileResource($profile);
+                                    }
                                 }
                             }
                         }
@@ -205,5 +228,18 @@ class SearchUsersController extends Controller
                 'details' => $e->getMessage()],
                 422);
         }
+    }
+
+    function getIntersect($arr1, $arr2)
+    {
+        foreach($arr1 as $val1)
+        {
+            foreach($arr2 as $val2)
+            {
+                if($val1 == $val2)
+                { return true; }
+            }
+        }
+        return false;
     }
 }
