@@ -117,10 +117,13 @@ class SearchUsersController extends Controller
             $prof = Profile::where('user_id', $user_id)->first();
             $seenUsers = User::all()->pluck('id');
             $seenProfiles = Profile::whereIn('user_id', $seenUsers)->where('gender', '!=', $prof->gender)->get();
+            $user_interests = $prof->interests->pluck('id')->toArray();
+
             $filters = [];
             if ($request->filterType == 'simpleFilter') {
                 foreach ($seenProfiles as $profile) {
-                    $profile['isProfileParametersMatched'] = (bool)SeenUser::where(['user_id' => $user_id, 'seen_user_id' => $profile->user_id])->value('is_matched');
+                    $profile_interests = $profile->interests->pluck('id')->toArray();
+                    $profile['isProfileParametersMatched'] = $this->getIntersect($user_interests, $profile_interests);
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     if ($request->isOnline) {
                         if ($age >= $request->minAge && $age <= $request->maxAge && $profile->isOnline()) {
@@ -139,7 +142,8 @@ class SearchUsersController extends Controller
             }
             if ($request->filterType == 'complicatedFilter') {
                 foreach ($seenProfiles as $profile) {
-                    $profile['isProfileParametersMatched'] = (bool)SeenUser::where(['user_id' => $user_id, 'seen_user_id' => $profile->user_id])->value('is_matched');
+                    $profile_interests = $profile->interests->pluck('id')->toArray();
+                    $profile['isProfileParametersMatched'] = $this->getIntersect($user_interests, $profile_interests);
                     $age = Carbon::parse($profile->birth_date)->diffInYears();
                     $education = null;
                     if (!is_null($request->education)) {
@@ -219,5 +223,18 @@ class SearchUsersController extends Controller
                 'details' => $e->getMessage()],
                 422);
         }
+    }
+
+    function getIntersect($arr1, $arr2)
+    {
+        foreach($arr1 as $val1)
+        {
+            foreach($arr2 as $val2)
+            {
+                if($val1 == $val2)
+                { return true; }
+            }
+        }
+        return false;
     }
 }
