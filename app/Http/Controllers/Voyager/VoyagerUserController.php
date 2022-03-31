@@ -14,4 +14,15 @@ class VoyagerUserController extends BaseVoyagerUserController
         $user->save();
         return redirect(route('voyager.users.index'));
     }
+
+    public function admin(){
+        $user = User::where('id', \request("id"))->first();
+        if($user->role_id == 2) {
+            $user->role_id = 1;
+        }else{
+            $user->role_id = 2;
+        }
+        $user->save();
+        return redirect(route('voyager.users.index'));
+    }
 }
