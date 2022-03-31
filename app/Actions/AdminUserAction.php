@@ -6,20 +6,20 @@ namespace App\Actions;
 
 use TCG\Voyager\Actions\AbstractAction;
 
-class BlockUserAction extends AbstractAction
+class AdminUserAction extends AbstractAction
 {
     public function getTitle()
     {
-        return $this->data->{'blocked_at'}==null?'Заблокировать':'Разблокировать';
+        return $this->data->{'role_id'}==2?'Пользователь':'Администратор';
     }
     public function getIcon()
     {
-        return $this->data->{'blocked_at'}==null?'voyager-x':'voyager-check';
+        return $this->data->{'role_id'}==2?'voyager-check':'voyager-x';
     }
     public function getAttributes()
     {
         return [
-            'class' => 'btn btn-sm btn-dark pull-right',
+            'class' => 'btn btn-sm btn-primary pull-right',
         ];
     }
     public function shouldActionDisplayOnDataType()
@@ -29,6 +29,7 @@ class BlockUserAction extends AbstractAction
     public function getDefaultRoute()
     {
         // URL-адрес для кнопки действия при нажатии кнопки
-        return route('users.block', array("id"=>$this->data->{$this->data->getKeyName()}));
+        return route('users.admin', array("id"=>$this->data->{$this->data->getKeyName()}));
     }
 }
+

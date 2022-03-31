@@ -34,6 +34,7 @@ Route::get('/support', function(){
 });
 Route::group(['prefix'=>'admin'], function(){
     Route::get('users/block',[VoyagerUserController::class, 'block'])->name('users.block');
+    Route::get('users/admin',[VoyagerUserController::class, 'admin'])->name('users.admin');
     Voyager::routes();
 });
 
