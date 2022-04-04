@@ -49,6 +49,7 @@ class LoginAndRegisterViaGoogleService
                $user->password=Hash::make($password);
                $user->save();
            }
+           logger($user->id);
            return ['username'=>$username, 'password'=>$password, 'user'=>$user];
        }
        else{
