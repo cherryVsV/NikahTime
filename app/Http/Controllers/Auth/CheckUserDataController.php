@@ -58,7 +58,7 @@ class CheckUserDataController extends Controller
             $password = $userData['password'];
         }
         if (is_null($user)) {
-            throw new UserNotFoundError();
+            throw new UserNotFoundError($username);
         }
         return ['user'=>$user, 'username'=>$username, 'password'=>$password];
     }

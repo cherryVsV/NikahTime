@@ -24,13 +24,13 @@ class SendCodeController extends Controller
             });
             return 'ok';
         } catch (Exception $e) {
-            throw new SendingMessageError();
+            throw new SendingMessageError($toEmail);
         }
     }
     public function sendPhoneCode($toPhone, $code){
             $isSent = SmsRu::send($toPhone, 'Ваш код подтверждения в NikahTime: '.$code.'. Если Вы не запрашивали код подтверждения, проигнорируйте данное сообщение.');
             if(!$isSent){
-                throw new SendingMessageError();
+                throw new SendingMessageError($toPhone);
             }else {
                 return 'ok';
             }

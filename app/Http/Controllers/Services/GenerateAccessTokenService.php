@@ -40,8 +40,7 @@ class GenerateAccessTokenService
                 'refreshToken' => $token->refresh_token
             ];
         } catch (Exception $e) {
-            logger($username);
-            throw new SocialAuthError('ERR_AUTHORIZATION_FAILED', 422, $e->getMessage());
+            throw new SocialAuthError('ERR_AUTHORIZATION_FAILED', 422, 'Username- '.$username.' '.$e->getMessage());
         }
 
     }

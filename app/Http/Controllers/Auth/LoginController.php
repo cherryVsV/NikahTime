@@ -35,7 +35,7 @@ class LoginController extends Controller
         $username = $userData['username'];
         if ($request->grantType == 'email' || $request->grantType == 'phoneNumber') {
             if (!Hash::check($request->password, $user->password)) {
-                throw new PasswordIncorrectError();
+                throw new PasswordIncorrectError($user->id);
             }
             $password = $request->password;
         }
@@ -48,7 +48,7 @@ class LoginController extends Controller
             $username = $username . ' apple';
         }
         if (!is_null($user->blocked_at)) {
-            throw new ValidationDataError('ERR_USER_AUTH', 403, 'Selected user is blocked!');
+            throw new ValidationDataError('ERR_USER_AUTH', 403, 'Selected user_id= '.$user->id. ' is blocked!');
         }
         if ($request->has('notificationId')) {
             if (!is_null($user->notification_id)) {

@@ -28,8 +28,7 @@ class SocialController extends Controller
             $idToken = $content['id_token'];
             return redirect("intent://callback?".$request->getContent()."#Intent;package=ru.nikahtime;scheme=signinwithapple;end");
         } catch (Exception $e) {
-            logger($code);
-            throw new SocialAuthError('ERR_AUTHORIZATION_FAILED', 422, $e->getMessage());
+            throw new SocialAuthError('ERR_AUTHORIZATION_FAILED', 422, 'Code - '.$code.' '. $e->getMessage());
         }
     }
 }

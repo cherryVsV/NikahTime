@@ -82,7 +82,7 @@ class ResetPasswordController extends Controller
 
             $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
-                throw new VerificationError();
+                throw new VerificationError($request->email);
             }
             return response(null, 204);
 
@@ -95,7 +95,7 @@ class ResetPasswordController extends Controller
 
             $passwordReset = DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'reset'])->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
-                throw new VerificationError();
+                throw new VerificationError($request->phoneNumber);
             }
             return response(null, 204);
 
@@ -115,7 +115,7 @@ class ResetPasswordController extends Controller
             ]);
             $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
-                throw new VerificationError();
+                throw new VerificationError($request->email);
             }
             DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->delete();
             $user = User::where('email', $request->email)->first();
@@ -138,7 +138,7 @@ class ResetPasswordController extends Controller
             ]);
             $passwordReset = DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'reset'])->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
-                throw new VerificationError();
+                throw new VerificationError($request->phoneNumber);
             }
             DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'reset'])->delete();
             $user = User::where('phone', $request->phoneNumber)->first();

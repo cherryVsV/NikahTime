@@ -79,7 +79,7 @@ class Handler extends ExceptionHandler
             if ($e instanceof \Illuminate\Validation\ValidationException) {
                 $response['code'] = 422;
                 $response['title'] = 'ERR_VALIDATION_FAILED';
-                $response['detail'] = $e->validator->errors()->first();
+                $response['detail'] =$e->validator->errors()->first() . ' : ' . json_encode($request->all());
             }
            /* if ($e instanceof \Symfony\Component\HttpFoundation\File\Exception\FileException) {
                 // create a validator and validate to throw a new ValidationException

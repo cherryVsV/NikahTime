@@ -30,12 +30,12 @@ class RegisterController extends Controller
                 'code' => ['required'],
             ]);
             if(!DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->exists()){
-                throw new UserNotFoundError();
+                throw new UserNotFoundError($request->email);
             }
             $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->first();
             $password = $passwordReset->code;
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
-                throw new VerificationError();
+                throw new VerificationError($request->email);
             }
             $user = User::create([
                 'email' => $request->email,
@@ -58,12 +58,12 @@ class RegisterController extends Controller
                 'code' => ['required'],
             ]);
             if(!DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'verify'])->exists()){
-                throw new UserNotFoundError();
+                throw new UserNotFoundError($request->phoneNumber);
             }
             $passwordReset = DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'verify'])->first();
             $password = $passwordReset->code;
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
-                throw new VerificationError();
+                throw new VerificationError($request->phoneNumber);
             }
             $user = User::create([
                 'phone' =>$request->phoneNumber,
@@ -181,7 +181,7 @@ class RegisterController extends Controller
             $toEmail = $request->email;
             $code = strval(mt_rand(100000, 999999));
             if(!DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'verify'])->exists()) {
-                throw new VerificationError();
+                throw new VerificationError($request->email);
             }
            DB::table('password_resets')->where(['email' => $request->email, 'type' => 'verify'])
                ->update(['token'=>Hash::make($code)]);
@@ -199,7 +199,7 @@ class RegisterController extends Controller
             $toPhone = $request->phoneNumber;
             $code = strval(mt_rand(100000, 999999));
             if(!DB::table('password_resets')->where(['phone'=> $toPhone, 'type'=>'verify'])->exists()) {
-                throw new VerificationError();
+                throw new VerificationError($toPhone);
             }
             DB::table('password_resets')->where(['phone'=> $toPhone, 'type' => 'verify'])
                 ->update(['token'=>Hash::make($code)]);
