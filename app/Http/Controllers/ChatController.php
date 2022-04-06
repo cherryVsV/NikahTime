@@ -45,7 +45,7 @@ class ChatController extends Controller
         }
         $user = Profile::where('user_id', $userId)->first();
         $avatar = null;
-        if(!is_null($user->photos)) {
+        if(!is_null($user->photos)  && count(json_decode($user->photos))>0) {
             $avatar = json_decode($user->photos)[0];
             if(!str_starts_with($avatar, 'http')){
                 $avatar = URL::to('/') . '/storage/'.$avatar;
@@ -121,7 +121,7 @@ class ChatController extends Controller
             $user = Profile::where('user_id', $chat->user1_id)->first();
         }
         $avatar = null;
-        if (!is_null($user->photos)) {
+        if (!is_null($user->photos) && count(json_decode($user->photos))>0) {
             $avatar = json_decode($user->photos)[0];
             if(!str_starts_with($avatar, 'http')){
                 $avatar = URL::to('/') . '/storage/'.$avatar;
@@ -165,7 +165,7 @@ class ChatController extends Controller
                 $user = Profile::where('user_id', $chat->user1_id)->first();
             }
             $avatar = null;
-            if(!is_null($user->photos))
+            if(!is_null($user->photos) && count(json_decode($user->photos))>0)
             {
                 $avatar = json_decode($user->photos)[0];
                 if(!str_starts_with($avatar, 'http')){

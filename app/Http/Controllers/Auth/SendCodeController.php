@@ -14,7 +14,7 @@ class SendCodeController extends Controller
     {
         try {
             $html = "Здравствуйте, подтвердите Ваш адрес электронной почты для приложения NikahTime с помощью кода проверки из данного сообщения
-            <strong> $code </strong>,
+            <strong> $code </strong>
             <p>Если Вы не запрашивали код подтверждения для выполнения операции в NikahTime, проигнорируйте данное сообщение.</p>";
             Mail::send([], [], function ($message) use ($toEmail, $html) {
                 $message->from('nikah.time@yandex.ru', 'NikahTime');
@@ -28,7 +28,7 @@ class SendCodeController extends Controller
         }
     }
     public function sendPhoneCode($toPhone, $code){
-            $isSent = SmsRu::send($toPhone, 'Ваш код подтверждения в NikahTime: '.$code.'. Если Вы не запрашивали код подтверждения, проигнорируйте данное сообщение.');
+            $isSent = SmsRu::send($toPhone, 'Ваш код подтверждения в NikahTime: '.$code.' Если Вы не запрашивали код подтверждения, проигнорируйте данное сообщение.');
             if(!$isSent){
                 throw new SendingMessageError($toPhone);
             }else {

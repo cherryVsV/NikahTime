@@ -10,6 +10,7 @@ use App\Http\Controllers\Services\GenerateAccessTokenService;
 use App\Http\Resources\ProfileResource;
 use App\Models\Profile;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -29,14 +30,15 @@ class ResetPasswordController extends Controller
                 'email' => ['required', 'string', 'email', 'max:255', 'exists:users']
             ]);
             $toEmail = $request->email;
-            $code = $this->generateCode();
+            $code = strval(mt_rand(10000000, 99999999));
             if(DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->exists()){
                 DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->delete();
             }
             DB::table("password_resets")->insert([
                 "email" => $toEmail,
                 "token" => Hash::make($code),
-                "type"=>'reset'
+                "type"=>'reset',
+                "created_at"=>Carbon::now()->addDay()
             ]);
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendEmailCode($toEmail, $code);
@@ -50,14 +52,15 @@ class ResetPasswordController extends Controller
                 'phoneNumber' => ['required', 'string','max:12', 'exists:users,phone'],
             ]);
             $toPhone = $request->phoneNumber;
-            $code = $this->generateCode();
+            $code = strval(mt_rand(10000000, 99999999));
             if(DB::table('password_resets')->where(['phone'=> $toPhone, 'type'=>'reset'])->exists()){
                 DB::table('password_resets')->where(['phone'=> $toPhone, 'type'=>'reset'])->delete();
             }
             DB::table("password_resets")->insert([
                 "phone" => $toPhone,
                 "token" => Hash::make($code),
-                "type"=>'reset'
+                "type"=>'reset',
+                "created_at"=>Carbon::now()->addDay()
             ]);
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendPhoneCode($toPhone, $code);
@@ -80,7 +83,7 @@ class ResetPasswordController extends Controller
                 'code' => ['required', 'string']
             ]);
 
-            $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->first();
+            $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->where('created_at', '>', Carbon::now())->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError($request->email);
             }
@@ -93,7 +96,7 @@ class ResetPasswordController extends Controller
                 'code' => ['required', 'string']
             ]);
 
-            $passwordReset = DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'reset'])->first();
+            $passwordReset = DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'reset'])->where('created_at', '>', Carbon::now())->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError($request->phoneNumber);
             }
@@ -113,7 +116,7 @@ class ResetPasswordController extends Controller
                 'password' => ['required', 'string', 'min:8'],
                 'code' => ['required', 'string']
             ]);
-            $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->first();
+            $passwordReset = DB::table('password_resets')->where(['email'=> $request->email, 'type'=>'reset'])->where('created_at', '>', Carbon::now())->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError($request->email);
             }
@@ -136,7 +139,7 @@ class ResetPasswordController extends Controller
                 'password' => ['required', 'string', 'min:8'],
                 'code' => ['required', 'string']
             ]);
-            $passwordReset = DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'reset'])->first();
+            $passwordReset = DB::table('password_resets')->where(['phone'=> $request->phoneNumber, 'type'=>'reset'])->where('created_at', '>', Carbon::now())->first();
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError($request->phoneNumber);
             }
@@ -156,12 +159,12 @@ class ResetPasswordController extends Controller
 
 
     }
-    public function generateCode(){
+   /* public function generateCode(){
         $code = '';
         $array = array_merge(range('0', '9'), range('a', 'z'), range('A', 'Z'));
         for ($i = 0; $i < 14; $i++) {
             $code .= $array[mt_rand(0, count($array) - 1)];
         }
         return $code;
-    }
+    }*/
 }
