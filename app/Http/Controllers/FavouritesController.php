@@ -41,7 +41,7 @@ class FavouritesController extends Controller
             if(Like::where(['user_id' => $userId, 'favourite_user_id' => $auth_id])->exists() && is_null(User::where('id', $userId)->value('blocked_at'))){
                 $user = Profile::find($userId);
                 $avatar = null;
-                if(!is_null($user->photos))
+                if(!is_null($user->photos) && count(json_decode($user->photos))>0)
                 {
                     $avatar = json_decode($user->photos)[0];
                     if(!str_starts_with($avatar, 'http')){

@@ -88,7 +88,11 @@ class ProfileController extends Controller
                 throw new ValidationDataError('ERR_VALIDATION_FAILED', 422, 'The photos field length should be no more than 10');
             }
         }
-        $profile->photos = $request->photos;
+        if(is_null($request->photos) ||  count($request->photos)==0){
+            $profile->photos = ["profiles/April2022/YdkBRFb9XWuLme1erZvh.jpg"];
+        }else{
+            $profile->photos = $request->photos;
+        }
         $profile->birth_date = $request->birthDate;
         $profile->country = $request->country;
         $profile->city = $request->city;
