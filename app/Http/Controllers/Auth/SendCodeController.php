@@ -28,7 +28,7 @@ class SendCodeController extends Controller
         }
     }
     public function sendPhoneCode($toPhone, $code){
-            $isSent = SmsRu::send($toPhone, 'Ваш код подтверждения в NikahTime: '.$code.' Если Вы не запрашивали код подтверждения, проигнорируйте данное сообщение.');
+             $isSent = SmsRu::send($toPhone, 'Ваш код подтверждения в NikahTime: '.$code.' Если Вы не запрашивали код подтверждения, проигнорируйте данное сообщение.');
             if(!$isSent){
                 throw new SendingMessageError($toPhone);
             }else {

@@ -53,7 +53,7 @@ class FavouritesController extends Controller
                     'userAvatar'=> $avatar,
                     'userName'=> $user->first_name,
                     'isOnline'=>$user->isOnline()
-                ], 202);
+                ], 200);
             }
             return response(null, 200);
         } else {

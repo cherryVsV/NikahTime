@@ -53,6 +53,7 @@ class ResetPasswordController extends Controller
             ]);
             $toPhone = $request->phoneNumber;
             $code = strval(mt_rand(10000000, 99999999));
+            logger($code);
             if(DB::table('password_resets')->where(['phone'=> $toPhone, 'type'=>'reset'])->exists()){
                 DB::table('password_resets')->where(['phone'=> $toPhone, 'type'=>'reset'])->delete();
             }
@@ -87,7 +88,7 @@ class ResetPasswordController extends Controller
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError($request->email);
             }
-            return response(null, 204);
+            return response(null, 200);
 
         }
         if ($request->grantType == "phoneNumber") {
@@ -100,7 +101,7 @@ class ResetPasswordController extends Controller
             if ($passwordReset == null || !Hash::check($request->code, $passwordReset->token)) {
                 throw new VerificationError($request->phoneNumber);
             }
-            return response(null, 204);
+            return response(null, 200);
 
         }
     }

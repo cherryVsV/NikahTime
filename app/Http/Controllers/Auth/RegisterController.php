@@ -77,8 +77,7 @@ class RegisterController extends Controller
             $generateToken = new GenerateAccessTokenService();
             $token = $generateToken->generateToken($request, $request->phoneNumber, $password);
             return response()->json(
-                $token
-                , 200);
+                $token, 200);
         }
     }
 
@@ -106,7 +105,7 @@ class RegisterController extends Controller
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendEmailCode($toEmail, $code);
             if($answer=='ok'){
-                return response(null, 204);
+                return response(null, 200);
             }
 
         }
@@ -121,10 +120,7 @@ class RegisterController extends Controller
             $username = $userData['username'].' google';
             $password = $userData['password'];
             $token = $generateToken->generateToken($request, $username, $password);
-            return response()->json(
-                $token
-                , 200);
-           // return response(null,204);
+            return response()->json($token, 200);
 
         }
         if ($request->grantType == 'appleIdToken') {
@@ -138,10 +134,7 @@ class RegisterController extends Controller
             $username = $userData['username'].' apple';
             $password = $userData['password'];
             $token = $generateToken->generateToken($request, $username, $password);
-            return response()->json(
-                $token
-                , 200);
-            // return response(null,204);
+            return response()->json($token, 200);
 
         }
         if ($request->grantType == 'phoneNumber') {
@@ -161,9 +154,10 @@ class RegisterController extends Controller
                 "code"=>$request->password
             ]);
             $sendCode = new SendCodeController();
+            logger($code);
             $answer = $sendCode->sendPhoneCode($toPhone, $code);
             if($answer=='ok'){
-                return response(null, 204);
+                return response(null, 200);
             }
 
         }
@@ -189,7 +183,7 @@ class RegisterController extends Controller
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendEmailCode($toEmail, $code);
             if($answer=='ok'){
-                return response(null, 202);
+                return response(null, 200);
             }
         }
         if($request->grantType == 'phoneNumber'){
@@ -207,7 +201,7 @@ class RegisterController extends Controller
             $sendCode = new SendCodeController();
             $answer = $sendCode->sendPhoneCode($toPhone, $code);
             if($answer=='ok'){
-                return response(null, 202);
+                return response(null, 200);
             }
         }
 
