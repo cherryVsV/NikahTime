@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Cache;
 class Profile extends Model
 {
     use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -35,7 +34,6 @@ class Profile extends Model
         'about',
         'nationality'
     ];
-
     /**
      * The attributes that should be cast to native types.
      *
@@ -53,7 +51,7 @@ class Profile extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function education()
@@ -79,5 +77,4 @@ class Profile extends Model
     {
         return Cache::has('user-is-online-' . $this->user_id);
     }
-
 }

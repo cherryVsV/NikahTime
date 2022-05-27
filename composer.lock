@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ff0f9af91fe73326fd6d1dd010eb620",
+    "content-hash": "21c417e90a74a5f3f4fb89f4bbe2d7a1",
     "packages": [
         {
             "name": "arrilot/laravel-widgets",
@@ -7121,16 +7121,16 @@
         },
         {
             "name": "tcg/voyager",
-            "version": "v1.5.2",
+            "version": "1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/the-control-group/voyager.git",
-                "reference": "8c3c1dde896a047b1334d68f6d6a1d32fd07df1b"
+                "reference": "a95fd26a555be8e05bc2370e1422092d96d070ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/the-control-group/voyager/zipball/8c3c1dde896a047b1334d68f6d6a1d32fd07df1b",
-                "reference": "8c3c1dde896a047b1334d68f6d6a1d32fd07df1b",
+                "url": "https://api.github.com/repos/the-control-group/voyager/zipball/a95fd26a555be8e05bc2370e1422092d96d070ed",
+                "reference": "a95fd26a555be8e05bc2370e1422092d96d070ed",
                 "shasum": ""
             },
             "require": {
@@ -7212,7 +7212,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-09T08:33:29+00:00"
+            "time": "2022-01-15T09:13:44+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -10156,7 +10156,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "codersstudio/sms-ru": 20
+        "codersstudio/sms-ru": 20,
+        "tcg/voyager": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
@@ -10166,5 +10167,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.2.0"
 }

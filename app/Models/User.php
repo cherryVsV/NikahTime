@@ -85,7 +85,7 @@ class User extends \TCG\Voyager\Models\User
 
     public function profile()
     {
-        return $this->HasOne(\App\Models\Profile::class);
+        return $this->HasMany(\App\Models\Profile::class);
     }
 
     public function socialAccount()
