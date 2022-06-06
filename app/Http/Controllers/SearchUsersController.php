@@ -24,7 +24,7 @@ class SearchUsersController extends Controller
             $selectionIds = Profile::whereHas('interests', function ($query) use ($profile) {
                 $query->whereIn('interest_id', $profile->interests->pluck('id'));
             })->where('user_id', '!=', $user_id)->where('gender', '!=', $profile->gender)->pluck('id');
-            $users = Profile::whereIn('id', $selectionIds)->get();
+            $users = Profile::whereIn('id', $selectionIds)->inRandomOrder()->get();
             $seenUsers = SeenUser::where('user_id', $profile->user_id)->pluck('seen_user_id');
             $selection = [];
             foreach ($users as $user) {
@@ -44,7 +44,7 @@ class SearchUsersController extends Controller
                 }
             }
             if (count($selection) < 20) {
-                $profiles = Profile::where('user_id', '!=', $user_id)->where('gender', '!=', $profile->gender)->get();
+                $profiles = Profile::where('user_id', '!=', $user_id)->where('gender', '!=', $profile->gender)->inRandomOrder()->get();
                 foreach ($profiles as $userProfile) {
                     if (count($selection) < 20) {
                         $userProfile['isProfileParametersMatched'] = false;
@@ -116,7 +116,7 @@ class SearchUsersController extends Controller
             $user_id = auth()->user()->getAuthIdentifier();
             $prof = Profile::where('user_id', $user_id)->first();
             $seenUsers = User::all()->pluck('id');
-            $seenProfiles = Profile::whereIn('user_id', $seenUsers)->where('gender', '!=', $prof->gender)->get();
+            $seenProfiles = Profile::whereIn('user_id', $seenUsers)->where('gender', '!=', $prof->gender)->inRandomOrder()->get();
             $user_interests = $prof->interests->pluck('id')->toArray();
 
             $filters = [];
