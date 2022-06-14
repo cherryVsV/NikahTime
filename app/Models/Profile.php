@@ -48,6 +48,19 @@ class Profile extends Model
         'have_children' => 'boolean',
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($item) {
+            $user = User::find($item->user_id);
+            if($user){
+                $user->delete();
+            }
+        });
+
+    }
+
 
     public function user()
     {

@@ -22,7 +22,7 @@ class ChatController extends Controller
 
     public function addUserChat($userId)
     {
-        if(!User::where('id', $userId)->exists() || !is_null(User::where('id', $userId)->value('blocked_at'))){
+        if(!User::where('id', $userId)->exists() || !is_null(User::where('id', $userId)->value('blocked_at')) || !Profile::where('user_id', $userId)->exists()){
             throw new ValidationDataError('ERR_USER_NOT_FOUND', 422, 'Selected user do not exists or is blocked');
         }
         $auth_id = auth()->user()->getAuthIdentifier();
@@ -163,6 +163,9 @@ class ChatController extends Controller
             }else
             {
                 $user = Profile::where('user_id', $chat->user1_id)->first();
+            }
+            if(!$user){
+                continue;
             }
             $avatar = null;
             if(!is_null($user->photos) && count(json_decode($user->photos))>0)
